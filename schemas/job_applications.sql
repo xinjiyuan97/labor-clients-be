@@ -1,5 +1,5 @@
 -- 岗位申请表
-CREATE TABLE job_applications (
+CREATE TABLE IF NOT EXISTS job_applications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申请ID',
     job_id BIGINT NOT NULL COMMENT '岗位ID',
     worker_id BIGINT NOT NULL COMMENT '零工ID',

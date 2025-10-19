@@ -1,5 +1,5 @@
 -- 消息表
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '消息ID',
     from_user BIGINT NOT NULL COMMENT '发送用户ID',
     to_user BIGINT NOT NULL COMMENT '接收用户ID',

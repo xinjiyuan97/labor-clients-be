@@ -1,5 +1,5 @@
 -- 社区帖子表
-CREATE TABLE community_posts (
+CREATE TABLE IF NOT EXISTS community_posts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '帖子ID',
     author_id BIGINT NOT NULL COMMENT '作者用户ID',
     title VARCHAR(200) NOT NULL COMMENT '帖子标题',

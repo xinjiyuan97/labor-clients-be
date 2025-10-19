@@ -1,5 +1,5 @@
 -- 日程表
-CREATE TABLE schedules (
+CREATE TABLE IF NOT EXISTS schedules (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '日程ID',
     worker_id BIGINT NOT NULL COMMENT '零工ID',
     job_id BIGINT NULL COMMENT '关联岗位ID',

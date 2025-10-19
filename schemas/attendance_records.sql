@@ -1,6 +1,6 @@
 -- 考勤记录表
-CREATE TABLE attendance_records (
-    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '考勤ID',
+CREATE TABLE IF NOT EXISTS attendance_records (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '考勤ID',
     job_id BIGINT NOT NULL COMMENT '岗位ID',
     worker_id BIGINT NOT NULL COMMENT '零工ID',
     check_in DATETIME NULL COMMENT '打卡时间',

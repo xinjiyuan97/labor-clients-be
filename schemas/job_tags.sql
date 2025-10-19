@@ -1,5 +1,5 @@
 -- 岗位标签表
-CREATE TABLE job_tags (
+CREATE TABLE IF NOT EXISTS job_tags (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '标签ID',
     job_id BIGINT NOT NULL COMMENT '岗位ID',
     tag_name VARCHAR(50) NOT NULL COMMENT '标签名称',
