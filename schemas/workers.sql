@@ -1,5 +1,5 @@
 -- 零工信息表
-CREATE TABLE workers (
+CREATE TABLE IF NOT EXISTS workers (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '零工ID',
     user_id BIGINT NOT NULL COMMENT '用户ID',
     real_name VARCHAR(50) COMMENT '真实姓名',

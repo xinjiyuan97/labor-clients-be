@@ -1,5 +1,5 @@
 -- 岗位表
-CREATE TABLE jobs (
+CREATE TABLE IF NOT EXISTS jobs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '岗位ID',
     employer_id BIGINT NOT NULL COMMENT '雇主ID',
     brand_id BIGINT NOT NULL COMMENT '所属品牌ID',
@@ -19,7 +19,6 @@ CREATE TABLE jobs (
     status ENUM('draft', 'published', 'filled', 'completed', 'cancelled') DEFAULT 'draft' COMMENT '岗位状态',
     max_applicants INT NOT NULL DEFAULT 1 COMMENT '该岗位最大招募人数',  -- 新增字段
     applicant_count INT DEFAULT 0 COMMENT '报名人数',
-    max_applicants INT DEFAULT 1 COMMENT '最大报名人数',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_at DATETIME DEFAULT NULL COMMENT '删除时间',

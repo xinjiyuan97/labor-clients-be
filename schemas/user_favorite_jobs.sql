@@ -1,5 +1,5 @@
 -- 用户收藏表
-CREATE TABLE user_favorite_jobs (
+CREATE TABLE IF NOT EXISTS user_favorite_jobs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '收藏ID',
     user_id BIGINT NOT NULL COMMENT '用户ID',
     job_id BIGINT NOT NULL COMMENT '岗位ID',

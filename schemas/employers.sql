@@ -1,4 +1,4 @@
-CREATE TABLE employers (
+CREATE TABLE IF NOT EXISTS employers (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '雇主ID',
     user_id BIGINT NOT NULL COMMENT '关联用户ID',
     brand_id BIGINT NOT NULL COMMENT '所属品牌ID',  -- 新增字段
