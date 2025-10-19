@@ -1,0 +1,86 @@
+# 应用配置文件示例
+# 复制此文件为 config.yaml 并修改相应的配置
+
+# Web服务器配置
+server:
+  host: "0.0.0.0"           # 服务器监听地址
+  port: 8080                 # 服务器端口
+  read_timeout: 30           # 读取超时时间(秒)
+  write_timeout: 30          # 写入超时时间(秒)
+  idle_timeout: 120          # 空闲超时时间(秒)
+  mode: "debug"              # 运行模式: debug, release, test
+
+# 数据库配置
+database:
+  driver: "mysql"            # 数据库驱动
+  host: "127.0.0.1"          # 数据库主机地址
+  port: 3306                 # 数据库端口
+  username: "root"           # 数据库用户名
+  password: "your_password_here"  # 数据库密码 - 请在config.yaml中配置真实值
+  database: "labors"  # 数据库名
+  charset: "utf8mb4"         # 字符集
+  max_open_conns: 100        # 最大打开连接数
+  max_idle_conns: 10         # 最大空闲连接数
+  conn_max_lifetime: 3600    # 连接最大生命周期(秒)
+  log_level: "debug"          # 日志级别: silent, error, warn, info
+
+# Redis配置
+redis:
+  host: "127.0.0.1"          # Redis主机地址
+  port: 6379                 # Redis端口
+  password: ""  # Redis密码
+  database: 0                # Redis数据库编号
+  pool_size: 100             # 连接池大小
+  min_idle_conns: 10         # 最小空闲连接数
+  dial_timeout: 5            # 连接超时时间(秒)
+  read_timeout: 3            # 读取超时时间(秒)
+  write_timeout: 3           # 写入超时时间(秒)
+
+# 对象存储配置
+oss:
+  provider: "volcengine"     # 存储提供商: aliyun, tencent, aws, volcengine, local
+  access_key: "YOUR_ACCESS_KEY_HERE"    # 访问密钥 - 请在config.yaml中配置真实值
+  secret_key: "YOUR_SECRET_KEY_HERE"    # 秘密密钥 - 请在config.yaml中配置真实值
+  region: "cn-beijing"       # 区域 (例如: cn-beijing, cn-shanghai)
+  bucket: "your-bucket-name"      # 存储桶名称 - 请修改为实际的存储桶
+  endpoint: "tos-cn-beijing.volces.com"  # 端点地址 (例如: tos-cn-beijing.volces.com)
+  base_url: "https://your-bucket-name.tos-cn-beijing.volces.com/"  # 基础URL - 请修改为实际的URL
+  upload_path: "uploads/"    # 上传路径前缀
+  max_file_size: 10485760    # 最大文件大小(10MB)
+  allowed_exts:              # 允许的文件扩展名
+    - "jpg"
+    - "jpeg"
+    - "png"
+    - "gif"
+    - "webp"
+    - "pdf"
+    - "doc"
+    - "docx"
+    - "xls"
+    - "xlsx"
+    - "zip"
+    - "rar"
+
+# 日志配置
+log:
+  level: "info"              # 日志级别: debug, info, warn, error, fatal, panic
+  format: "json"             # 日志格式: json, text
+  output: "both"             # 输出方式: file, stdout, both
+  file_path: "./logs/app.log" # 日志文件路径
+  max_size: 100              # 单个日志文件最大大小(MB)
+  max_backups: 10            # 保留的日志文件数量
+  max_age: 30                # 日志文件保留天数
+  compress: true             # 是否压缩旧日志文件
+
+# 鉴权配置
+auth:
+  jwt_secret: "your-super-secret-jwt-key-change-this-in-production"  # JWT密钥(生产环境请修改)
+  jwt_expire: 24             # JWT过期时间(小时)
+  refresh_expire: 7          # 刷新令牌过期时间(天)
+  issuer: "labor-clients"    # JWT签发者
+  audience: "labor-clients"  # JWT受众
+  algorithm: "HS256"         # 签名算法
+
+# 雪花算法配置
+snowflake:
+  node_id: 1                 # 节点ID(0-1023)
