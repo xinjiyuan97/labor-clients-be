@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/shopspring/decimal"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,4 +17,9 @@ func HashPassword(password string) (string, error) {
 // CheckPassword 验证密码
 func CheckPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+
+// DecimalFromFloat 从float64创建decimal
+func DecimalFromFloat(f float64) decimal.Decimal {
+	return decimal.NewFromFloat(f)
 }

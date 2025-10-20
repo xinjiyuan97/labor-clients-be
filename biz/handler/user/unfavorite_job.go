@@ -7,7 +7,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	userlogic "github.com/xinjiyuan97/labor-clients/biz/logic/user"
 	user "github.com/xinjiyuan97/labor-clients/biz/model/user"
+	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
 // UnfavoriteJob .
@@ -21,7 +23,18 @@ func UnfavoriteJob(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(user.UnfavoriteJobResp)
+	// 从上下文中获取用户ID
+	userID, exists := middleware.GetUserIDFromContext(c)
+	if !exists {
+		c.String(consts.StatusUnauthorized, "未登录")
+		return
+	}
+
+	resp, err := userlogic.UnfavoriteJobLogic(&req, userID)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

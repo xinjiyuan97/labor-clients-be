@@ -237,23 +237,3 @@ func CheckUserExistsByPhone(tx *gorm.DB, phone string) (bool, error) {
 
 	return count > 0, nil
 }
-
-// Worker相关数据库操作
-
-// GetWorkerByUserID 根据用户ID获取零工信息
-func GetWorkerByUserID(tx *gorm.DB, userID int64) (*models.Worker, error) {
-	if tx == nil {
-		tx = DB
-	}
-
-	var worker models.Worker
-	if err := tx.Where("user_id = ?", userID).First(&worker).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, nil
-		}
-		utils.Errorf("根据用户ID查询零工信息失败: %v", err)
-		return nil, err
-	}
-
-	return &worker, nil
-}

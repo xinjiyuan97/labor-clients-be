@@ -1,13 +1,23 @@
 package models
 
-import "github.com/shopspring/decimal"
+import (
+	"github.com/shopspring/decimal"
+	"github.com/xinjiyuan97/labor-clients/biz/model/common"
+)
+
+type Gender string
+
+const (
+	GenderMale   Gender = "male"
+	GenderFemale Gender = "female"
+)
 
 // Worker 零工详细信息表
 type Worker struct {
 	BaseModel
 	UserID         int64           `json:"user_id" gorm:"column:user_id;type:bigint;not null;index;comment:用户ID"`
 	RealName       string          `json:"real_name" gorm:"column:real_name;type:varchar(50);index;comment:真实姓名"`
-	Gender         string          `json:"gender" gorm:"column:gender;type:enum('male','female');comment:性别"`
+	Gender         Gender          `json:"gender" gorm:"column:gender;type:enum('male','female');comment:性别"`
 	Age            uint8           `json:"age" gorm:"column:age;type:tinyint unsigned;comment:年龄"`
 	IDCard         string          `json:"id_card" gorm:"column:id_card;type:varchar(20);comment:身份证号"`
 	HealthCert     string          `json:"health_cert" gorm:"column:health_cert;type:varchar(255);comment:健康证URL"`
@@ -21,4 +31,18 @@ type Worker struct {
 // TableName 指定表名
 func (Worker) TableName() string {
 	return "workers"
+}
+
+func (w *Worker) ToThrift() *common.WorkerInfo {
+	return &common.WorkerInfo{
+		UserID:         w.UserID,
+		RealName:       w.RealName,
+		Gender:         string(w.Gender),
+		Age:            int32(w.Age),
+		Education:      w.Education,
+		Height:         w.Height.InexactFloat64(),
+		Introduction:   w.Introduction,
+		WorkExperience: w.WorkExperience,
+		ExpectedSalary: w.ExpectedSalary.InexactFloat64(),
+	}
 }

@@ -25,3 +25,4 @@ generate_all:
 	hz update -idl idls/payment.thrift --handler_by_method --handler_dir biz/handler/payment  
 	hz update -idl idls/system.thrift --handler_by_method --handler_dir biz/handler/system  
 	hz update -idl idls/upload.thrift --handler_by_method --handler_dir biz/handler/upload  
+	hz update -idl idls/admin.thrift --handler_by_method --handler_dir biz/handler/admin  

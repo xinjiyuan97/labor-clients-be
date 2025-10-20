@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	joblogic "github.com/xinjiyuan97/labor-clients/biz/logic/job"
 	job "github.com/xinjiyuan97/labor-clients/biz/model/job"
 )
 
@@ -21,7 +22,11 @@ func GetRecommendJobs(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(job.GetRecommendJobsResp)
+	resp, err := joblogic.GetRecommendJobsLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
