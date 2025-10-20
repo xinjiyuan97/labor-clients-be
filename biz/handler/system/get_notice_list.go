@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	systemlogic "github.com/xinjiyuan97/labor-clients/biz/logic/system"
 	system "github.com/xinjiyuan97/labor-clients/biz/model/system"
 )
 
@@ -21,7 +22,11 @@ func GetNoticeList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(system.GetNoticeListResp)
+	resp, err := systemlogic.GetNoticeListLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
