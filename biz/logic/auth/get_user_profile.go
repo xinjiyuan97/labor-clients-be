@@ -77,7 +77,7 @@ func GetUserProfileLogic(ctx context.Context, c *app.RequestContext) (*auth.GetU
 			workerInfo = &common.WorkerInfo{
 				UserID:         worker.UserID,
 				RealName:       worker.RealName,
-				Gender:         worker.Gender,
+				Gender:         string(worker.Gender),
 				Age:            int32(worker.Age),
 				Education:      worker.Education,
 				Height:         worker.Height.InexactFloat64(),

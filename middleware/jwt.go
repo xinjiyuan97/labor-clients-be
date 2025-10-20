@@ -184,3 +184,8 @@ func RequireWorkerRole() app.HandlerFunc {
 func RequireEmployerRole() app.HandlerFunc {
 	return RequireRole("employer")
 }
+
+// RequireAdminRole 要求admin角色的中间件
+func RequireAdminRole() app.HandlerFunc {
+	return RequireRole("admin")
+}

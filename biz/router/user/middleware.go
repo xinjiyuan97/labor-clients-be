@@ -4,6 +4,7 @@ package user
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -23,7 +24,7 @@ func _v1Mw() []app.HandlerFunc {
 
 func _userMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{middleware.JWTAuth()}
 }
 
 func _favoritesMw() []app.HandlerFunc {

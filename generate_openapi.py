@@ -6,6 +6,7 @@
 import os
 import re
 import json
+import argparse
 from typing import Dict, List, Any
 
 class ThriftToOpenAPIConverter:
@@ -72,7 +73,8 @@ class ThriftToOpenAPIConverter:
             "review": {"name": "评价系统", "description": "双向评价、评分管理相关接口"},
             "payment": {"name": "支付管理", "description": "收入统计、提现相关接口"},
             "system": {"name": "系统功能", "description": "系统配置、公告相关接口"},
-            "upload": {"name": "文件上传", "description": "文件、图片上传相关接口"}
+            "upload": {"name": "文件上传", "description": "文件、图片上传相关接口"},
+            "admin": {"name": "管理后台", "description": "管理员管理品牌方等信息"},
         }
 
     def parse_thrift_file(self, file_path: str) -> Dict[str, Any]:
@@ -84,9 +86,9 @@ class ThriftToOpenAPIConverter:
         namespace_match = re.search(r'namespace go (\w+)', content)
         module_name = namespace_match.group(1) if namespace_match else "unknown"
         
-        # 提取 include
+         # 提取 include    
         includes = re.findall(r'include "([^"]+)"', content)
-        
+
         # 提取结构体定义
         structs = self._extract_structs(content)
         
@@ -392,8 +394,14 @@ class ThriftToOpenAPIConverter:
 
 def main():
     """主函数"""
-    idl_dir = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(idl_dir, "openapi.json")
+    parser = argparse.ArgumentParser(description="根据 Thrift IDL 文件生成 OpenAPI 3.0 规范文件")
+    parser.add_argument("idl_dir", help="IDL 文件所在目录")
+    parser.add_argument("--output-dir", "-o", dest="output_dir", help="OpenAPI 输出目录，默认当前工作目录", default=None)
+    args = parser.parse_args()
+
+    idl_dir = os.path.abspath(args.idl_dir)
+    output_dir = os.path.abspath(args.output_dir) if args.output_dir else os.getcwd()
+    output_file = os.path.join(output_dir, "openapi.json")
     
     converter = ThriftToOpenAPIConverter()
     openapi_spec = converter.generate_openapi_spec(idl_dir)
