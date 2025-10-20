@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	schedulelogic "github.com/xinjiyuan97/labor-clients/biz/logic/schedule"
 	schedule "github.com/xinjiyuan97/labor-clients/biz/model/schedule"
 )
 
@@ -21,7 +22,11 @@ func UpdateSchedule(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(schedule.UpdateScheduleResp)
+	resp, err := schedulelogic.UpdateScheduleLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

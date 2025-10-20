@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/xinjiyuan97/labor-clients/biz/model/common"
+	"github.com/xinjiyuan97/labor-clients/utils"
+)
 
 // Schedule 个人日程表
 type Schedule struct {
@@ -19,4 +24,19 @@ type Schedule struct {
 // TableName 指定表名
 func (Schedule) TableName() string {
 	return "schedules"
+}
+
+func (s *Schedule) ToThrift() *common.ScheduleInfo {
+	return &common.ScheduleInfo{
+		ScheduleID:      s.ID,
+		WorkerID:        s.WorkerID,
+		JobID:           utils.GetOrDefault(s.JobID, 0),
+		Title:           s.Title,
+		StartTime:       s.StartTime.Format(time.RFC3339),
+		EndTime:         s.EndTime.Format(time.RFC3339),
+		Location:        s.Location,
+		Notes:           s.Notes,
+		Status:          s.Status,
+		ReminderMinutes: int32(s.ReminderMinutes),
+	}
 }
