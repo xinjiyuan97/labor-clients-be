@@ -7,7 +7,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	attendancelogic "github.com/xinjiyuan97/labor-clients/biz/logic/attendance"
 	attendance "github.com/xinjiyuan97/labor-clients/biz/model/attendance"
+	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
 // CheckIn .
@@ -21,7 +23,17 @@ func CheckIn(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(attendance.CheckInResp)
+	userID, exists := middleware.GetUserIDFromContext(c)
+	if !exists {
+		c.String(consts.StatusUnauthorized, "未登录")
+		return
+	}
+
+	resp, err := attendancelogic.CheckInLogic(int64(userID), &req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

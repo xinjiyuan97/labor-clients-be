@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	reviewlogic "github.com/xinjiyuan97/labor-clients/biz/logic/review"
 	review "github.com/xinjiyuan97/labor-clients/biz/model/review"
 )
 
@@ -21,7 +22,11 @@ func GetReviewDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(review.GetReviewDetailResp)
+	resp, err := reviewlogic.GetReviewDetailLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
