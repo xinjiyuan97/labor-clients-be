@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	communitylogic "github.com/xinjiyuan97/labor-clients/biz/logic/community"
 	community "github.com/xinjiyuan97/labor-clients/biz/model/community"
 )
 
@@ -21,7 +22,11 @@ func DeletePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(community.DeletePostResp)
+	resp, err := communitylogic.DeletePostLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

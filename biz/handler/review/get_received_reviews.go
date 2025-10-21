@@ -7,7 +7,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	reviewlogic "github.com/xinjiyuan97/labor-clients/biz/logic/review"
 	review "github.com/xinjiyuan97/labor-clients/biz/model/review"
+	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
 // GetReceivedReviews .
@@ -21,7 +23,17 @@ func GetReceivedReviews(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(review.GetReceivedReviewsResp)
+	userID, exists := middleware.GetUserIDFromContext(c)
+	if !exists {
+		c.String(consts.StatusUnauthorized, "未登录")
+		return
+	}
+
+	resp, err := reviewlogic.GetReceivedReviewsLogic(int64(userID), &req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

@@ -7,7 +7,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	communitylogic "github.com/xinjiyuan97/labor-clients/biz/logic/community"
 	community "github.com/xinjiyuan97/labor-clients/biz/model/community"
+	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
 // CreatePost .
@@ -21,7 +23,17 @@ func CreatePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(community.CreatePostResp)
+	userID, exists := middleware.GetUserIDFromContext(c)
+	if !exists {
+		c.String(consts.StatusUnauthorized, "未登录")
+		return
+	}
+
+	resp, err := communitylogic.CreatePostLogic(userID, &req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

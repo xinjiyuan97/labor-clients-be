@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	messagelogic "github.com/xinjiyuan97/labor-clients/biz/logic/message"
 	message "github.com/xinjiyuan97/labor-clients/biz/model/message"
 )
 
@@ -21,7 +22,11 @@ func GetUnreadCount(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(message.GetUnreadCountResp)
+	resp, err := messagelogic.GetUnreadCountLogic(&req)
+	if err != nil {
+		c.String(consts.StatusInternalServerError, err.Error())
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }
