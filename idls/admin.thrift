@@ -191,14 +191,13 @@ struct GetUserListResp {
 
 // 创建用户请求
 struct CreateUserReq {
-    1: string username (api.body="username", api.vd="len($)>0");
+    1: string phone (api.body="phone", api.vd="len($)>0");
     2: string real_name (api.body="real_name", api.vd="len($)>0");
     3: i64 brand_id (api.body="brand_id", api.vd="$>0");
     4: string role (api.body="role", api.vd="len($)>0");
     5: string password (api.body="password");
     6: string email (api.body="email");
-    7: string phone (api.body="phone");
-    8: string permissions (api.body="permissions");
+    7: string permissions (api.body="permissions");
 }
 
 // 创建用户响应
@@ -536,7 +535,7 @@ struct AdminInfo {
 
 // 创建管理员请求
 struct CreateAdminReq {
-    1: string username (api.body="username", api.vd="len($)>0");
+    1: string phone (api.body="phone", api.vd="len($)>0");
     2: string real_name (api.body="real_name", api.vd="len($)>0");
     3: string password (api.body="password", api.vd="len($)>0");
     4: string role (api.body="role", api.vd="len($)>0");
@@ -562,6 +561,47 @@ struct GetAdminListResp {
     1: common.BaseResp base (api.body="base");
     2: common.PageResp page_info (api.body="page_info");
     3: list<AdminInfo> admins (api.body="admins");
+}
+
+// 停用管理员请求
+struct DisableAdminReq {
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+}
+
+// 停用管理员响应
+struct DisableAdminResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// 启用管理员请求
+struct EnableAdminReq {
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+}
+
+// 启用管理员响应
+struct EnableAdminResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// 删除管理员请求
+struct DeleteAdminReq {
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+}
+
+// 删除管理员响应
+struct DeleteAdminResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// 重置管理员密码请求
+struct ResetAdminPasswordReq {
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+    2: string new_password (api.body="new_password", api.vd="len($)>0");
+}
+
+// 重置管理员密码响应
+struct ResetAdminPasswordResp {
+    1: common.BaseResp base (api.body="base");
 }
 
 // ==================== 服务定义 ====================
@@ -603,6 +643,12 @@ service AdminService {
     // 系统设置
     GetSystemConfigResp GetSystemConfig(1: GetSystemConfigReq request) (api.get="/api/v1/admin/config/:config_key");
     UpdateSystemConfigResp UpdateSystemConfig(1: UpdateSystemConfigReq request) (api.put="/api/v1/admin/config/:config_key");
+    
+    // 管理员管理
     CreateAdminResp CreateAdmin(1: CreateAdminReq request) (api.post="/api/v1/admin/admins");
     GetAdminListResp GetAdminList(1: GetAdminListReq request) (api.get="/api/v1/admin/admins");
+    DisableAdminResp DisableAdmin(1: DisableAdminReq request) (api.post="/api/v1/admin/admins/:admin_id/disable");
+    EnableAdminResp EnableAdmin(1: EnableAdminReq request) (api.post="/api/v1/admin/admins/:admin_id/enable");
+    DeleteAdminResp DeleteAdmin(1: DeleteAdminReq request) (api.delete="/api/v1/admin/admins/:admin_id");
+    ResetAdminPasswordResp ResetAdminPassword(1: ResetAdminPasswordReq request) (api.post="/api/v1/admin/admins/:admin_id/reset-password");
 }

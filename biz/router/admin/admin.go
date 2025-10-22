@@ -24,6 +24,15 @@ func Register(r *server.Hertz) {
 			{
 				_admin := _v1.Group("/admin", _adminMw()...)
 				_admin.GET("/admins", append(_getadminlistMw(), admin.GetAdminList)...)
+				_admins := _admin.Group("/admins", _adminsMw()...)
+				_admins.DELETE("/:admin_id", append(_deleteadminMw(), admin.DeleteAdmin)...)
+				_admin_id := _admins.Group("/:admin_id", _admin_idMw()...)
+				_admin_id.POST("/reset-password", append(_resetadminpasswordMw(), admin.ResetAdminPassword)...)
+				{
+					_admin_id0 := _admins.Group("/:admin_id", _admin_id0Mw()...)
+					_admin_id0.POST("/disable", append(_disableadminMw(), admin.DisableAdmin)...)
+					_admin_id0.POST("/enable", append(_enableadminMw(), admin.EnableAdmin)...)
+				}
 				_admin.POST("/admins", append(_createadminMw(), admin.CreateAdmin)...)
 				_admin.GET("/brands", append(_getbrandlistMw(), admin.GetBrandList)...)
 				_brands := _admin.Group("/brands", _brandsMw()...)

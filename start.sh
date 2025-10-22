@@ -105,6 +105,20 @@ run_migrate() {
     go run . -mode migrate -env $env
 }
 
+run_create_admin() {
+    local env=${1:-example}
+    local phone=${2:-""}
+    local password=${3:-""}
+    local role=${4:-"admin"}
+    
+    print_message $GREEN "执行创建管理员 (环境: $env)..."
+    check_go
+    check_config $env
+    create_dirs
+    
+    go run . -mode create-admin -env $env -phone $phone -password $password -role $role
+}
+
 # 编译项目
 build_project() {
     print_message $GREEN "编译项目..."
@@ -140,6 +154,9 @@ main() {
             ;;
         "migrate")
             run_migrate $2
+            ;;
+        "create-admin")
+            run_create_admin $2 $3 $4 $5
             ;;
         "build")
             build_project

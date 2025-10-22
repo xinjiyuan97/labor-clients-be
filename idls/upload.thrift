@@ -46,8 +46,23 @@ struct UploadCertFileResp {
     5: i64 file_size (api.body="file_size");
 }
 
+// 获取签名URL请求
+struct GetSignedURLReq {
+    1: string file_url (api.query="file_url", api.vd="len($)>0");
+    2: i64 expire_seconds (api.query="expire_seconds");
+}
+
+// 获取签名URL响应
+struct GetSignedURLResp {
+    1: common.BaseResp base (api.body="base");
+    2: string signed_url (api.body="signed_url");
+    3: i64 expire_seconds (api.body="expire_seconds");
+    4: string expire_time (api.body="expire_time");
+}
+
 service UploadService {
     UploadImageResp UploadImage(1: UploadImageReq request) (api.post="/api/v1/upload/image");
     UploadFileResp UploadFile(1: UploadFileReq request) (api.post="/api/v1/upload/file");
     UploadCertFileResp UploadCertFile(1: UploadCertFileReq request) (api.post="/api/v1/upload/cert");
+    GetSignedURLResp GetSignedURL(1: GetSignedURLReq request) (api.get="/api/v1/upload/signed-url");
 }

@@ -162,6 +162,7 @@ func RequireAuth() app.HandlerFunc {
 func RequireRole(requiredRole string) app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		userRole, exists := GetUserRoleFromContext(c)
+		utils.Infof("userRole: %s, requiredRole: %s", userRole, requiredRole)
 		if !exists || userRole != requiredRole {
 			c.JSON(403, &common.BaseResp{
 				Code:      403,

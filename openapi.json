@@ -21,55 +21,55 @@
   ],
   "tags": [
     {
-      "name": "用户认证",
+      "name": "auth",
       "description": "用户注册、登录、认证相关接口"
     },
     {
-      "name": "日程管理",
+      "name": "schedule",
       "description": "日程创建、查询、管理相关接口"
     },
     {
-      "name": "岗位推荐",
+      "name": "job",
       "description": "岗位列表、详情、推荐相关接口"
     },
     {
-      "name": "岗位申请",
+      "name": "job_application",
       "description": "岗位申请、状态管理相关接口"
     },
     {
-      "name": "消息管理",
+      "name": "message",
       "description": "消息发送、接收、管理相关接口"
     },
     {
-      "name": "用户中心",
+      "name": "user",
       "description": "用户信息、收藏、收入相关接口"
     },
     {
-      "name": "社区功能",
+      "name": "community",
       "description": "社区帖子、互动相关接口"
     },
     {
-      "name": "考勤管理",
+      "name": "attendance",
       "description": "打卡、考勤记录相关接口"
     },
     {
-      "name": "评价系统",
+      "name": "review",
       "description": "双向评价、评分管理相关接口"
     },
     {
-      "name": "支付管理",
+      "name": "payment",
       "description": "收入统计、提现相关接口"
     },
     {
-      "name": "系统功能",
+      "name": "system",
       "description": "系统配置、公告相关接口"
     },
     {
-      "name": "文件上传",
+      "name": "upload",
       "description": "文件、图片上传相关接口"
     },
     {
-      "name": "管理后台",
+      "name": "admin",
       "description": "管理员管理品牌方等信息"
     }
   ],
@@ -77,7 +77,7 @@
     "/api/v1/system/config": {
       "get": {
         "tags": [
-          "系统功能"
+          "system"
         ],
         "summary": "GetSystemConfig",
         "description": "GetSystemConfig 接口",
@@ -152,7 +152,7 @@
     "/api/v1/system/version": {
       "get": {
         "tags": [
-          "系统功能"
+          "system"
         ],
         "summary": "GetVersion",
         "description": "GetVersion 接口",
@@ -227,7 +227,7 @@
     "/api/v1/system/feedback": {
       "post": {
         "tags": [
-          "系统功能"
+          "system"
         ],
         "summary": "SubmitFeedback",
         "description": "SubmitFeedback 接口",
@@ -289,7 +289,7 @@
     "/api/v1/system/notices": {
       "get": {
         "tags": [
-          "系统功能"
+          "system"
         ],
         "summary": "GetNoticeList",
         "description": "GetNoticeList 接口",
@@ -361,10 +361,10 @@
         }
       }
     },
-    "/api/v1/system/notices/:notice_id": {
+    "/api/v1/system/notices/{notice_id}": {
       "get": {
         "tags": [
-          "系统功能"
+          "system"
         ],
         "summary": "GetNoticeDetail",
         "description": "GetNoticeDetail 接口",
@@ -389,6 +389,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "notice_id",
+            "in": "path",
+            "required": true,
+            "description": "notice_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -439,7 +448,7 @@
     "/api/v1/community/posts": {
       "get": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "GetPostList",
         "description": "GetPostList 接口",
@@ -512,7 +521,7 @@
       },
       "post": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "CreatePost",
         "description": "CreatePost 接口",
@@ -571,10 +580,10 @@
         }
       }
     },
-    "/api/v1/community/posts/:post_id": {
+    "/api/v1/community/posts/{post_id}": {
       "get": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "GetPostDetail",
         "description": "GetPostDetail 接口",
@@ -599,6 +608,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -647,7 +665,7 @@
       },
       "put": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "UpdatePost",
         "description": "UpdatePost 接口",
@@ -662,6 +680,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -707,11 +736,22 @@
       },
       "delete": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "DeletePost",
         "description": "DeletePost 接口",
         "operationId": "community_DeletePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -756,10 +796,10 @@
         }
       }
     },
-    "/api/v1/community/posts/:post_id/like": {
+    "/api/v1/community/posts/{post_id}/like": {
       "post": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "LikePost",
         "description": "LikePost 接口",
@@ -774,6 +814,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -819,11 +870,22 @@
       },
       "delete": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "UnlikePost",
         "description": "UnlikePost 接口",
         "operationId": "community_UnlikePost",
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -868,10 +930,10 @@
         }
       }
     },
-    "/api/v1/community/posts/:post_id/comment": {
+    "/api/v1/community/posts/{post_id}/comment": {
       "post": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "CommentPost",
         "description": "CommentPost 接口",
@@ -886,6 +948,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -930,10 +1003,10 @@
         }
       }
     },
-    "/api/v1/community/posts/:post_id/comments": {
+    "/api/v1/community/posts/{post_id}/comments": {
       "get": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "GetCommentList",
         "description": "GetCommentList 接口",
@@ -958,6 +1031,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "description": "post_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -1008,7 +1090,7 @@
     "/api/v1/community/courses": {
       "get": {
         "tags": [
-          "社区功能"
+          "community"
         ],
         "summary": "GetCourses",
         "description": "GetCourses 接口",
@@ -1083,7 +1165,7 @@
     "/api/v1/jobs": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "GetJobList",
         "description": "GetJobList 接口",
@@ -1155,10 +1237,10 @@
         }
       }
     },
-    "/api/v1/jobs/:job_id": {
+    "/api/v1/jobs/{job_id}": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "GetJobDetail",
         "description": "GetJobDetail 接口",
@@ -1183,6 +1265,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "description": "job_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -1233,7 +1324,7 @@
     "/api/v1/jobs/recommend": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "GetRecommendJobs",
         "description": "GetRecommendJobs 接口",
@@ -1308,7 +1399,7 @@
     "/api/v1/jobs/search": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "SearchJobs",
         "description": "SearchJobs 接口",
@@ -1383,7 +1474,7 @@
     "/api/v1/job-categories": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "GetJobCategories",
         "description": "GetJobCategories 接口",
@@ -1458,7 +1549,7 @@
     "/api/v1/brands": {
       "get": {
         "tags": [
-          "岗位推荐"
+          "job"
         ],
         "summary": "GetBrandList",
         "description": "GetBrandList 接口",
@@ -1533,7 +1624,7 @@
     "/api/v1/auth/register": {
       "post": {
         "tags": [
-          "用户认证"
+          "auth"
         ],
         "summary": "Register",
         "description": "Register 接口",
@@ -1595,7 +1686,7 @@
     "/api/v1/auth/login": {
       "post": {
         "tags": [
-          "用户认证"
+          "auth"
         ],
         "summary": "Login",
         "description": "Login 接口",
@@ -1657,7 +1748,7 @@
     "/api/v1/auth/logout": {
       "post": {
         "tags": [
-          "用户认证"
+          "auth"
         ],
         "summary": "Logout",
         "description": "Logout 接口",
@@ -1719,7 +1810,7 @@
     "/api/v1/auth/refresh": {
       "post": {
         "tags": [
-          "用户认证"
+          "auth"
         ],
         "summary": "RefreshToken",
         "description": "RefreshToken 接口",
@@ -1781,7 +1872,7 @@
     "/api/v1/auth/profile": {
       "get": {
         "tags": [
-          "用户认证"
+          "auth"
         ],
         "summary": "GetUserProfile",
         "description": "GetUserProfile 接口",
@@ -1853,10 +1944,72 @@
         }
       }
     },
+    "/api/v1/auth/change-password": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "ChangePassword",
+        "description": "ChangePassword 接口",
+        "operationId": "auth_ChangePassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/schedules": {
       "post": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "CreateSchedule",
         "description": "CreateSchedule 接口",
@@ -1916,7 +2069,7 @@
       },
       "get": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "GetScheduleList",
         "description": "GetScheduleList 接口",
@@ -1991,7 +2144,7 @@
     "/api/v1/schedules/today": {
       "get": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "GetTodaySchedule",
         "description": "GetTodaySchedule 接口",
@@ -2063,10 +2216,10 @@
         }
       }
     },
-    "/api/v1/schedules/:schedule_id": {
+    "/api/v1/schedules/{schedule_id}": {
       "get": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "GetScheduleDetail",
         "description": "GetScheduleDetail 接口",
@@ -2091,6 +2244,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "description": "schedule_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -2139,7 +2301,7 @@
       },
       "put": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "UpdateSchedule",
         "description": "UpdateSchedule 接口",
@@ -2154,6 +2316,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "description": "schedule_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2199,11 +2372,22 @@
       },
       "delete": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "DeleteSchedule",
         "description": "DeleteSchedule 接口",
         "operationId": "schedule_DeleteSchedule",
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "description": "schedule_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2248,10 +2432,10 @@
         }
       }
     },
-    "/api/v1/schedules/:schedule_id/status": {
+    "/api/v1/schedules/{schedule_id}/status": {
       "put": {
         "tags": [
-          "日程管理"
+          "schedule"
         ],
         "summary": "UpdateScheduleStatus",
         "description": "UpdateScheduleStatus 接口",
@@ -2266,6 +2450,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "schedule_id",
+            "in": "path",
+            "required": true,
+            "description": "schedule_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -2313,7 +2508,7 @@
     "/api/v1/upload/image": {
       "post": {
         "tags": [
-          "文件上传"
+          "upload"
         ],
         "summary": "UploadImage",
         "description": "UploadImage 接口",
@@ -2375,7 +2570,7 @@
     "/api/v1/upload/file": {
       "post": {
         "tags": [
-          "文件上传"
+          "upload"
         ],
         "summary": "UploadFile",
         "description": "UploadFile 接口",
@@ -2437,7 +2632,7 @@
     "/api/v1/upload/cert": {
       "post": {
         "tags": [
-          "文件上传"
+          "upload"
         ],
         "summary": "UploadCertFile",
         "description": "UploadCertFile 接口",
@@ -2499,7 +2694,7 @@
     "/api/v1/attendance/records": {
       "get": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "GetAttendanceRecords",
         "description": "GetAttendanceRecords 接口",
@@ -2571,10 +2766,10 @@
         }
       }
     },
-    "/api/v1/attendance/records/:record_id": {
+    "/api/v1/attendance/records/{record_id}": {
       "get": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "GetAttendanceDetail",
         "description": "GetAttendanceDetail 接口",
@@ -2599,6 +2794,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "description": "record_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -2649,7 +2853,7 @@
     "/api/v1/attendance/checkin": {
       "post": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "CheckIn",
         "description": "CheckIn 接口",
@@ -2711,7 +2915,7 @@
     "/api/v1/attendance/checkout": {
       "post": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "CheckOut",
         "description": "CheckOut 接口",
@@ -2773,7 +2977,7 @@
     "/api/v1/attendance/apply-leave": {
       "post": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "ApplyLeave",
         "description": "ApplyLeave 接口",
@@ -2835,7 +3039,7 @@
     "/api/v1/attendance/apply-makeup": {
       "post": {
         "tags": [
-          "考勤管理"
+          "attendance"
         ],
         "summary": "ApplyMakeup",
         "description": "ApplyMakeup 接口",
@@ -2897,7 +3101,7 @@
     "/api/v1/admin/brands": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetBrandList",
         "description": "GetBrandList 接口",
@@ -2970,7 +3174,7 @@
       },
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "CreateBrand",
         "description": "CreateBrand 接口",
@@ -3029,10 +3233,10 @@
         }
       }
     },
-    "/api/v1/admin/brands/:brand_id": {
+    "/api/v1/admin/brands/{brand_id}": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetBrandDetail",
         "description": "GetBrandDetail 接口",
@@ -3057,6 +3261,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "brand_id",
+            "in": "path",
+            "required": true,
+            "description": "brand_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -3105,7 +3318,7 @@
       },
       "put": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "UpdateBrand",
         "description": "UpdateBrand 接口",
@@ -3120,6 +3333,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "brand_id",
+            "in": "path",
+            "required": true,
+            "description": "brand_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3164,10 +3388,10 @@
         }
       }
     },
-    "/api/v1/admin/brands/:brand_id/review": {
+    "/api/v1/admin/brands/{brand_id}/review": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "ReviewBrand",
         "description": "ReviewBrand 接口",
@@ -3182,6 +3406,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "brand_id",
+            "in": "path",
+            "required": true,
+            "description": "brand_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3229,7 +3464,7 @@
     "/api/v1/admin/brands/batch-import": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "BatchImportBrands",
         "description": "BatchImportBrands 接口",
@@ -3291,7 +3526,7 @@
     "/api/v1/admin/users": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetUserList",
         "description": "GetUserList 接口",
@@ -3364,7 +3599,7 @@
       },
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "CreateUser",
         "description": "CreateUser 接口",
@@ -3423,10 +3658,10 @@
         }
       }
     },
-    "/api/v1/admin/users/:user_id": {
+    "/api/v1/admin/users/{user_id}": {
       "put": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "UpdateUser",
         "description": "UpdateUser 接口",
@@ -3441,6 +3676,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "user_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3485,10 +3731,10 @@
         }
       }
     },
-    "/api/v1/admin/users/:user_id/reset-password": {
+    "/api/v1/admin/users/{user_id}/reset-password": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "ResetPassword",
         "description": "ResetPassword 接口",
@@ -3503,6 +3749,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "user_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3550,7 +3807,7 @@
     "/api/v1/admin/jobs": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetJobList",
         "description": "GetJobList 接口",
@@ -3622,10 +3879,10 @@
         }
       }
     },
-    "/api/v1/admin/jobs/:job_id/review": {
+    "/api/v1/admin/jobs/{job_id}/review": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "ReviewJob",
         "description": "ReviewJob 接口",
@@ -3640,6 +3897,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "description": "job_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -3687,7 +3955,7 @@
     "/api/v1/admin/statistics/brands": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetBrandStatistics",
         "description": "GetBrandStatistics 接口",
@@ -3762,7 +4030,7 @@
     "/api/v1/admin/statistics/jobs": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetJobStatistics",
         "description": "GetJobStatistics 接口",
@@ -3837,7 +4105,7 @@
     "/api/v1/admin/statistics/users": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetUserStatistics",
         "description": "GetUserStatistics 接口",
@@ -3912,7 +4180,7 @@
     "/api/v1/admin/notices": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "SendSystemNotice",
         "description": "SendSystemNotice 接口",
@@ -3972,7 +4240,7 @@
       },
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetNoticeList",
         "description": "GetNoticeList 接口",
@@ -4047,7 +4315,7 @@
     "/api/v1/admin/message-templates": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "CreateMessageTemplate",
         "description": "CreateMessageTemplate 接口",
@@ -4109,7 +4377,7 @@
     "/api/v1/admin/finance/income": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetIncomeStatistics",
         "description": "GetIncomeStatistics 接口",
@@ -4184,7 +4452,7 @@
     "/api/v1/admin/finance/settlements": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetSettlementList",
         "description": "GetSettlementList 接口",
@@ -4256,10 +4524,10 @@
         }
       }
     },
-    "/api/v1/admin/finance/settlements/:settlement_id/process": {
+    "/api/v1/admin/finance/settlements/{settlement_id}/process": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "ProcessSettlement",
         "description": "ProcessSettlement 接口",
@@ -4274,6 +4542,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "settlement_id",
+            "in": "path",
+            "required": true,
+            "description": "settlement_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -4318,10 +4597,10 @@
         }
       }
     },
-    "/api/v1/admin/config/:config_key": {
+    "/api/v1/admin/config/{config_key}": {
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetSystemConfig",
         "description": "GetSystemConfig 接口",
@@ -4346,6 +4625,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "config_key",
+            "in": "path",
+            "required": true,
+            "description": "config_key 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -4394,7 +4682,7 @@
       },
       "put": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "UpdateSystemConfig",
         "description": "UpdateSystemConfig 接口",
@@ -4409,6 +4697,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "config_key",
+            "in": "path",
+            "required": true,
+            "description": "config_key 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -4456,7 +4755,7 @@
     "/api/v1/admin/admins": {
       "post": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "CreateAdmin",
         "description": "CreateAdmin 接口",
@@ -4516,7 +4815,7 @@
       },
       "get": {
         "tags": [
-          "管理后台"
+          "admin"
         ],
         "summary": "GetAdminList",
         "description": "GetAdminList 接口",
@@ -4588,10 +4887,292 @@
         }
       }
     },
+    "/api/v1/admin/admins/{admin_id}/disable": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "DisableAdmin",
+        "description": "DisableAdmin 接口",
+        "operationId": "admin_DisableAdmin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DisableAdminReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "description": "admin_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DisableAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/admins/{admin_id}/enable": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "EnableAdmin",
+        "description": "EnableAdmin 接口",
+        "operationId": "admin_EnableAdmin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnableAdminReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "description": "admin_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnableAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/admins/{admin_id}": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "DeleteAdmin",
+        "description": "DeleteAdmin 接口",
+        "operationId": "admin_DeleteAdmin",
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "description": "admin_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/admins/{admin_id}/reset-password": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "ResetAdminPassword",
+        "description": "ResetAdminPassword 接口",
+        "operationId": "admin_ResetAdminPassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetAdminPasswordReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "description": "admin_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetAdminPasswordResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/reviews/received": {
       "get": {
         "tags": [
-          "评价系统"
+          "review"
         ],
         "summary": "GetReceivedReviews",
         "description": "GetReceivedReviews 接口",
@@ -4666,7 +5247,7 @@
     "/api/v1/reviews/given": {
       "get": {
         "tags": [
-          "评价系统"
+          "review"
         ],
         "summary": "GetGivenReviews",
         "description": "GetGivenReviews 接口",
@@ -4738,10 +5319,10 @@
         }
       }
     },
-    "/api/v1/reviews/:review_id": {
+    "/api/v1/reviews/{review_id}": {
       "get": {
         "tags": [
-          "评价系统"
+          "review"
         ],
         "summary": "GetReviewDetail",
         "description": "GetReviewDetail 接口",
@@ -4766,6 +5347,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "description": "review_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -4814,7 +5404,7 @@
       },
       "put": {
         "tags": [
-          "评价系统"
+          "review"
         ],
         "summary": "UpdateReview",
         "description": "UpdateReview 接口",
@@ -4829,6 +5419,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "description": "review_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -4876,7 +5477,7 @@
     "/api/v1/reviews": {
       "post": {
         "tags": [
-          "评价系统"
+          "review"
         ],
         "summary": "CreateReview",
         "description": "CreateReview 接口",
@@ -4938,7 +5539,7 @@
     "/api/v1/job-applications": {
       "post": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "ApplyJob",
         "description": "ApplyJob 接口",
@@ -4998,7 +5599,7 @@
       },
       "get": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "GetApplicationList",
         "description": "GetApplicationList 接口",
@@ -5073,7 +5674,7 @@
     "/api/v1/job-applications/my": {
       "get": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "GetMyApplications",
         "description": "GetMyApplications 接口",
@@ -5145,10 +5746,10 @@
         }
       }
     },
-    "/api/v1/job-applications/:application_id": {
+    "/api/v1/job-applications/{application_id}": {
       "get": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "GetApplicationDetail",
         "description": "GetApplicationDetail 接口",
@@ -5173,6 +5774,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "description": "application_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -5220,10 +5830,10 @@
         }
       }
     },
-    "/api/v1/job-applications/:application_id/cancel": {
+    "/api/v1/job-applications/{application_id}/cancel": {
       "put": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "CancelApplication",
         "description": "CancelApplication 接口",
@@ -5238,6 +5848,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "description": "application_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -5282,10 +5903,10 @@
         }
       }
     },
-    "/api/v1/job-applications/:application_id/confirm": {
+    "/api/v1/job-applications/{application_id}/confirm": {
       "put": {
         "tags": [
-          "岗位申请"
+          "job_application"
         ],
         "summary": "ConfirmApplication",
         "description": "ConfirmApplication 接口",
@@ -5300,6 +5921,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "required": true,
+            "description": "application_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -5347,7 +5979,7 @@
     "/api/v1/payments": {
       "get": {
         "tags": [
-          "支付管理"
+          "payment"
         ],
         "summary": "GetPaymentRecords",
         "description": "GetPaymentRecords 接口",
@@ -5419,10 +6051,10 @@
         }
       }
     },
-    "/api/v1/payments/:payment_id": {
+    "/api/v1/payments/{payment_id}": {
       "get": {
         "tags": [
-          "支付管理"
+          "payment"
         ],
         "summary": "GetPaymentDetail",
         "description": "GetPaymentDetail 接口",
@@ -5447,6 +6079,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "payment_id",
+            "in": "path",
+            "required": true,
+            "description": "payment_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -5497,7 +6138,7 @@
     "/api/v1/payments/withdraw": {
       "post": {
         "tags": [
-          "支付管理"
+          "payment"
         ],
         "summary": "ApplyWithdraw",
         "description": "ApplyWithdraw 接口",
@@ -5559,7 +6200,7 @@
     "/api/v1/payments/withdraw-records": {
       "get": {
         "tags": [
-          "支付管理"
+          "payment"
         ],
         "summary": "GetWithdrawRecords",
         "description": "GetWithdrawRecords 接口",
@@ -5634,7 +6275,7 @@
     "/api/v1/user/profile": {
       "put": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "UpdateProfile",
         "description": "UpdateProfile 接口",
@@ -5696,7 +6337,7 @@
     "/api/v1/user/upload-avatar": {
       "post": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "UploadAvatar",
         "description": "UploadAvatar 接口",
@@ -5758,7 +6399,7 @@
     "/api/v1/user/upload-cert": {
       "post": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "UploadCert",
         "description": "UploadCert 接口",
@@ -5820,7 +6461,7 @@
     "/api/v1/user/favorites": {
       "get": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "GetMyFavorites",
         "description": "GetMyFavorites 接口",
@@ -5893,7 +6534,7 @@
       },
       "post": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "FavoriteJob",
         "description": "FavoriteJob 接口",
@@ -5952,14 +6593,25 @@
         }
       }
     },
-    "/api/v1/user/favorites/:job_id": {
+    "/api/v1/user/favorites/{job_id}": {
       "delete": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "UnfavoriteJob",
         "description": "UnfavoriteJob 接口",
         "operationId": "user_UnfavoriteJob",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "description": "job_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -6007,7 +6659,7 @@
     "/api/v1/user/income": {
       "get": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "GetIncome",
         "description": "GetIncome 接口",
@@ -6082,7 +6734,7 @@
     "/api/v1/user/income/detail": {
       "get": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "GetIncomeDetail",
         "description": "GetIncomeDetail 接口",
@@ -6157,7 +6809,7 @@
     "/api/v1/user/performance": {
       "get": {
         "tags": [
-          "用户中心"
+          "user"
         ],
         "summary": "GetPerformance",
         "description": "GetPerformance 接口",
@@ -6232,7 +6884,7 @@
     "/api/v1/messages": {
       "get": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "GetMessageList",
         "description": "GetMessageList 接口",
@@ -6305,7 +6957,7 @@
       },
       "post": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "SendMessage",
         "description": "SendMessage 接口",
@@ -6364,10 +7016,10 @@
         }
       }
     },
-    "/api/v1/messages/:message_id": {
+    "/api/v1/messages/{message_id}": {
       "get": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "GetMessageDetail",
         "description": "GetMessageDetail 接口",
@@ -6392,6 +7044,15 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
+            }
+          },
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "description": "message_id 参数",
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -6439,10 +7100,10 @@
         }
       }
     },
-    "/api/v1/messages/:message_id/read": {
+    "/api/v1/messages/{message_id}/read": {
       "put": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "MarkMessageRead",
         "description": "MarkMessageRead 接口",
@@ -6457,6 +7118,17 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "message_id",
+            "in": "path",
+            "required": true,
+            "description": "message_id 参数",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "成功",
@@ -6504,7 +7176,7 @@
     "/api/v1/messages/batch-read": {
       "put": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "BatchMarkRead",
         "description": "BatchMarkRead 接口",
@@ -6566,7 +7238,7 @@
     "/api/v1/messages/unread-count": {
       "get": {
         "tags": [
-          "消息管理"
+          "message"
         ],
         "summary": "GetUnreadCount",
         "description": "GetUnreadCount 接口",
@@ -7175,7 +7847,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "config_info": {
             "$ref": "#/components/schemas/SystemConfigInfo"
@@ -7190,7 +7862,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "version": {
             "type": "string"
@@ -7231,7 +7903,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "feedback_id": {
             "type": "integer"
@@ -7269,10 +7941,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "notices": {
             "type": "array",
@@ -7297,10 +7969,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "notice": {
-            "$ref": "#/components/schemas/common.CommunityPostInfo"
+            "$ref": "#/components/schemas/CommunityPostInfo"
           }
         }
       },
@@ -7308,7 +7980,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "post_type": {
             "type": "string"
@@ -7325,15 +7997,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "posts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.CommunityPostInfo"
+              "$ref": "#/components/schemas/CommunityPostInfo"
             }
           }
         }
@@ -7353,10 +8025,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "post": {
-            "$ref": "#/components/schemas/common.CommunityPostInfo"
+            "$ref": "#/components/schemas/CommunityPostInfo"
           }
         }
       },
@@ -7382,7 +8054,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "post_id": {
             "type": "integer"
@@ -7413,10 +8085,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "post": {
-            "$ref": "#/components/schemas/common.CommunityPostInfo"
+            "$ref": "#/components/schemas/CommunityPostInfo"
           }
         }
       },
@@ -7435,7 +8107,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -7454,7 +8126,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "like_count": {
             "type": "integer"
@@ -7476,7 +8148,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "like_count": {
             "type": "integer"
@@ -7505,7 +8177,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "comment_id": {
             "type": "integer"
@@ -7519,7 +8191,7 @@
             "type": "integer"
           },
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           }
         },
         "required": [
@@ -7530,15 +8202,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "comments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.MessageInfo"
+              "$ref": "#/components/schemas/MessageInfo"
             }
           }
         }
@@ -7547,7 +8219,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "category": {
             "type": "string"
@@ -7558,15 +8230,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "courses": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.CommunityPostInfo"
+              "$ref": "#/components/schemas/CommunityPostInfo"
             }
           }
         }
@@ -7614,15 +8286,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "jobs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobInfo"
+              "$ref": "#/components/schemas/JobInfo"
             }
           }
         }
@@ -7642,10 +8314,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "job": {
-            "$ref": "#/components/schemas/common.JobInfo"
+            "$ref": "#/components/schemas/JobInfo"
           }
         }
       },
@@ -7653,7 +8325,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "latitude": {
             "type": "number"
@@ -7667,15 +8339,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "jobs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobInfo"
+              "$ref": "#/components/schemas/JobInfo"
             }
           }
         }
@@ -7684,7 +8356,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "keyword": {
             "type": "string"
@@ -7713,15 +8385,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "jobs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobInfo"
+              "$ref": "#/components/schemas/JobInfo"
             }
           }
         }
@@ -7738,12 +8410,12 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "categories": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobCategoryInfo"
+              "$ref": "#/components/schemas/JobCategoryInfo"
             }
           }
         }
@@ -7788,10 +8460,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "brands": {
             "type": "array",
@@ -7828,7 +8500,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
             "type": "integer"
@@ -7860,7 +8532,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
             "type": "integer"
@@ -7888,7 +8560,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -7907,7 +8579,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "token": {
             "type": "string"
@@ -7925,13 +8597,36 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "user_info": {
-            "$ref": "#/components/schemas/common.UserInfo"
+            "$ref": "#/components/schemas/UserInfo"
           },
           "worker_info": {
-            "$ref": "#/components/schemas/common.WorkerInfo"
+            "$ref": "#/components/schemas/WorkerInfo"
+          }
+        }
+      },
+      "ChangePasswordReq": {
+        "type": "object",
+        "properties": {
+          "old_password": {
+            "type": "string"
+          },
+          "new_password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "old_password",
+          "new_password"
+        ]
+      },
+      "ChangePasswordResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -7970,7 +8665,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "schedule_id": {
             "type": "integer"
@@ -7987,7 +8682,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -8004,15 +8699,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "schedules": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.ScheduleInfo"
+              "$ref": "#/components/schemas/ScheduleInfo"
             }
           }
         }
@@ -8029,12 +8724,12 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "schedules": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.ScheduleInfo"
+              "$ref": "#/components/schemas/ScheduleInfo"
             }
           }
         }
@@ -8054,10 +8749,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "schedule": {
-            "$ref": "#/components/schemas/common.ScheduleInfo"
+            "$ref": "#/components/schemas/ScheduleInfo"
           }
         }
       },
@@ -8094,10 +8789,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "schedule": {
-            "$ref": "#/components/schemas/common.ScheduleInfo"
+            "$ref": "#/components/schemas/ScheduleInfo"
           }
         }
       },
@@ -8120,7 +8815,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "status": {
             "type": "string"
@@ -8142,7 +8837,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -8164,7 +8859,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "image_url": {
             "type": "string"
@@ -8195,7 +8890,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "file_url": {
             "type": "string"
@@ -8230,7 +8925,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "file_url": {
             "type": "string"
@@ -8250,7 +8945,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "job_id": {
             "type": "integer"
@@ -8267,15 +8962,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "records": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.AttendanceRecordInfo"
+              "$ref": "#/components/schemas/AttendanceRecordInfo"
             }
           }
         }
@@ -8295,10 +8990,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "record": {
-            "$ref": "#/components/schemas/common.AttendanceRecordInfo"
+            "$ref": "#/components/schemas/AttendanceRecordInfo"
           }
         }
       },
@@ -8327,7 +9022,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "record_id": {
             "type": "integer"
@@ -8362,7 +9057,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "record_id": {
             "type": "integer"
@@ -8398,7 +9093,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "leave_id": {
             "type": "integer"
@@ -8432,7 +9127,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "makeup_id": {
             "type": "integer"
@@ -8561,7 +9256,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "brand_info": {
             "$ref": "#/components/schemas/BrandDetail"
@@ -8637,7 +9332,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "brand_id": {
             "type": "integer"
@@ -8710,7 +9405,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -8742,7 +9437,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -8761,7 +9456,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "success_count": {
             "type": "integer"
@@ -8846,10 +9541,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "users": {
             "type": "array",
@@ -8862,7 +9557,7 @@
       "CreateUserReq": {
         "type": "object",
         "properties": {
-          "username": {
+          "phone": {
             "type": "string"
           },
           "real_name": {
@@ -8880,15 +9575,12 @@
           "email": {
             "type": "string"
           },
-          "phone": {
-            "type": "string"
-          },
           "permissions": {
             "type": "string"
           }
         },
         "required": [
-          "username",
+          "phone",
           "real_name",
           "brand_id",
           "role"
@@ -8898,7 +9590,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
             "type": "integer"
@@ -8938,7 +9630,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -8961,7 +9653,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -8990,7 +9682,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -9046,7 +9738,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "brand_stats": {
             "$ref": "#/components/schemas/StatisticsData"
@@ -9089,7 +9781,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "job_stats": {
             "$ref": "#/components/schemas/StatisticsData"
@@ -9129,7 +9821,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "worker_stats": {
             "$ref": "#/components/schemas/StatisticsData"
@@ -9226,7 +9918,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "notice_id": {
             "type": "integer"
@@ -9294,7 +9986,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "template_id": {
             "type": "integer"
@@ -9342,7 +10034,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "income_stats": {
             "$ref": "#/components/schemas/IncomeStatsInfo"
@@ -9421,10 +10113,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "settlements": {
             "type": "array",
@@ -9456,7 +10148,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -9502,7 +10194,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -9538,7 +10230,7 @@
       "CreateAdminReq": {
         "type": "object",
         "properties": {
-          "username": {
+          "phone": {
             "type": "string"
           },
           "real_name": {
@@ -9555,7 +10247,7 @@
           }
         },
         "required": [
-          "username",
+          "phone",
           "real_name",
           "password",
           "role"
@@ -9565,7 +10257,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "admin_id": {
             "type": "integer"
@@ -9597,10 +10289,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_info": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "admins": {
             "type": "array",
@@ -9610,11 +10302,91 @@
           }
         }
       },
+      "DisableAdminReq": {
+        "type": "object",
+        "properties": {
+          "admin_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "admin_id"
+        ]
+      },
+      "DisableAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "EnableAdminReq": {
+        "type": "object",
+        "properties": {
+          "admin_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "admin_id"
+        ]
+      },
+      "EnableAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "DeleteAdminReq": {
+        "type": "object",
+        "properties": {
+          "admin_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "admin_id"
+        ]
+      },
+      "DeleteAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "ResetAdminPasswordReq": {
+        "type": "object",
+        "properties": {
+          "admin_id": {
+            "type": "integer"
+          },
+          "new_password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "admin_id",
+          "new_password"
+        ]
+      },
+      "ResetAdminPasswordResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
       "GetReceivedReviewsReq": {
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -9628,15 +10400,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "reviews": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.ReviewInfo"
+              "$ref": "#/components/schemas/ReviewInfo"
             }
           }
         }
@@ -9645,7 +10417,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -9659,15 +10431,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "reviews": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.ReviewInfo"
+              "$ref": "#/components/schemas/ReviewInfo"
             }
           }
         }
@@ -9687,10 +10459,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "review": {
-            "$ref": "#/components/schemas/common.ReviewInfo"
+            "$ref": "#/components/schemas/ReviewInfo"
           }
         }
       },
@@ -9725,7 +10497,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "review_id": {
             "type": "integer"
@@ -9755,10 +10527,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "review": {
-            "$ref": "#/components/schemas/common.ReviewInfo"
+            "$ref": "#/components/schemas/ReviewInfo"
           }
         }
       },
@@ -9777,7 +10549,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "application_id": {
             "type": "integer"
@@ -9797,7 +10569,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "status": {
             "type": "string"
@@ -9808,15 +10580,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "applications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobApplicationInfo"
+              "$ref": "#/components/schemas/JobApplicationInfo"
             }
           }
         }
@@ -9825,7 +10597,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "status": {
             "type": "string"
@@ -9836,15 +10608,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "applications": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.JobApplicationInfo"
+              "$ref": "#/components/schemas/JobApplicationInfo"
             }
           }
         }
@@ -9864,10 +10636,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "application": {
-            "$ref": "#/components/schemas/common.JobApplicationInfo"
+            "$ref": "#/components/schemas/JobApplicationInfo"
           }
         }
       },
@@ -9890,7 +10662,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -9909,7 +10681,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -9917,7 +10689,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -9934,15 +10706,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "payments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.PaymentInfo"
+              "$ref": "#/components/schemas/PaymentInfo"
             }
           }
         }
@@ -9962,10 +10734,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "payment": {
-            "$ref": "#/components/schemas/common.PaymentInfo"
+            "$ref": "#/components/schemas/PaymentInfo"
           }
         }
       },
@@ -9992,7 +10764,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "withdraw_id": {
             "type": "integer"
@@ -10003,7 +10775,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -10020,15 +10792,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "withdraws": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.PaymentInfo"
+              "$ref": "#/components/schemas/PaymentInfo"
             }
           }
         }
@@ -10043,7 +10815,7 @@
             "type": "string"
           },
           "worker_info": {
-            "$ref": "#/components/schemas/common.WorkerInfo"
+            "$ref": "#/components/schemas/WorkerInfo"
           }
         }
       },
@@ -10051,13 +10823,13 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "user_info": {
-            "$ref": "#/components/schemas/common.UserInfo"
+            "$ref": "#/components/schemas/UserInfo"
           },
           "worker_info": {
-            "$ref": "#/components/schemas/common.WorkerInfo"
+            "$ref": "#/components/schemas/WorkerInfo"
           }
         }
       },
@@ -10076,7 +10848,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "avatar_url": {
             "type": "string"
@@ -10102,7 +10874,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "cert_type": {
             "type": "string"
@@ -10119,7 +10891,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           }
         }
       },
@@ -10127,15 +10899,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "favorites": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.UserFavoriteJobInfo"
+              "$ref": "#/components/schemas/UserFavoriteJobInfo"
             }
           }
         }
@@ -10155,7 +10927,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "favorite_id": {
             "type": "integer"
@@ -10177,7 +10949,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -10199,7 +10971,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "total_income": {
             "type": "number"
@@ -10213,7 +10985,7 @@
           "payments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.PaymentInfo"
+              "$ref": "#/components/schemas/PaymentInfo"
             }
           }
         }
@@ -10222,7 +10994,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "start_date": {
             "type": "string"
@@ -10239,15 +11011,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "payments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.PaymentInfo"
+              "$ref": "#/components/schemas/PaymentInfo"
             }
           }
         }
@@ -10264,7 +11036,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "completed_jobs": {
             "type": "integer"
@@ -10287,7 +11059,7 @@
         "type": "object",
         "properties": {
           "page_req": {
-            "$ref": "#/components/schemas/common.PageReq"
+            "$ref": "#/components/schemas/PageReq"
           },
           "msg_category": {
             "type": "string"
@@ -10301,15 +11073,15 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "page_resp": {
-            "$ref": "#/components/schemas/common.PageResp"
+            "$ref": "#/components/schemas/PageResp"
           },
           "messages": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/common.MessageInfo"
+              "$ref": "#/components/schemas/MessageInfo"
             }
           }
         }
@@ -10329,10 +11101,10 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "message": {
-            "$ref": "#/components/schemas/common.MessageInfo",
+            "$ref": "#/components/schemas/MessageInfo",
             "description": "消息"
           }
         }
@@ -10363,7 +11135,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "message_id": {
             "type": "integer"
@@ -10385,7 +11157,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           }
         }
       },
@@ -10407,7 +11179,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "count": {
             "type": "integer"
@@ -10426,7 +11198,7 @@
         "type": "object",
         "properties": {
           "base": {
-            "$ref": "#/components/schemas/common.BaseResp"
+            "$ref": "#/components/schemas/BaseResp"
           },
           "unread_count": {
             "type": "integer"

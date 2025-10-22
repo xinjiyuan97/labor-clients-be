@@ -52,11 +52,7 @@ func GetAdminListLogic(req *admin.GetAdminListReq) (*admin.GetAdminListResp, err
 	// 构建管理员信息
 	var adminInfos []*admin.AdminInfo
 	for _, adminUser := range admins {
-		adminInfo := &admin.AdminInfo{
-			AdminID:  adminUser.ID,
-			Username: adminUser.Username,
-			Role:     adminUser.Role,
-		}
+		adminInfo := adminUser.ToThriftAdmin()
 		adminInfos = append(adminInfos, adminInfo)
 	}
 

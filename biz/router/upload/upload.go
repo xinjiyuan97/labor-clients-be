@@ -26,6 +26,7 @@ func Register(r *server.Hertz) {
 				_upload.POST("/cert", append(_uploadcertfileMw(), upload.UploadCertFile)...)
 				_upload.POST("/file", append(_uploadfileMw(), upload.UploadFile)...)
 				_upload.POST("/image", append(_uploadimageMw(), upload.UploadImage)...)
+				_upload.GET("/signed-url", append(_getsignedurlMw(), upload.GetSignedURL)...)
 			}
 		}
 	}

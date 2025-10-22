@@ -51,3 +51,11 @@ func _registerMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _changepasswordMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.JWTAuth(),
+		middleware.RequireAuth(),
+	}
+}

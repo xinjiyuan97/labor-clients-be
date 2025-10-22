@@ -209,3 +209,38 @@ func _getuserstatisticsMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _adminsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _admin_idMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deleteadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _resetadminpasswordMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _admin_id0Mw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _disableadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _enableadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

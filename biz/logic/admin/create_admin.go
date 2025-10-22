@@ -14,10 +14,10 @@ import (
 
 // CreateAdminLogic 创建管理员业务逻辑
 func CreateAdminLogic(req *admin.CreateAdminReq) (*admin.CreateAdminResp, error) {
-	// 检查用户名是否已存在
-	existingUser, err := mysql.GetUserByUsername(nil, req.Username)
+	// 检查手机号是否已存在
+	existingUser, err := mysql.GetUserByPhone(nil, req.Phone)
 	if err != nil {
-		utils.Errorf("检查用户名失败: %v", err)
+		utils.Errorf("检查手机号失败: %v", err)
 		return &admin.CreateAdminResp{
 			Base: &common.BaseResp{
 				Code:      500,
@@ -31,7 +31,7 @@ func CreateAdminLogic(req *admin.CreateAdminReq) (*admin.CreateAdminResp, error)
 		return &admin.CreateAdminResp{
 			Base: &common.BaseResp{
 				Code:      400,
-				Message:   "用户名已存在",
+				Message:   "手机号已存在",
 				Timestamp: time.Now().Format(time.RFC3339),
 			},
 		}, nil
@@ -52,9 +52,10 @@ func CreateAdminLogic(req *admin.CreateAdminReq) (*admin.CreateAdminResp, error)
 
 	// 创建管理员用户
 	adminUser := &models.User{
-		Username:     req.Username,
+		Phone:        req.Phone,
+		Username:     req.Phone, // 使用手机号作为用户名
 		PasswordHash: hashedPassword,
-		Role:         "admin",
+		Role:         req.Role,
 	}
 
 	err = mysql.Transaction(func(tx *gorm.DB) error {

@@ -13,22 +13,27 @@ import (
 	"github.com/xinjiyuan97/labor-clients/config"
 	"github.com/xinjiyuan97/labor-clients/dal"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
+	"github.com/xinjiyuan97/labor-clients/dal/tos"
 	"github.com/xinjiyuan97/labor-clients/models"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
 const (
-	ModeServer  = "server"
-	ModeMigrate = "migrate"
+	ModeServer      = "server"
+	ModeMigrate     = "migrate"
+	ModeCreateAdmin = "create-admin"
 )
 
 func main() {
 	// 解析命令行参数
 	var (
-		mode    = flag.String("mode", ModeServer, "运行模式: server(启动服务器) | migrate(数据库迁移)")
-		env     = flag.String("env", "example", "环境配置: example | prod")
-		help    = flag.Bool("help", false, "显示帮助信息")
-		version = flag.Bool("version", false, "显示版本信息")
+		mode       = flag.String("mode", ModeServer, "运行模式: server(启动服务器) | migrate(数据库迁移) | create-admin(创建管理员)")
+		env        = flag.String("env", "example", "环境配置: example | prod")
+		help       = flag.Bool("help", false, "显示帮助信息")
+		version    = flag.Bool("version", false, "显示版本信息")
+		adminPhone = flag.String("phone", "", "管理员手机号（create-admin模式）")
+		adminPass  = flag.String("password", "", "管理员密码（create-admin模式）")
+		adminRole  = flag.String("role", "admin", "管理员角色（create-admin模式）")
 	)
 	flag.Parse()
 
@@ -45,8 +50,8 @@ func main() {
 	}
 
 	// 验证运行模式
-	if *mode != ModeServer && *mode != ModeMigrate {
-		log.Fatalf("无效的运行模式: %s，支持的模式: %s, %s", *mode, ModeServer, ModeMigrate)
+	if *mode != ModeServer && *mode != ModeMigrate && *mode != ModeCreateAdmin {
+		log.Fatalf("无效的运行模式: %s，支持的模式: %s, %s, %s", *mode, ModeServer, ModeMigrate, ModeCreateAdmin)
 	}
 
 	// 加载配置
@@ -54,6 +59,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
 	}
+
+	config.SetGlobalConfig(cfg)
 
 	// 初始化基础组件
 	if err := initBaseComponents(cfg); err != nil {
@@ -66,6 +73,8 @@ func main() {
 		runServer(cfg)
 	case ModeMigrate:
 		runMigrate(cfg)
+	case ModeCreateAdmin:
+		runCreateAdmin(cfg, *adminPhone, *adminPass, *adminRole)
 	default:
 		log.Fatalf("未知的运行模式: %s", *mode)
 	}
@@ -128,6 +137,15 @@ func initBaseComponents(cfg *config.Config) error {
 	// 初始化数据访问层
 	if err := dal.InitDAL(cfg); err != nil {
 		return fmt.Errorf("初始化数据访问层失败: %v", err)
+	}
+
+	// 初始化TOS客户端（仅当provider为volcengine时）
+	if cfg.OSS.Provider == "volcengine" {
+		if err := tos.Init(&cfg.OSS); err != nil {
+			return fmt.Errorf("初始化TOS客户端失败: %v", err)
+		}
+		// 将TOS客户端设置到utils包中（避免循环导入）
+		utils.SetTOSClient(tos.GetClient())
 	}
 
 	return nil
@@ -219,6 +237,72 @@ func runMigrate(cfg *config.Config) {
 	}
 }
 
+// runCreateAdmin 创建管理员
+func runCreateAdmin(cfg *config.Config, phone, password, role string) {
+	utils.Info("启动创建管理员模式...")
+
+	// 验证参数
+	if phone == "" {
+		log.Fatal("错误: 必须提供管理员手机号 (-phone)")
+	}
+	if password == "" {
+		log.Fatal("错误: 必须提供管理员密码 (-password)")
+	}
+
+	// 确保 MySQL 连接已初始化
+	if mysql.GetDB() == nil {
+		log.Fatal("MySQL 数据库连接未初始化，请检查配置")
+	}
+
+	// 检查手机号是否已存在
+	existingUser, err := mysql.GetUserByPhone(nil, phone)
+	if err != nil {
+		utils.Errorf("检查手机号失败: %v", err)
+		log.Fatal("系统错误")
+	}
+
+	if existingUser != nil {
+		log.Fatalf("手机号 %s 已存在，无法创建管理员", phone)
+	}
+
+	// 加密密码
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		utils.Errorf("密码加密失败: %v", err)
+		log.Fatal("密码加密失败")
+	}
+
+	// 创建管理员用户
+	adminUser := &models.User{
+		Phone:        phone,
+		Username:     phone, // 使用手机号作为用户名
+		PasswordHash: hashedPassword,
+		Role:         role,
+	}
+
+	if err := mysql.CreateUser(nil, adminUser); err != nil {
+		utils.Errorf("创建管理员失败: %v", err)
+		log.Fatal("创建管理员失败")
+	}
+
+	utils.LogWithFields(map[string]interface{}{
+		"phone":    phone,
+		"role":     role,
+		"user_id":  adminUser.ID,
+		"username": adminUser.Username,
+	}).Info("管理员创建成功")
+
+	fmt.Println("========================================")
+	fmt.Printf("✓ 管理员创建成功!\n")
+	fmt.Println("========================================")
+	fmt.Printf("用户ID:   %d\n", adminUser.ID)
+	fmt.Printf("手机号:   %s\n", phone)
+	fmt.Printf("用户名:   %s\n", adminUser.Username)
+	fmt.Printf("角色:     %s\n", role)
+	fmt.Printf("创建时间: %s\n", adminUser.CreatedAt.Format("2006-01-02 15:04:05"))
+	fmt.Println("========================================")
+}
+
 // showHelp 显示帮助信息
 func showHelp() {
 	fmt.Println("零工APP后端服务")
@@ -228,9 +312,15 @@ func showHelp() {
 	fmt.Println()
 	fmt.Println("选项:")
 	fmt.Println("  -mode string")
-	fmt.Printf("        运行模式: %s(启动服务器) | %s(数据库迁移) (默认: %s)\n", ModeServer, ModeMigrate, ModeServer)
+	fmt.Printf("        运行模式: %s(启动服务器) | %s(数据库迁移) | %s(创建管理员) (默认: %s)\n", ModeServer, ModeMigrate, ModeCreateAdmin, ModeServer)
 	fmt.Println("  -env string")
 	fmt.Println("        环境配置: example | prod (默认: example)")
+	fmt.Println("  -phone string")
+	fmt.Println("        管理员手机号 (仅用于 create-admin 模式)")
+	fmt.Println("  -password string")
+	fmt.Println("        管理员密码 (仅用于 create-admin 模式)")
+	fmt.Println("  -role string")
+	fmt.Println("        管理员角色 (仅用于 create-admin 模式，默认: admin)")
 	fmt.Println("  -help")
 	fmt.Println("        显示帮助信息")
 	fmt.Println("  -version")
@@ -242,6 +332,12 @@ func showHelp() {
 	fmt.Println()
 	fmt.Println("  # 执行数据库迁移")
 	fmt.Println("  main -mode migrate -env prod")
+	fmt.Println()
+	fmt.Println("  # 创建管理员")
+	fmt.Println("  main -mode create-admin -phone 13800138000 -password admin123")
+	fmt.Println()
+	fmt.Println("  # 创建管理员（指定角色）")
+	fmt.Println("  main -mode create-admin -phone 13900139000 -password super123 -role super_admin")
 	fmt.Println()
 	fmt.Println("  # 使用环境变量")
 	fmt.Println("  ENV=prod main -mode server")

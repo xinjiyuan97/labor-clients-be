@@ -22,7 +22,7 @@ database:
   max_open_conns: 100        # 最大打开连接数
   max_idle_conns: 10         # 最大空闲连接数
   conn_max_lifetime: 3600    # 连接最大生命周期(秒)
-  log_level: "warn"          # 日志级别: silent, error, warn, info
+  log_level: "debug"          # 日志级别: silent, error, warn, info
 
 # Redis配置
 redis:
@@ -38,25 +38,28 @@ redis:
 
 # 对象存储配置
 oss:
-  provider: "aliyun"         # 存储提供商: aliyun, tencent, aws, local
-  access_key: "your_access_key"    # 访问密钥
-  secret_key: "your_secret_key"    # 秘密密钥
-  region: "cn-hangzhou"      # 区域
-  bucket: "your-bucket"      # 存储桶名称
-  endpoint: "oss-cn-hangzhou.aliyuncs.com"  # 端点地址
-  base_url: "https://your-bucket.oss-cn-hangzhou.aliyuncs.com/"  # 基础URL
-  upload_path: "./uploads/"  # 本地上传路径
+  provider: "volcengine"     # 存储提供商: aliyun, tencent, aws, volcengine, local
+  access_key: "your_volcengine_access_key"    # 访问密钥
+  secret_key: "your_volcengine_secret_key"    # 秘密密钥
+  region: "cn-beijing"       # 区域 (例如: cn-beijing, cn-shanghai)
+  bucket: "your-bucket-name"      # 存储桶名称
+  endpoint: "tos-cn-beijing.volces.com"  # 端点地址 (例如: tos-cn-beijing.volces.com)
+  base_url: "https://your-bucket.tos-cn-beijing.volces.com/"  # 基础URL
+  upload_path: "uploads/"    # 上传路径前缀
   max_file_size: 10485760    # 最大文件大小(10MB)
   allowed_exts:              # 允许的文件扩展名
     - "jpg"
     - "jpeg"
     - "png"
     - "gif"
+    - "webp"
     - "pdf"
     - "doc"
     - "docx"
     - "xls"
     - "xlsx"
+    - "zip"
+    - "rar"
 
 # 日志配置
 log:

@@ -98,6 +98,13 @@ func CountBrandsForAdmin(tx *gorm.DB) (int64, error) {
 	return count, nil
 }
 
+// GetBrandByIDForAdmin 根据ID获取品牌信息（管理员用）
+// 注意：这个函数与brand.go中的GetBrandByID功能相同，将来应该合并
+func GetBrandByIDForAdmin(tx *gorm.DB, brandID int64) (*models.Brand, error) {
+	// 直接调用brand.go中的GetBrandByID
+	return GetBrandByID(tx, brandID)
+}
+
 // GetBrandStatistics 获取品牌统计信息
 func GetBrandStatistics(tx *gorm.DB) (map[string]int64, error) {
 	if tx == nil {
