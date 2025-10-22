@@ -40,3 +40,8 @@ func _uploadimageMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getsignedurlMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -174,3 +174,45 @@ func GetUserByUsername(tx *gorm.DB, username string) (*models.User, error) {
 
 	return &user, nil
 }
+
+// UpdateUserStatus 更新用户状态
+func UpdateUserStatus(tx *gorm.DB, userID int64, status string) error {
+	if tx == nil {
+		tx = DB
+	}
+
+	if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("status", status).Error; err != nil {
+		utils.Errorf("更新用户状态失败: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// UpdateUserPassword 更新用户密码
+func UpdateUserPassword(tx *gorm.DB, userID int64, hashedPassword string) error {
+	if tx == nil {
+		tx = DB
+	}
+
+	if err := tx.Model(&models.User{}).Where("id = ?", userID).Update("password_hash", hashedPassword).Error; err != nil {
+		utils.Errorf("更新用户密码失败: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// DeleteUser 软删除用户
+func DeleteUser(tx *gorm.DB, userID int64) error {
+	if tx == nil {
+		tx = DB
+	}
+
+	if err := tx.Delete(&models.User{}, userID).Error; err != nil {
+		utils.Errorf("删除用户失败: %v", err)
+		return err
+	}
+
+	return nil
+}

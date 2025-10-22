@@ -62,19 +62,19 @@ class ThriftToOpenAPIConverter:
         
         # 模块信息
         self.modules = {
-            "auth": {"name": "用户认证", "description": "用户注册、登录、认证相关接口"},
-            "schedule": {"name": "日程管理", "description": "日程创建、查询、管理相关接口"},
-            "job": {"name": "岗位推荐", "description": "岗位列表、详情、推荐相关接口"},
-            "job_application": {"name": "岗位申请", "description": "岗位申请、状态管理相关接口"},
-            "message": {"name": "消息管理", "description": "消息发送、接收、管理相关接口"},
-            "user": {"name": "用户中心", "description": "用户信息、收藏、收入相关接口"},
-            "community": {"name": "社区功能", "description": "社区帖子、互动相关接口"},
-            "attendance": {"name": "考勤管理", "description": "打卡、考勤记录相关接口"},
-            "review": {"name": "评价系统", "description": "双向评价、评分管理相关接口"},
-            "payment": {"name": "支付管理", "description": "收入统计、提现相关接口"},
-            "system": {"name": "系统功能", "description": "系统配置、公告相关接口"},
-            "upload": {"name": "文件上传", "description": "文件、图片上传相关接口"},
-            "admin": {"name": "管理后台", "description": "管理员管理品牌方等信息"},
+            "auth": {"name": "auth", "description": "用户注册、登录、认证相关接口"},
+            "schedule": {"name": "schedule", "description": "日程创建、查询、管理相关接口"},
+            "job": {"name": "job", "description": "岗位列表、详情、推荐相关接口"},
+            "job_application": {"name": "job_application", "description": "岗位申请、状态管理相关接口"},
+            "message": {"name": "message", "description": "消息发送、接收、管理相关接口"},
+            "user": {"name": "user", "description": "用户信息、收藏、收入相关接口"},
+            "community": {"name": "community", "description": "社区帖子、互动相关接口"},
+            "attendance": {"name": "attendance", "description": "打卡、考勤记录相关接口"},
+            "review": {"name": "review", "description": "双向评价、评分管理相关接口"},
+            "payment": {"name": "payment", "description": "收入统计、提现相关接口"},
+            "system": {"name": "system", "description": "系统配置、公告相关接口"},
+            "upload": {"name": "upload", "description": "文件、图片上传相关接口"},
+            "admin": {"name": "admin", "description": "管理员管理品牌方等信息"},
         }
 
     def parse_thrift_file(self, file_path: str) -> Dict[str, Any]:
@@ -205,7 +205,9 @@ class ThriftToOpenAPIConverter:
             return {"type": "object"}
         else:
             # 自定义类型，作为引用处理
-            return {"$ref": f"#/components/schemas/{thrift_type}"}
+            # 去掉命名空间前缀（如 common.BaseResp -> BaseResp）
+            schema_name = thrift_type.split('.')[-1]
+            return {"$ref": f"#/components/schemas/{schema_name}"}
 
     def convert_struct_to_schema(self, struct_name: str, struct_info: Dict[str, Any]) -> Dict[str, Any]:
         """将 Thrift 结构体转换为 OpenAPI Schema"""
@@ -256,8 +258,9 @@ class ThriftToOpenAPIConverter:
         else:
             return None
         
-        # 转换路径参数
-        path = path.replace(":param", "{param}")
+        # 转换路径参数：将 :xxx 格式转换为 {xxx} 格式
+        # 例如：/api/v1/admin/admins/:admin_id -> /api/v1/admin/admins/{admin_id}
+        path = re.sub(r':([a-zA-Z_][a-zA-Z0-9_]*)', r'{\1}', path)
         
         operation = {
             "tags": [self.modules.get(module_name, {}).get("name", module_name)],

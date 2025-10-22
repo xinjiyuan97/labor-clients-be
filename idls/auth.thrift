@@ -65,10 +65,22 @@ struct GetUserProfileResp {
     3: common.WorkerInfo worker_info (api.body="worker_info");
 }
 
+// 修改密码请求
+struct ChangePasswordReq {
+    1: string old_password (api.body="old_password", api.vd="len($)>0");
+    2: string new_password (api.body="new_password", api.vd="len($)>0");
+}
+
+// 修改密码响应
+struct ChangePasswordResp {
+    1: common.BaseResp base (api.body="base");
+}
+
 service AuthService {
     RegisterResp Register(1: RegisterReq request) (api.post="/api/v1/auth/register");
     LoginResp Login(1: LoginReq request) (api.post="/api/v1/auth/login");
     LogoutResp Logout(1: LogoutReq request) (api.post="/api/v1/auth/logout");
     RefreshTokenResp RefreshToken(1: RefreshTokenReq request) (api.post="/api/v1/auth/refresh");
     GetUserProfileResp GetUserProfile(1: GetUserProfileReq request) (api.get="/api/v1/auth/profile");
+    ChangePasswordResp ChangePassword(1: ChangePasswordReq request) (api.post="/api/v1/auth/change-password");
 }

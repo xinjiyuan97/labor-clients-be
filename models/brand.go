@@ -1,5 +1,11 @@
 package models
 
+import (
+	"time"
+
+	"github.com/xinjiyuan97/labor-clients/biz/model/admin"
+)
+
 // Brand 品牌信息表
 type Brand struct {
 	BaseModel
@@ -12,4 +18,20 @@ type Brand struct {
 // TableName 指定表名
 func (Brand) TableName() string {
 	return "brands"
+}
+
+// ToThriftBrand 转换为Thrift品牌信息
+func (b *Brand) ToThriftBrand() *admin.BrandDetail {
+	return &admin.BrandDetail{
+		BrandID:       b.ID,
+		CompanyName:   b.Name,
+		Logo:          b.Logo,
+		Description:   b.Description,
+		AuthStatus:    b.AuthStatus,
+		CreatedAt:     b.CreatedAt.Format(time.DateTime),
+		UpdatedAt:     b.UpdatedAt.Format(time.DateTime),
+		AccountStatus: "active",
+		JobCount:      0,
+		ActivityLevel: "normal",
+	}
 }

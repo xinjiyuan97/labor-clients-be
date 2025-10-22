@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	adminlogic "github.com/xinjiyuan97/labor-clients/biz/logic/admin"
 	admin "github.com/xinjiyuan97/labor-clients/biz/model/admin"
 )
 
@@ -21,7 +22,12 @@ func GetBrandDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := new(admin.GetBrandDetailResp)
+	// 调用业务逻辑
+	resp, err := adminlogic.GetBrandDetailLogic(req.BrandID)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, resp)
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

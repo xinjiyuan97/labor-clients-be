@@ -1,4 +1,4 @@
-.PHONY: build generate_all  # 声明为伪目标，强制每次执行命令
+.PHONY: build generate_all generate_openapi # 声明为伪目标，强制每次执行命令
 
 build:
 	$(eval RUN_NAME=hertz_service)
@@ -26,3 +26,6 @@ generate_all:
 	hz update -idl idls/system.thrift --handler_by_method --handler_dir biz/handler/system  
 	hz update -idl idls/upload.thrift --handler_by_method --handler_dir biz/handler/upload  
 	hz update -idl idls/admin.thrift --handler_by_method --handler_dir biz/handler/admin  
+
+generate_openapi:
+	python3 generate_openapi.py idls

@@ -7,21 +7,70 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	uploadlogic "github.com/xinjiyuan97/labor-clients/biz/logic/upload"
+	"github.com/xinjiyuan97/labor-clients/biz/model/common"
 	upload "github.com/xinjiyuan97/labor-clients/biz/model/upload"
+	"github.com/xinjiyuan97/labor-clients/config"
 )
 
 // UploadCertFile .
 // @router /api/v1/upload/cert [POST]
 func UploadCertFile(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req upload.UploadCertFileReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.String(consts.StatusBadRequest, err.Error())
+	// 获取证书类型（必填）
+	certType := c.PostForm("cert_type")
+	if certType == "" {
+		c.JSON(consts.StatusBadRequest, &upload.UploadCertFileResp{
+			Base: &common.BaseResp{
+				Code:    400,
+				Message: "证书类型不能为空",
+			},
+		})
 		return
 	}
 
-	resp := new(upload.UploadCertFileResp)
+	// 获取上传的文件
+	fileHeader, err := c.FormFile("cert_file")
+	if err != nil {
+		c.JSON(consts.StatusBadRequest, &upload.UploadCertFileResp{
+			Base: &common.BaseResp{
+				Code:    400,
+				Message: "获取文件失败: " + err.Error(),
+			},
+		})
+		return
+	}
+
+	// 打开文件
+	file, err := fileHeader.Open()
+	if err != nil {
+		c.JSON(consts.StatusBadRequest, &upload.UploadCertFileResp{
+			Base: &common.BaseResp{
+				Code:    400,
+				Message: "打开文件失败: " + err.Error(),
+			},
+		})
+		return
+	}
+	defer file.Close()
+
+	// 加载配置（TODO: 考虑从全局变量或context中获取）
+	cfg, err := config.LoadConfig("conf/config.yaml")
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, &upload.UploadCertFileResp{
+			Base: &common.BaseResp{
+				Code:    500,
+				Message: "加载配置失败: " + err.Error(),
+			},
+		})
+		return
+	}
+
+	// 调用业务逻辑
+	resp, err := uploadlogic.UploadCertFileLogic(file, fileHeader, certType, &cfg.OSS)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, resp)
+		return
+	}
 
 	c.JSON(consts.StatusOK, resp)
 }

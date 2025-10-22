@@ -11,21 +11,20 @@ import (
 	admin "github.com/xinjiyuan97/labor-clients/biz/model/admin"
 )
 
-// CreateBrand .
-// @router /api/v1/admin/brands [POST]
-func CreateBrand(ctx context.Context, c *app.RequestContext) {
+// EnableAdmin .
+// @router /api/v1/admin/admins/:admin_id/enable [POST]
+func EnableAdmin(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req admin.CreateBrandReq
+	var req admin.EnableAdminReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	// 调用业务逻辑
-	resp, err := adminlogic.CreateBrandLogic(&req)
+	resp, err := adminlogic.EnableAdminLogic(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, resp)
+		c.String(consts.StatusInternalServerError, err.Error())
 		return
 	}
 

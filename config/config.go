@@ -7,6 +7,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+var GlobalConfig *Config
+
+func SetGlobalConfig(config *Config) {
+	GlobalConfig = config
+}
+
+func GetGlobalConfig() *Config {
+	return GlobalConfig
+}
+
 // Config 应用配置结构
 type Config struct {
 	Server    ServerConfig    `yaml:"server"`
@@ -58,7 +68,7 @@ type RedisConfig struct {
 
 // OSSConfig 对象存储配置
 type OSSConfig struct {
-	Provider    string   `yaml:"provider"`      // 存储提供商: aliyun, tencent, aws, local
+	Provider    string   `yaml:"provider"`      // 存储提供商: aliyun, tencent, aws, volcengine, local
 	AccessKey   string   `yaml:"access_key"`    // 访问密钥
 	SecretKey   string   `yaml:"secret_key"`    // 秘密密钥
 	Region      string   `yaml:"region"`        // 区域
