@@ -12,9 +12,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/xinjiyuan97/labor-clients/config"
-	"github.com/xinjiyuan97/labor-clients/dal"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
-	"github.com/xinjiyuan97/labor-clients/dal/tos"
 	"github.com/xinjiyuan97/labor-clients/models"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
@@ -136,18 +134,18 @@ func initBaseComponents(cfg *config.Config) error {
 	}
 
 	// 初始化数据访问层
-	if err := dal.InitDAL(cfg); err != nil {
-		return fmt.Errorf("初始化数据访问层失败: %v", err)
-	}
+	// if err := dal.InitDAL(cfg); err != nil {
+	// 	return fmt.Errorf("初始化数据访问层失败: %v", err)
+	// }
 
-	// 初始化TOS客户端（仅当provider为volcengine时）
-	if cfg.OSS.Provider == "volcengine" {
-		if err := tos.Init(&cfg.OSS); err != nil {
-			return fmt.Errorf("初始化TOS客户端失败: %v", err)
-		}
-		// 将TOS客户端设置到utils包中（避免循环导入）
-		utils.SetTOSClient(tos.GetClient())
-	}
+	// // 初始化TOS客户端（仅当provider为volcengine时）
+	// if cfg.OSS.Provider == "volcengine" {
+	// 	if err := tos.Init(&cfg.OSS); err != nil {
+	// 		return fmt.Errorf("初始化TOS客户端失败: %v", err)
+	// 	}
+	// 	// 将TOS客户端设置到utils包中（避免循环导入）
+	// 	utils.SetTOSClient(tos.GetClient())
+	// }
 
 	// 加载菜单配置
 	menuConfigPath := "conf/menus.yaml"
