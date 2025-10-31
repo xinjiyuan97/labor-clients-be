@@ -34,7 +34,6 @@ COPY --from=builder /app/main .
 
 # 复制配置文件
 COPY conf ./conf
-COPY output/conf ./conf
 
 # 暴露端口
 EXPOSE 8888
