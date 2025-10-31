@@ -46,6 +46,10 @@ logs/
 config/config.yaml
 config/config.prod.yaml
 !config/config.example.yaml
+# Also ignore conf directory configs
+conf/config.yaml
+conf/config.prod.yaml
+!conf/config.example.yaml
 
 # Environment files
 .env
