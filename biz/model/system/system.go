@@ -1028,7 +1028,7 @@ func (p *SubmitFeedbackReq) String() string {
 // 提交反馈响应
 type SubmitFeedbackResp struct {
 	Base       *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	FeedbackID int64            `thrift:"feedback_id,2" form:"feedback_id" json:"feedback_id"`
+	FeedbackID int64            `thrift:"feedback_id,2" json:"feedback_id,string" form:"feedback_id" `
 }
 
 func NewSubmitFeedbackResp() *SubmitFeedbackResp {
@@ -1668,7 +1668,7 @@ func (p *GetNoticeListResp) String() string {
 
 // 获取公告详情请求
 type GetNoticeDetailReq struct {
-	NoticeID int64 `thrift:"notice_id,1" json:"notice_id" path:"notice_id" vd:"$>0"`
+	NoticeID int64 `thrift:"notice_id,1" json:"notice_id,string" path:"notice_id" vd:"$>0"`
 }
 
 func NewGetNoticeDetailReq() *GetNoticeDetailReq {
@@ -2000,6 +2000,461 @@ func (p *GetNoticeDetailResp) String() string {
 
 }
 
+// 获取微信用户信息请求
+type GetWeChatUserInfoReq struct {
+}
+
+func NewGetWeChatUserInfoReq() *GetWeChatUserInfoReq {
+	return &GetWeChatUserInfoReq{}
+}
+
+var fieldIDToName_GetWeChatUserInfoReq = map[int16]string{}
+
+func (p *GetWeChatUserInfoReq) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		if err = iprot.Skip(fieldTypeId); err != nil {
+			goto SkipFieldTypeError
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+SkipFieldTypeError:
+	return thrift.PrependError(fmt.Sprintf("%T skip field type %d error", p, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoReq) Write(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteStructBegin("GetWeChatUserInfoReq"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoReq) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetWeChatUserInfoReq(%+v)", *p)
+
+}
+
+// 获取微信用户信息响应
+type GetWeChatUserInfoResp struct {
+	Base                 *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
+	Openid               string           `thrift:"openid,2" form:"openid" json:"openid"`
+	Unionid              string           `thrift:"unionid,3" form:"unionid" json:"unionid"`
+	Appid                string           `thrift:"appid,4" form:"appid" json:"appid"`
+	Env                  string           `thrift:"env,5" form:"env" json:"env"`
+	CloudbaseAccessToken string           `thrift:"cloudbase_access_token,6" form:"cloudbase_access_token" json:"cloudbase_access_token"`
+}
+
+func NewGetWeChatUserInfoResp() *GetWeChatUserInfoResp {
+	return &GetWeChatUserInfoResp{}
+}
+
+var GetWeChatUserInfoResp_Base_DEFAULT *common.BaseResp
+
+func (p *GetWeChatUserInfoResp) GetBase() (v *common.BaseResp) {
+	if !p.IsSetBase() {
+		return GetWeChatUserInfoResp_Base_DEFAULT
+	}
+	return p.Base
+}
+
+func (p *GetWeChatUserInfoResp) GetOpenid() (v string) {
+	return p.Openid
+}
+
+func (p *GetWeChatUserInfoResp) GetUnionid() (v string) {
+	return p.Unionid
+}
+
+func (p *GetWeChatUserInfoResp) GetAppid() (v string) {
+	return p.Appid
+}
+
+func (p *GetWeChatUserInfoResp) GetEnv() (v string) {
+	return p.Env
+}
+
+func (p *GetWeChatUserInfoResp) GetCloudbaseAccessToken() (v string) {
+	return p.CloudbaseAccessToken
+}
+
+var fieldIDToName_GetWeChatUserInfoResp = map[int16]string{
+	1: "base",
+	2: "openid",
+	3: "unionid",
+	4: "appid",
+	5: "env",
+	6: "cloudbase_access_token",
+}
+
+func (p *GetWeChatUserInfoResp) IsSetBase() bool {
+	return p.Base != nil
+}
+
+func (p *GetWeChatUserInfoResp) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 2:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField2(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 3:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField3(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 4:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_GetWeChatUserInfoResp[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) ReadField1(iprot thrift.TProtocol) error {
+	_field := common.NewBaseResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Base = _field
+	return nil
+}
+func (p *GetWeChatUserInfoResp) ReadField2(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Openid = _field
+	return nil
+}
+func (p *GetWeChatUserInfoResp) ReadField3(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Unionid = _field
+	return nil
+}
+func (p *GetWeChatUserInfoResp) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Appid = _field
+	return nil
+}
+func (p *GetWeChatUserInfoResp) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Env = _field
+	return nil
+}
+func (p *GetWeChatUserInfoResp) ReadField6(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.CloudbaseAccessToken = _field
+	return nil
+}
+
+func (p *GetWeChatUserInfoResp) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetWeChatUserInfoResp"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+		if err = p.writeField2(oprot); err != nil {
+			fieldId = 2
+			goto WriteFieldError
+		}
+		if err = p.writeField3(oprot); err != nil {
+			fieldId = 3
+			goto WriteFieldError
+		}
+		if err = p.writeField4(oprot); err != nil {
+			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("base", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Base.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("openid", thrift.STRING, 2); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Openid); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("unionid", thrift.STRING, 3); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Unionid); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("appid", thrift.STRING, 4); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Appid); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("env", thrift.STRING, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Env); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("cloudbase_access_token", thrift.STRING, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.CloudbaseAccessToken); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
+}
+
+func (p *GetWeChatUserInfoResp) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetWeChatUserInfoResp(%+v)", *p)
+
+}
+
 type SystemService interface {
 	GetSystemConfig(ctx context.Context, request *GetSystemConfigReq) (r *GetSystemConfigResp, err error)
 
@@ -2010,6 +2465,8 @@ type SystemService interface {
 	GetNoticeList(ctx context.Context, request *GetNoticeListReq) (r *GetNoticeListResp, err error)
 
 	GetNoticeDetail(ctx context.Context, request *GetNoticeDetailReq) (r *GetNoticeDetailResp, err error)
+
+	GetWeChatUserInfo(ctx context.Context, request *GetWeChatUserInfoReq) (r *GetWeChatUserInfoResp, err error)
 }
 
 type SystemServiceClient struct {
@@ -2083,6 +2540,15 @@ func (p *SystemServiceClient) GetNoticeDetail(ctx context.Context, request *GetN
 	}
 	return _result.GetSuccess(), nil
 }
+func (p *SystemServiceClient) GetWeChatUserInfo(ctx context.Context, request *GetWeChatUserInfoReq) (r *GetWeChatUserInfoResp, err error) {
+	var _args SystemServiceGetWeChatUserInfoArgs
+	_args.Request = request
+	var _result SystemServiceGetWeChatUserInfoResult
+	if err = p.Client_().Call(ctx, "GetWeChatUserInfo", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
 
 type SystemServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
@@ -2109,6 +2575,7 @@ func NewSystemServiceProcessor(handler SystemService) *SystemServiceProcessor {
 	self.AddToProcessorMap("SubmitFeedback", &systemServiceProcessorSubmitFeedback{handler: handler})
 	self.AddToProcessorMap("GetNoticeList", &systemServiceProcessorGetNoticeList{handler: handler})
 	self.AddToProcessorMap("GetNoticeDetail", &systemServiceProcessorGetNoticeDetail{handler: handler})
+	self.AddToProcessorMap("GetWeChatUserInfo", &systemServiceProcessorGetWeChatUserInfo{handler: handler})
 	return self
 }
 func (p *SystemServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -2352,6 +2819,54 @@ func (p *systemServiceProcessorGetNoticeDetail) Process(ctx context.Context, seq
 		result.Success = retval
 	}
 	if err2 = oprot.WriteMessageBegin("GetNoticeDetail", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(ctx); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
+type systemServiceProcessorGetWeChatUserInfo struct {
+	handler SystemService
+}
+
+func (p *systemServiceProcessorGetWeChatUserInfo) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := SystemServiceGetWeChatUserInfoArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("GetWeChatUserInfo", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	var err2 error
+	result := SystemServiceGetWeChatUserInfoResult{}
+	var retval *GetWeChatUserInfoResp
+	if retval, err2 = p.handler.GetWeChatUserInfo(ctx, args.Request); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetWeChatUserInfo: "+err2.Error())
+		oprot.WriteMessageBegin("GetWeChatUserInfo", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush(ctx)
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("GetWeChatUserInfo", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -3806,5 +4321,293 @@ func (p *SystemServiceGetNoticeDetailResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("SystemServiceGetNoticeDetailResult(%+v)", *p)
+
+}
+
+type SystemServiceGetWeChatUserInfoArgs struct {
+	Request *GetWeChatUserInfoReq `thrift:"request,1"`
+}
+
+func NewSystemServiceGetWeChatUserInfoArgs() *SystemServiceGetWeChatUserInfoArgs {
+	return &SystemServiceGetWeChatUserInfoArgs{}
+}
+
+var SystemServiceGetWeChatUserInfoArgs_Request_DEFAULT *GetWeChatUserInfoReq
+
+func (p *SystemServiceGetWeChatUserInfoArgs) GetRequest() (v *GetWeChatUserInfoReq) {
+	if !p.IsSetRequest() {
+		return SystemServiceGetWeChatUserInfoArgs_Request_DEFAULT
+	}
+	return p.Request
+}
+
+var fieldIDToName_SystemServiceGetWeChatUserInfoArgs = map[int16]string{
+	1: "request",
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) IsSetRequest() bool {
+	return p.Request != nil
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 1:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField1(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SystemServiceGetWeChatUserInfoArgs[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewGetWeChatUserInfoReq()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Request = _field
+	return nil
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetWeChatUserInfo_args"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField1(oprot); err != nil {
+			fieldId = 1
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("request", thrift.STRUCT, 1); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := p.Request.Write(oprot); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SystemServiceGetWeChatUserInfoArgs(%+v)", *p)
+
+}
+
+type SystemServiceGetWeChatUserInfoResult struct {
+	Success *GetWeChatUserInfoResp `thrift:"success,0,optional"`
+}
+
+func NewSystemServiceGetWeChatUserInfoResult() *SystemServiceGetWeChatUserInfoResult {
+	return &SystemServiceGetWeChatUserInfoResult{}
+}
+
+var SystemServiceGetWeChatUserInfoResult_Success_DEFAULT *GetWeChatUserInfoResp
+
+func (p *SystemServiceGetWeChatUserInfoResult) GetSuccess() (v *GetWeChatUserInfoResp) {
+	if !p.IsSetSuccess() {
+		return SystemServiceGetWeChatUserInfoResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+var fieldIDToName_SystemServiceGetWeChatUserInfoResult = map[int16]string{
+	0: "success",
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) Read(iprot thrift.TProtocol) (err error) {
+
+	var fieldTypeId thrift.TType
+	var fieldId int16
+
+	if _, err = iprot.ReadStructBegin(); err != nil {
+		goto ReadStructBeginError
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err = iprot.ReadFieldBegin()
+		if err != nil {
+			goto ReadFieldBeginError
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+
+		switch fieldId {
+		case 0:
+			if fieldTypeId == thrift.STRUCT {
+				if err = p.ReadField0(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		default:
+			if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		}
+		if err = iprot.ReadFieldEnd(); err != nil {
+			goto ReadFieldEndError
+		}
+	}
+	if err = iprot.ReadStructEnd(); err != nil {
+		goto ReadStructEndError
+	}
+
+	return nil
+ReadStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct begin error: ", p), err)
+ReadFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
+ReadFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_SystemServiceGetWeChatUserInfoResult[fieldId]), err)
+SkipFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
+
+ReadFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read field end error", p), err)
+ReadStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewGetWeChatUserInfoResp()
+	if err := _field.Read(iprot); err != nil {
+		return err
+	}
+	p.Success = _field
+	return nil
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) Write(oprot thrift.TProtocol) (err error) {
+	var fieldId int16
+	if err = oprot.WriteStructBegin("GetWeChatUserInfo_result"); err != nil {
+		goto WriteStructBeginError
+	}
+	if p != nil {
+		if err = p.writeField0(oprot); err != nil {
+			fieldId = 0
+			goto WriteFieldError
+		}
+	}
+	if err = oprot.WriteFieldStop(); err != nil {
+		goto WriteFieldStopError
+	}
+	if err = oprot.WriteStructEnd(); err != nil {
+		goto WriteStructEndError
+	}
+	return nil
+WriteStructBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+WriteFieldError:
+	return thrift.PrependError(fmt.Sprintf("%T write field %d error: ", p, fieldId), err)
+WriteFieldStopError:
+	return thrift.PrependError(fmt.Sprintf("%T write field stop error: ", p), err)
+WriteStructEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			goto WriteFieldBeginError
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return err
+		}
+		if err = oprot.WriteFieldEnd(); err != nil {
+			goto WriteFieldEndError
+		}
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
+}
+
+func (p *SystemServiceGetWeChatUserInfoResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("SystemServiceGetWeChatUserInfoResult(%+v)", *p)
 
 }

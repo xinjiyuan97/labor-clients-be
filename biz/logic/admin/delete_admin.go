@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // DeleteAdminLogic 删除管理员业务逻辑
-func DeleteAdminLogic(req *admin.DeleteAdminReq) (*admin.DeleteAdminResp, error) {
+func DeleteAdminLogic(ctx context.Context, req *admin.DeleteAdminReq) (*admin.DeleteAdminResp, error) {
 	// 获取管理员信息
 	adminUser, err := mysql.GetAdminByID(nil, req.AdminID)
 	if err != nil {
@@ -37,7 +38,7 @@ func DeleteAdminLogic(req *admin.DeleteAdminReq) (*admin.DeleteAdminResp, error)
 	}
 
 	// 软删除管理员
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.DeleteUser(tx, req.AdminID)
 	})
 

@@ -5,7 +5,7 @@ include "common.thrift"
 // 创建日程请求
 struct CreateScheduleReq {
     1: string title (api.body="title", api.vd="len($)>0");
-    2: i64 job_id (api.body="job_id");
+    2: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
     3: string start_time (api.body="start_time", api.vd="len($)>0");
     4: string end_time (api.body="end_time", api.vd="len($)>0");
     5: string location (api.body="location");
@@ -16,7 +16,7 @@ struct CreateScheduleReq {
 // 创建日程响应
 struct CreateScheduleResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 schedule_id (api.body="schedule_id");
+    2: i64 schedule_id (api.body="schedule_id" go.tag="json:\"schedule_id,string\"");
     3: string title (api.body="title");
     4: string status (api.body="status");
 }
@@ -49,7 +49,7 @@ struct GetTodayScheduleResp {
 
 // 获取日程详情请求
 struct GetScheduleDetailReq {
-    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0");
+    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0" go.tag="json:\"schedule_id,string\"");
 }
 
 // 获取日程详情响应
@@ -60,7 +60,7 @@ struct GetScheduleDetailResp {
 
 // 更新日程请求
 struct UpdateScheduleReq {
-    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0");
+    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0" go.tag="json:\"schedule_id,string\"");
     2: string title (api.body="title");
     3: string start_time (api.body="start_time");
     4: string end_time (api.body="end_time");
@@ -77,7 +77,7 @@ struct UpdateScheduleResp {
 
 // 更新日程状态请求
 struct UpdateScheduleStatusReq {
-    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0");
+    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0" go.tag="json:\"schedule_id,string\"");
     2: string status (api.body="status", api.vd="len($)>0");
 }
 
@@ -89,7 +89,7 @@ struct UpdateScheduleStatusResp {
 
 // 删除日程请求
 struct DeleteScheduleReq {
-    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0");
+    1: i64 schedule_id (api.path="schedule_id", api.vd="$>0" go.tag="json:\"schedule_id,string\"");
 }
 
 // 删除日程响应

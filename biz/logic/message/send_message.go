@@ -1,6 +1,7 @@
 package message
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // SendMessageLogic 发送消息业务逻辑
-func SendMessageLogic(req *message.SendMessageReq) (*message.SendMessageResp, error) {
+func SendMessageLogic(ctx context.Context, req *message.SendMessageReq) (*message.SendMessageResp, error) {
 	// 创建消息
 	messageModel := &models.Message{
 		FromUser:    0, // 需要从JWT token中获取
@@ -24,7 +25,7 @@ func SendMessageLogic(req *message.SendMessageReq) (*message.SendMessageResp, er
 		IsRead:      false,
 	}
 
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateMessage(tx, messageModel)
 	})
 

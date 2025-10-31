@@ -12,7 +12,7 @@ import (
 // 创建日程请求
 type CreateScheduleReq struct {
 	Title           string `thrift:"title,1" form:"title" json:"title" vd:"len($)>0"`
-	JobID           int64  `thrift:"job_id,2" form:"job_id" json:"job_id"`
+	JobID           int64  `thrift:"job_id,2" json:"job_id,string" form:"job_id" `
 	StartTime       string `thrift:"start_time,3" form:"start_time" json:"start_time" vd:"len($)>0"`
 	EndTime         string `thrift:"end_time,4" form:"end_time" json:"end_time" vd:"len($)>0"`
 	Location        string `thrift:"location,5" form:"location" json:"location"`
@@ -426,7 +426,7 @@ func (p *CreateScheduleReq) String() string {
 // 创建日程响应
 type CreateScheduleResp struct {
 	Base       *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	ScheduleID int64            `thrift:"schedule_id,2" form:"schedule_id" json:"schedule_id"`
+	ScheduleID int64            `thrift:"schedule_id,2" json:"schedule_id,string" form:"schedule_id" `
 	Title      string           `thrift:"title,3" form:"title" json:"title"`
 	Status     string           `thrift:"status,4" form:"status" json:"status"`
 }
@@ -1597,7 +1597,7 @@ func (p *GetTodayScheduleResp) String() string {
 
 // 获取日程详情请求
 type GetScheduleDetailReq struct {
-	ScheduleID int64 `thrift:"schedule_id,1" json:"schedule_id" path:"schedule_id" vd:"$>0"`
+	ScheduleID int64 `thrift:"schedule_id,1" json:"schedule_id,string" path:"schedule_id" vd:"$>0"`
 }
 
 func NewGetScheduleDetailReq() *GetScheduleDetailReq {
@@ -1931,7 +1931,7 @@ func (p *GetScheduleDetailResp) String() string {
 
 // 更新日程请求
 type UpdateScheduleReq struct {
-	ScheduleID      int64  `thrift:"schedule_id,1" json:"schedule_id" path:"schedule_id" vd:"$>0"`
+	ScheduleID      int64  `thrift:"schedule_id,1" json:"schedule_id,string" path:"schedule_id" vd:"$>0"`
 	Title           string `thrift:"title,2" form:"title" json:"title"`
 	StartTime       string `thrift:"start_time,3" form:"start_time" json:"start_time"`
 	EndTime         string `thrift:"end_time,4" form:"end_time" json:"end_time"`
@@ -2541,7 +2541,7 @@ func (p *UpdateScheduleResp) String() string {
 
 // 更新日程状态请求
 type UpdateScheduleStatusReq struct {
-	ScheduleID int64  `thrift:"schedule_id,1" json:"schedule_id" path:"schedule_id" vd:"$>0"`
+	ScheduleID int64  `thrift:"schedule_id,1" json:"schedule_id,string" path:"schedule_id" vd:"$>0"`
 	Status     string `thrift:"status,2" form:"status" json:"status" vd:"len($)>0"`
 }
 
@@ -2915,7 +2915,7 @@ func (p *UpdateScheduleStatusResp) String() string {
 
 // 删除日程请求
 type DeleteScheduleReq struct {
-	ScheduleID int64 `thrift:"schedule_id,1" json:"schedule_id" path:"schedule_id" vd:"$>0"`
+	ScheduleID int64 `thrift:"schedule_id,1" json:"schedule_id,string" path:"schedule_id" vd:"$>0"`
 }
 
 func NewDeleteScheduleReq() *DeleteScheduleReq {

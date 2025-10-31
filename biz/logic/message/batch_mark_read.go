@@ -1,6 +1,7 @@
 package message
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,8 +13,8 @@ import (
 )
 
 // BatchMarkReadLogic 批量标记已读业务逻辑
-func BatchMarkReadLogic(req *message.BatchMarkReadReq) (*message.BatchMarkReadResp, error) {
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+func BatchMarkReadLogic(ctx context.Context, req *message.BatchMarkReadReq) (*message.BatchMarkReadResp, error) {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.BatchMarkMessagesRead(tx, req.MessageIds)
 	})
 

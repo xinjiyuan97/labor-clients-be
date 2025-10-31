@@ -46,16 +46,24 @@ func UploadFileLogic(file multipart.File, header *multipart.FileHeader, uploadTy
 		}, nil
 	}
 
+	// 生成签名URL用于展示（默认7天有效期）
+	displayURL, err := uploadService.GetSignedURL(fileURL, 7*24*3600)
+	if err != nil {
+		utils.Warnf("生成签名URL失败: %v, 使用原始URL", err)
+		displayURL = fileURL
+	}
+
 	return &upload.UploadFileResp{
 		Base: &common.BaseResp{
 			Code:      200,
 			Message:   "文件上传成功",
 			Timestamp: time.Now().Format(time.RFC3339),
 		},
-		FileURL:  fileURL,
-		FileName: header.Filename,
-		FileSize: header.Size,
-		FileType: fileType,
+		FileURL:    fileURL,    // 原始地址（用于存储）
+		DisplayURL: displayURL, // 签名后的展示地址
+		FileName:   header.Filename,
+		FileSize:   header.Size,
+		FileType:   fileType,
 	}, nil
 }
 

@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -74,9 +75,19 @@ func InitMySQL(cfg *config.DatabaseConfig) error {
 	return nil
 }
 
+const dbKey = "mysql_db"
+
+func GetContextWithDB(ctx context.Context) context.Context {
+	return context.WithValue(ctx, dbKey, DB)
+}
+
 // GetDB 获取数据库连接
-func GetDB() *gorm.DB {
-	return DB
+func GetDB(ctx context.Context) *gorm.DB {
+	db, ok := ctx.Value(dbKey).(*gorm.DB)
+	if !ok {
+		return DB
+	}
+	return db
 }
 
 // CloseMySQL 关闭MySQL连接
@@ -108,10 +119,12 @@ func AutoMigrate(models ...interface{}) error {
 }
 
 // Transaction 执行数据库事务
-func Transaction(fn func(*gorm.DB) error) error {
+func Transaction(ctx context.Context, fn func(*gorm.DB) error) error {
 	if DB == nil {
 		return fmt.Errorf("数据库连接未初始化")
 	}
+
+	ctx = GetContextWithDB(ctx)
 
 	return DB.Transaction(fn)
 }
@@ -158,11 +171,8 @@ func GetStats() map[string]interface{} {
 // User相关数据库操作
 
 // CreateUser 创建用户
-func CreateUser(tx *gorm.DB, user *models.User) error {
-	if tx == nil {
-		tx = DB
-	}
-
+func CreateUser(ctx context.Context, user *models.User) error {
+	tx := GetDB(ctx)
 	if err := tx.Create(user).Error; err != nil {
 		utils.Errorf("创建用户失败: %v", err)
 		return err
@@ -173,10 +183,8 @@ func CreateUser(tx *gorm.DB, user *models.User) error {
 }
 
 // GetUserByPhone 根据手机号获取用户
-func GetUserByPhone(tx *gorm.DB, phone string) (*models.User, error) {
-	if tx == nil {
-		tx = DB
-	}
+func GetUserByPhone(ctx context.Context, phone string) (*models.User, error) {
+	tx := GetDB(ctx)
 
 	var user models.User
 	if err := tx.Where("phone = ?", phone).First(&user).Error; err != nil {

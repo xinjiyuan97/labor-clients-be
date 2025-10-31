@@ -22,7 +22,7 @@ func SubmitFeedback(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := systemlogic.SubmitFeedbackLogic(&req)
+	resp, err := systemlogic.SubmitFeedbackLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

@@ -19,7 +19,7 @@ struct GetPostListResp {
 
 // 获取帖子详情请求
 struct GetPostDetailReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
 }
 
 // 获取帖子详情响应
@@ -38,12 +38,12 @@ struct CreatePostReq {
 // 发布帖子响应
 struct CreatePostResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 post_id (api.body="post_id");
+    2: i64 post_id (api.body="post_id" go.tag="json:\"post_id,string\"");
 }
 
 // 更新帖子请求
 struct UpdatePostReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
     2: string title (api.body="title");
     3: string content (api.body="content");
     4: string post_type (api.body="post_type");
@@ -57,7 +57,7 @@ struct UpdatePostResp {
 
 // 删除帖子请求
 struct DeletePostReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
 }
 
 // 删除帖子响应
@@ -67,7 +67,7 @@ struct DeletePostResp {
 
 // 点赞帖子请求
 struct LikePostReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
 }
 
 // 点赞帖子响应
@@ -78,7 +78,7 @@ struct LikePostResp {
 
 // 取消点赞请求
 struct UnlikePostReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
 }
 
 // 取消点赞响应
@@ -89,20 +89,20 @@ struct UnlikePostResp {
 
 // 评论帖子请求
 struct CommentPostReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
     2: string content (api.body="content", api.vd="len($)>0");
-    3: i64 parent_id (api.body="parent_id");
+    3: i64 parent_id (api.body="parent_id" go.tag="json:\"parent_id,string\"");
 }
 
 // 评论帖子响应
 struct CommentPostResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 comment_id (api.body="comment_id");
+    2: i64 comment_id (api.body="comment_id" go.tag="json:\"comment_id,string\"");
 }
 
 // 获取评论列表请求
 struct GetCommentListReq {
-    1: i64 post_id (api.path="post_id", api.vd="$>0");
+    1: i64 post_id (api.path="post_id", api.vd="$>0" go.tag="json:\"post_id,string\"");
     2: common.PageReq page_req (api.body="page_req");
 }
 

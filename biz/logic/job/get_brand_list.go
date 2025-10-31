@@ -103,13 +103,7 @@ func GetBrandListLogic(req *job.GetBrandListReq) (*job.GetBrandListResp, error) 
 	// 构建品牌信息
 	var brandInfos []*common.BrandInfo
 	for _, brand := range brands {
-		brandInfo := &common.BrandInfo{
-			BrandID:     brand.ID,
-			Name:        brand.Name,
-			Logo:        brand.Logo,
-			Description: brand.Description,
-			AuthStatus:  brand.AuthStatus,
-		}
+		brandInfo := brand.ToBrandInfo()
 		brandInfos = append(brandInfos, brandInfo)
 	}
 

@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // UnlikePostLogic 取消点赞业务逻辑
-func UnlikePostLogic(req *community.UnlikePostReq) (*community.UnlikePostResp, error) {
+func UnlikePostLogic(ctx context.Context, req *community.UnlikePostReq) (*community.UnlikePostResp, error) {
 	userID := int64(0) // 需要从JWT token中获取
 
 	// 检查是否已点赞
@@ -39,7 +40,7 @@ func UnlikePostLogic(req *community.UnlikePostReq) (*community.UnlikePostResp, e
 	}
 
 	// 删除点赞记录并减少点赞数
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		// 删除点赞记录
 		if err := mysql.DeletePostLike(tx, req.PostID, userID); err != nil {
 			return err

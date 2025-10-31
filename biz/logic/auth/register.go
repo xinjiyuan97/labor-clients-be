@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // RegisterLogic 用户注册业务逻辑
-func RegisterLogic(req *auth.RegisterReq) (*auth.RegisterResp, error) {
+func RegisterLogic(ctx context.Context, req *auth.RegisterReq) (*auth.RegisterResp, error) {
 	// 验证角色
 	if req.Role != "worker" && req.Role != "employer" {
 		return &auth.RegisterResp{
@@ -70,8 +71,8 @@ func RegisterLogic(req *auth.RegisterReq) (*auth.RegisterResp, error) {
 	}
 
 	// 使用事务创建用户
-	err = mysql.Transaction(func(tx *gorm.DB) error {
-		return mysql.CreateUser(tx, user)
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
+		return mysql.CreateUser(ctx, user)
 	})
 
 	if err != nil {

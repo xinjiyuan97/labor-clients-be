@@ -52,7 +52,7 @@ class ThriftToOpenAPIConverter:
         # Thrift 类型到 OpenAPI 类型的映射
         self.type_mapping = {
             "i32": "integer",
-            "i64": "integer",
+            "i64": "string",  # i64 使用 string 类型以避免 JavaScript 精度丢失
             "double": "number",
             "string": "string",
             "bool": "boolean",
@@ -300,12 +300,14 @@ class ThriftToOpenAPIConverter:
         # 检查路径参数
         path_params = re.findall(r'\{([^}]+)\}', path)
         for param in path_params:
+            # 大多数 ID 参数都是 i64 类型，使用 string 以避免精度丢失
+            param_type = "string" if param.endswith("_id") or param == "id" else "string"
             parameters.append({
                 "name": param,
                 "in": "path",
                 "required": True,
                 "description": f"{param} 参数",
-                "schema": {"type": "integer"}
+                "schema": {"type": param_type}
             })
         
         if parameters:

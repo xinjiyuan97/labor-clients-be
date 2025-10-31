@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // GetPostDetailLogic 获取帖子详情业务逻辑
-func GetPostDetailLogic(req *community.GetPostDetailReq) (*community.GetPostDetailResp, error) {
+func GetPostDetailLogic(ctx context.Context, req *community.GetPostDetailReq) (*community.GetPostDetailResp, error) {
 	// 获取帖子详情
 	post, err := mysql.GetCommunityPostByID(nil, req.PostID)
 	if err != nil {
@@ -37,7 +38,7 @@ func GetPostDetailLogic(req *community.GetPostDetailReq) (*community.GetPostDeta
 	}
 
 	// 增加浏览数
-	_ = mysql.Transaction(func(tx *gorm.DB) error {
+	_ = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.IncrementPostViewCount(tx, req.PostID)
 	})
 

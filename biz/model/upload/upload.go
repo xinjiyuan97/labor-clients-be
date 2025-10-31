@@ -195,10 +195,13 @@ func (p *UploadImageReq) String() string {
 
 // 上传图片响应
 type UploadImageResp struct {
-	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	ImageURL string           `thrift:"image_url,2" form:"image_url" json:"image_url"`
-	FileName string           `thrift:"file_name,3" form:"file_name" json:"file_name"`
-	FileSize int64            `thrift:"file_size,4" form:"file_size" json:"file_size"`
+	Base *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
+	// 原始地址（用于存储）
+	ImageURL string `thrift:"image_url,2" form:"image_url" json:"image_url"`
+	// 签名后的展示地址
+	DisplayURL string `thrift:"display_url,3" form:"display_url" json:"display_url"`
+	FileName   string `thrift:"file_name,4" form:"file_name" json:"file_name"`
+	FileSize   int64  `thrift:"file_size,5" json:"file_size,string" form:"file_size" `
 }
 
 func NewUploadImageResp() *UploadImageResp {
@@ -218,6 +221,10 @@ func (p *UploadImageResp) GetImageURL() (v string) {
 	return p.ImageURL
 }
 
+func (p *UploadImageResp) GetDisplayURL() (v string) {
+	return p.DisplayURL
+}
+
 func (p *UploadImageResp) GetFileName() (v string) {
 	return p.FileName
 }
@@ -229,8 +236,9 @@ func (p *UploadImageResp) GetFileSize() (v int64) {
 var fieldIDToName_UploadImageResp = map[int16]string{
 	1: "base",
 	2: "image_url",
-	3: "file_name",
-	4: "file_size",
+	3: "display_url",
+	4: "file_name",
+	5: "file_size",
 }
 
 func (p *UploadImageResp) IsSetBase() bool {
@@ -281,8 +289,16 @@ func (p *UploadImageResp) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 5:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField5(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -344,10 +360,21 @@ func (p *UploadImageResp) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.FileName = _field
+	p.DisplayURL = _field
 	return nil
 }
 func (p *UploadImageResp) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.FileName = _field
+	return nil
+}
+func (p *UploadImageResp) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -379,6 +406,10 @@ func (p *UploadImageResp) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField4(oprot); err != nil {
 			fieldId = 4
+			goto WriteFieldError
+		}
+		if err = p.writeField5(oprot); err != nil {
+			fieldId = 5
 			goto WriteFieldError
 		}
 	}
@@ -434,10 +465,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadImageResp) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("display_url", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.FileName); err != nil {
+	if err := oprot.WriteString(p.DisplayURL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -451,10 +482,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadImageResp) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.FileSize); err != nil {
+	if err := oprot.WriteString(p.FileName); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -465,6 +496,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
+}
+
+func (p *UploadImageResp) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 5); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.FileSize); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
 func (p *UploadImageResp) String() string {
@@ -661,11 +709,14 @@ func (p *UploadFileReq) String() string {
 
 // 上传文件响应
 type UploadFileResp struct {
-	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	FileURL  string           `thrift:"file_url,2" form:"file_url" json:"file_url"`
-	FileName string           `thrift:"file_name,3" form:"file_name" json:"file_name"`
-	FileSize int64            `thrift:"file_size,4" form:"file_size" json:"file_size"`
-	FileType string           `thrift:"file_type,5" form:"file_type" json:"file_type"`
+	Base *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
+	// 原始地址（用于存储）
+	FileURL string `thrift:"file_url,2" form:"file_url" json:"file_url"`
+	// 签名后的展示地址
+	DisplayURL string `thrift:"display_url,3" form:"display_url" json:"display_url"`
+	FileName   string `thrift:"file_name,4" form:"file_name" json:"file_name"`
+	FileSize   int64  `thrift:"file_size,5" json:"file_size,string" form:"file_size" `
+	FileType   string `thrift:"file_type,6" form:"file_type" json:"file_type"`
 }
 
 func NewUploadFileResp() *UploadFileResp {
@@ -685,6 +736,10 @@ func (p *UploadFileResp) GetFileURL() (v string) {
 	return p.FileURL
 }
 
+func (p *UploadFileResp) GetDisplayURL() (v string) {
+	return p.DisplayURL
+}
+
 func (p *UploadFileResp) GetFileName() (v string) {
 	return p.FileName
 }
@@ -700,9 +755,10 @@ func (p *UploadFileResp) GetFileType() (v string) {
 var fieldIDToName_UploadFileResp = map[int16]string{
 	1: "base",
 	2: "file_url",
-	3: "file_name",
-	4: "file_size",
-	5: "file_type",
+	3: "display_url",
+	4: "file_name",
+	5: "file_size",
+	6: "file_type",
 }
 
 func (p *UploadFileResp) IsSetBase() bool {
@@ -753,7 +809,7 @@ func (p *UploadFileResp) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 4:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField4(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -761,8 +817,16 @@ func (p *UploadFileResp) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.STRING {
+			if fieldTypeId == thrift.I64 {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -824,10 +888,21 @@ func (p *UploadFileResp) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.FileName = _field
+	p.DisplayURL = _field
 	return nil
 }
 func (p *UploadFileResp) ReadField4(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.FileName = _field
+	return nil
+}
+func (p *UploadFileResp) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -838,7 +913,7 @@ func (p *UploadFileResp) ReadField4(iprot thrift.TProtocol) error {
 	p.FileSize = _field
 	return nil
 }
-func (p *UploadFileResp) ReadField5(iprot thrift.TProtocol) error {
+func (p *UploadFileResp) ReadField6(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -874,6 +949,10 @@ func (p *UploadFileResp) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -929,10 +1008,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadFileResp) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("display_url", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.FileName); err != nil {
+	if err := oprot.WriteString(p.DisplayURL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -946,10 +1025,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadFileResp) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 4); err != nil {
+	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.FileSize); err != nil {
+	if err := oprot.WriteString(p.FileName); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -963,10 +1042,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadFileResp) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_type", thrift.STRING, 5); err != nil {
+	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.FileType); err != nil {
+	if err := oprot.WriteI64(p.FileSize); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -977,6 +1056,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *UploadFileResp) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("file_type", thrift.STRING, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.FileType); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
 func (p *UploadFileResp) String() string {
@@ -1173,11 +1269,14 @@ func (p *UploadCertFileReq) String() string {
 
 // 上传认证文件响应
 type UploadCertFileResp struct {
-	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	FileURL  string           `thrift:"file_url,2" form:"file_url" json:"file_url"`
-	CertType string           `thrift:"cert_type,3" form:"cert_type" json:"cert_type"`
-	FileName string           `thrift:"file_name,4" form:"file_name" json:"file_name"`
-	FileSize int64            `thrift:"file_size,5" form:"file_size" json:"file_size"`
+	Base *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
+	// 原始地址（用于存储）
+	FileURL string `thrift:"file_url,2" form:"file_url" json:"file_url"`
+	// 签名后的展示地址
+	DisplayURL string `thrift:"display_url,3" form:"display_url" json:"display_url"`
+	CertType   string `thrift:"cert_type,4" form:"cert_type" json:"cert_type"`
+	FileName   string `thrift:"file_name,5" form:"file_name" json:"file_name"`
+	FileSize   int64  `thrift:"file_size,6" json:"file_size,string" form:"file_size" `
 }
 
 func NewUploadCertFileResp() *UploadCertFileResp {
@@ -1197,6 +1296,10 @@ func (p *UploadCertFileResp) GetFileURL() (v string) {
 	return p.FileURL
 }
 
+func (p *UploadCertFileResp) GetDisplayURL() (v string) {
+	return p.DisplayURL
+}
+
 func (p *UploadCertFileResp) GetCertType() (v string) {
 	return p.CertType
 }
@@ -1212,9 +1315,10 @@ func (p *UploadCertFileResp) GetFileSize() (v int64) {
 var fieldIDToName_UploadCertFileResp = map[int16]string{
 	1: "base",
 	2: "file_url",
-	3: "cert_type",
-	4: "file_name",
-	5: "file_size",
+	3: "display_url",
+	4: "cert_type",
+	5: "file_name",
+	6: "file_size",
 }
 
 func (p *UploadCertFileResp) IsSetBase() bool {
@@ -1273,8 +1377,16 @@ func (p *UploadCertFileResp) Read(iprot thrift.TProtocol) (err error) {
 				goto SkipFieldError
 			}
 		case 5:
-			if fieldTypeId == thrift.I64 {
+			if fieldTypeId == thrift.STRING {
 				if err = p.ReadField5(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
+		case 6:
+			if fieldTypeId == thrift.I64 {
+				if err = p.ReadField6(iprot); err != nil {
 					goto ReadFieldError
 				}
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
@@ -1336,7 +1448,7 @@ func (p *UploadCertFileResp) ReadField3(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.CertType = _field
+	p.DisplayURL = _field
 	return nil
 }
 func (p *UploadCertFileResp) ReadField4(iprot thrift.TProtocol) error {
@@ -1347,10 +1459,21 @@ func (p *UploadCertFileResp) ReadField4(iprot thrift.TProtocol) error {
 	} else {
 		_field = v
 	}
-	p.FileName = _field
+	p.CertType = _field
 	return nil
 }
 func (p *UploadCertFileResp) ReadField5(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.FileName = _field
+	return nil
+}
+func (p *UploadCertFileResp) ReadField6(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -1386,6 +1509,10 @@ func (p *UploadCertFileResp) Write(oprot thrift.TProtocol) (err error) {
 		}
 		if err = p.writeField5(oprot); err != nil {
 			fieldId = 5
+			goto WriteFieldError
+		}
+		if err = p.writeField6(oprot); err != nil {
+			fieldId = 6
 			goto WriteFieldError
 		}
 	}
@@ -1441,10 +1568,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadCertFileResp) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("cert_type", thrift.STRING, 3); err != nil {
+	if err = oprot.WriteFieldBegin("display_url", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.CertType); err != nil {
+	if err := oprot.WriteString(p.DisplayURL); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1458,10 +1585,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadCertFileResp) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 4); err != nil {
+	if err = oprot.WriteFieldBegin("cert_type", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.FileName); err != nil {
+	if err := oprot.WriteString(p.CertType); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1475,10 +1602,10 @@ WriteFieldEndError:
 }
 
 func (p *UploadCertFileResp) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 5); err != nil {
+	if err = oprot.WriteFieldBegin("file_name", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteI64(p.FileSize); err != nil {
+	if err := oprot.WriteString(p.FileName); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -1489,6 +1616,23 @@ WriteFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 begin error: ", p), err)
 WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
+}
+
+func (p *UploadCertFileResp) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("file_size", thrift.I64, 6); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteI64(p.FileSize); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
 func (p *UploadCertFileResp) String() string {
@@ -1502,7 +1646,7 @@ func (p *UploadCertFileResp) String() string {
 // 获取签名URL请求
 type GetSignedURLReq struct {
 	FileURL       string `thrift:"file_url,1" json:"file_url" query:"file_url" vd:"len($)>0"`
-	ExpireSeconds int64  `thrift:"expire_seconds,2" json:"expire_seconds" query:"expire_seconds"`
+	ExpireSeconds int64  `thrift:"expire_seconds,2" json:"expire_seconds,string" query:"expire_seconds" `
 }
 
 func NewGetSignedURLReq() *GetSignedURLReq {
@@ -1687,7 +1831,7 @@ func (p *GetSignedURLReq) String() string {
 type GetSignedURLResp struct {
 	Base          *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
 	SignedURL     string           `thrift:"signed_url,2" form:"signed_url" json:"signed_url"`
-	ExpireSeconds int64            `thrift:"expire_seconds,3" form:"expire_seconds" json:"expire_seconds"`
+	ExpireSeconds int64            `thrift:"expire_seconds,3" json:"expire_seconds,string" form:"expire_seconds" `
 	ExpireTime    string           `thrift:"expire_time,4" form:"expire_time" json:"expire_time"`
 }
 

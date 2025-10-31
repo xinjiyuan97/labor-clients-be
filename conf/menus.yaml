@@ -1,0 +1,331 @@
+# 系统菜单配置
+# roles: 可访问该菜单的角色列表，支持：admin, brand_admin, store_admin, employer, worker
+
+menus:
+  # Dashboard（仅系统管理员）
+  - menu_id: "1"
+    name: "dashboard"
+    label: "Dashboard"
+    path: "/admin/dashboard"
+    icon: "DashboardOutlined"
+    parent_id: null
+    type: "menu"
+    sort_order: 1
+    visible: true
+    disabled: false
+    permission: "dashboard:view"
+    roles: ["admin"]
+
+  # 人员管理（仅系统管理员）
+  - menu_id: "2"
+    name: "staff"
+    label: "人员管理"
+    path: "/admin/staff"
+    icon: "TeamOutlined"
+    parent_id: null
+    type: "menu"
+    sort_order: 2
+    visible: true
+    disabled: false
+    permission: "staff:view"
+    roles: ["admin"]
+
+  # 品牌管理
+  - menu_id: "3"
+    name: "brands"
+    label: "品牌管理"
+    icon: "ShopOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 3
+    visible: true
+    disabled: false
+    permission: "brands:view"
+    roles: ["admin", "brand_admin"]
+    children:
+      - menu_id: "3-1"
+        name: "brand-list"
+        label: "品牌管理"
+        path: "/admin/brands"
+        icon: "BankOutlined"
+        parent_id: "3"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "brands:list"
+        roles: ["admin"]
+      
+      - menu_id: "3-2"
+        name: "brand-staff"
+        label: "品牌人员管理"
+        path: "/admin/brands/staff"
+        icon: "TeamOutlined"
+        parent_id: "3"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "brands:staff"
+        roles: ["admin"]
+      
+      - menu_id: "3-3"
+        name: "brand-staff"
+        label: "人员管理"
+        path: "/admin/brand/staff"
+        icon: "TeamOutlined"
+        parent_id: "3"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "brand:staff"
+        roles: ["brand_admin"]
+
+  # 用户管理（仅系统管理员）
+  - menu_id: "4"
+    name: "users"
+    label: "用户管理"
+    path: "/admin/users"
+    icon: "UserOutlined"
+    parent_id: null
+    type: "menu"
+    sort_order: 4
+    visible: true
+    disabled: false
+    permission: "users:view"
+    roles: ["admin"]
+
+  # 门店管理
+  - menu_id: "5"
+    name: "stores"
+    label: "门店管理"
+    icon: "HomeOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 5
+    visible: true
+    disabled: false
+    permission: "stores:view"
+    roles: ["employer"]
+    children:
+      - menu_id: "5-1"
+        name: "store-list"
+        label: "门店列表"
+        path: "/admin/stores"
+        icon: "ShopOutlined"
+        parent_id: "5"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "stores:list"
+        roles: ["employer"]
+      
+      - menu_id: "5-2"
+        name: "store-staff"
+        label: "门店人员管理"
+        path: "/admin/stores/staff"
+        icon: "TeamOutlined"
+        parent_id: "5"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "stores:staff"
+        roles: ["employer"]
+      
+      - menu_id: "5-3"
+        name: "store-jobs"
+        label: "门店岗位"
+        path: "/admin/stores/jobs"
+        icon: "ProfileOutlined"
+        parent_id: "5"
+        type: "menu"
+        sort_order: 3
+        visible: true
+        disabled: false
+        permission: "stores:jobs"
+        roles: ["employer"]
+
+  # 岗位管理
+  - menu_id: "6"
+    name: "jobs"
+    label: "岗位管理"
+    icon: "SolutionOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 6
+    visible: true
+    disabled: false
+    permission: "jobs:view"
+    roles: ["employer"]
+    children:
+      - menu_id: "6-1"
+        name: "job-list"
+        label: "岗位列表"
+        path: "/admin/jobs"
+        icon: "UnorderedListOutlined"
+        parent_id: "6"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "jobs:list"
+        roles: ["employer"]
+      
+      - menu_id: "6-2"
+        name: "job-applications"
+        label: "应聘管理"
+        path: "/admin/jobs/applications"
+        icon: "FileDoneOutlined"
+        parent_id: "6"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "jobs:applications"
+        roles: ["employer"]
+      
+      - menu_id: "6-3"
+        name: "job-statistics"
+        label: "岗位统计"
+        path: "/admin/jobs/statistics"
+        icon: "BarChartOutlined"
+        parent_id: "6"
+        type: "menu"
+        sort_order: 3
+        visible: true
+        disabled: false
+        permission: "jobs:statistics"
+        roles: ["employer"]
+
+  # 财务管理（仅系统管理员）
+  - menu_id: "7"
+    name: "finance"
+    label: "财务管理"
+    icon: "AccountBookOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 7
+    visible: true
+    disabled: false
+    permission: "finance:view"
+    roles: ["admin"]
+    children:
+      - menu_id: "7-1"
+        name: "settlements"
+        label: "结算管理"
+        path: "/admin/finance/settlements"
+        icon: "TransactionOutlined"
+        parent_id: "7"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "finance:settlements"
+        roles: ["admin"]
+      
+      - menu_id: "7-2"
+        name: "income"
+        label: "收入统计"
+        path: "/admin/finance/income"
+        icon: "DollarOutlined"
+        parent_id: "7"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "finance:income"
+        roles: ["admin"]
+
+  # 消息管理（仅系统管理员）
+  - menu_id: "8"
+    name: "messages"
+    label: "消息管理"
+    icon: "MessageOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 8
+    visible: true
+    disabled: false
+    permission: "messages:view"
+    roles: ["admin"]
+    children:
+      - menu_id: "8-1"
+        name: "notices"
+        label: "系统通知"
+        path: "/admin/messages/notices"
+        icon: "NotificationOutlined"
+        parent_id: "8"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "messages:notices"
+        roles: ["admin"]
+      
+      - menu_id: "8-2"
+        name: "templates"
+        label: "消息模板"
+        path: "/admin/messages/templates"
+        icon: "FileTextOutlined"
+        parent_id: "8"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "messages:templates"
+        roles: ["admin"]
+
+  # 系统管理（仅系统管理员）
+  - menu_id: "9"
+    name: "system"
+    label: "系统管理"
+    icon: "SettingOutlined"
+    parent_id: null
+    type: "group"
+    sort_order: 9
+    visible: true
+    disabled: false
+    permission: "system:view"
+    roles: ["admin"]
+    children:
+      - menu_id: "9-1"
+        name: "admin-list"
+        label: "管理员管理"
+        path: "/admin/admins"
+        icon: "UserOutlined"
+        parent_id: "9"
+        type: "menu"
+        sort_order: 1
+        visible: true
+        disabled: false
+        permission: "admin:list"
+        roles: ["admin"]
+      
+      - menu_id: "9-2"
+        name: "system-config"
+        label: "系统配置"
+        path: "/admin/config"
+        icon: "ControlOutlined"
+        parent_id: "9"
+        type: "menu"
+        sort_order: 2
+        visible: true
+        disabled: false
+        permission: "system:config"
+        roles: ["admin"]
+      
+      - menu_id: "9-3"
+        name: "system-logs"
+        label: "系统日志"
+        path: "/admin/logs"
+        icon: "FileTextOutlined"
+        parent_id: "9"
+        type: "menu"
+        sort_order: 3
+        visible: true
+        disabled: false
+        permission: "system:logs"
+        roles: ["admin"]

@@ -29,7 +29,7 @@ func CreatePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.CreatePostLogic(userID, &req)
+	resp, err := communitylogic.CreatePostLogic(ctx, userID, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // UnfavoriteJobLogic 取消收藏工作业务逻辑
-func UnfavoriteJobLogic(req *user.UnfavoriteJobReq, userID int64) (*user.UnfavoriteJobResp, error) {
+func UnfavoriteJobLogic(ctx context.Context, req *user.UnfavoriteJobReq, userID int64) (*user.UnfavoriteJobResp, error) {
 	// 检查是否已经收藏
 	exists, err := mysql.CheckUserFavoriteJob(nil, userID, req.JobID)
 	if err != nil {
@@ -37,7 +38,7 @@ func UnfavoriteJobLogic(req *user.UnfavoriteJobReq, userID int64) (*user.Unfavor
 	}
 
 	// 使用事务删除收藏记录
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.DeleteUserFavoriteJob(tx, userID, req.JobID)
 	})
 

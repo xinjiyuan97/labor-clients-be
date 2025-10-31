@@ -19,7 +19,7 @@ struct GetPaymentRecordsResp {
 
 // 获取支付详情请求
 struct GetPaymentDetailReq {
-    1: i64 payment_id (api.path="payment_id", api.vd="$>0");
+    1: i64 payment_id (api.path="payment_id", api.vd="$>0" go.tag="json:\"payment_id,string\"");
 }
 
 // 获取支付详情响应
@@ -38,7 +38,7 @@ struct ApplyWithdrawReq {
 // 申请提现响应
 struct ApplyWithdrawResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 withdraw_id (api.body="withdraw_id");
+    2: i64 withdraw_id (api.body="withdraw_id" go.tag="json:\"withdraw_id,string\"");
 }
 
 // 获取提现记录请求

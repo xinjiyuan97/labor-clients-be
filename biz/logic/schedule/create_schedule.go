@@ -1,6 +1,7 @@
 package schedule
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // CreateScheduleLogic 创建日程业务逻辑
-func CreateScheduleLogic(req *schedule.CreateScheduleReq) (*schedule.CreateScheduleResp, error) {
+func CreateScheduleLogic(ctx context.Context, req *schedule.CreateScheduleReq) (*schedule.CreateScheduleResp, error) {
 	// 解析时间
 	startTime, err := time.Parse(time.RFC3339, req.StartTime)
 	if err != nil {
@@ -63,7 +64,7 @@ func CreateScheduleLogic(req *schedule.CreateScheduleReq) (*schedule.CreateSched
 		ReminderMinutes: int(req.ReminderMinutes),
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateSchedule(tx, scheduleModel)
 	})
 

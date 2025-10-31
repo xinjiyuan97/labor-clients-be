@@ -22,7 +22,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := authlogic.LoginLogic(&req)
+	resp, err := authlogic.LoginLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

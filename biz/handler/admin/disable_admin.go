@@ -22,7 +22,7 @@ func DisableAdmin(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := adminlogic.DisableAdminLogic(&req)
+	resp, err := adminlogic.DisableAdminLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

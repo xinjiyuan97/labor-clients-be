@@ -554,7 +554,7 @@ func (p *GetPostListResp) String() string {
 
 // 获取帖子详情请求
 type GetPostDetailReq struct {
-	PostID int64 `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID int64 `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 }
 
 func NewGetPostDetailReq() *GetPostDetailReq {
@@ -1119,7 +1119,7 @@ func (p *CreatePostReq) String() string {
 // 发布帖子响应
 type CreatePostResp struct {
 	Base   *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	PostID int64            `thrift:"post_id,2" form:"post_id" json:"post_id"`
+	PostID int64            `thrift:"post_id,2" json:"post_id,string" form:"post_id" `
 }
 
 func NewCreatePostResp() *CreatePostResp {
@@ -1308,7 +1308,7 @@ func (p *CreatePostResp) String() string {
 
 // 更新帖子请求
 type UpdatePostReq struct {
-	PostID   int64  `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID   int64  `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 	Title    string `thrift:"title,2" form:"title" json:"title"`
 	Content  string `thrift:"content,3" form:"content" json:"content"`
 	PostType string `thrift:"post_type,4" form:"post_type" json:"post_type"`
@@ -1780,7 +1780,7 @@ func (p *UpdatePostResp) String() string {
 
 // 删除帖子请求
 type DeletePostReq struct {
-	PostID int64 `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID int64 `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 }
 
 func NewDeletePostReq() *DeletePostReq {
@@ -2062,7 +2062,7 @@ func (p *DeletePostResp) String() string {
 
 // 点赞帖子请求
 type LikePostReq struct {
-	PostID int64 `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID int64 `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 }
 
 func NewLikePostReq() *LikePostReq {
@@ -2390,7 +2390,7 @@ func (p *LikePostResp) String() string {
 
 // 取消点赞请求
 type UnlikePostReq struct {
-	PostID int64 `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID int64 `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 }
 
 func NewUnlikePostReq() *UnlikePostReq {
@@ -2718,9 +2718,9 @@ func (p *UnlikePostResp) String() string {
 
 // 评论帖子请求
 type CommentPostReq struct {
-	PostID   int64  `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID   int64  `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 	Content  string `thrift:"content,2" form:"content" json:"content" vd:"len($)>0"`
-	ParentID int64  `thrift:"parent_id,3" form:"parent_id" json:"parent_id"`
+	ParentID int64  `thrift:"parent_id,3" json:"parent_id,string" form:"parent_id" `
 }
 
 func NewCommentPostReq() *CommentPostReq {
@@ -2949,7 +2949,7 @@ func (p *CommentPostReq) String() string {
 // 评论帖子响应
 type CommentPostResp struct {
 	Base      *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	CommentID int64            `thrift:"comment_id,2" form:"comment_id" json:"comment_id"`
+	CommentID int64            `thrift:"comment_id,2" json:"comment_id,string" form:"comment_id" `
 }
 
 func NewCommentPostResp() *CommentPostResp {
@@ -3138,7 +3138,7 @@ func (p *CommentPostResp) String() string {
 
 // 获取评论列表请求
 type GetCommentListReq struct {
-	PostID  int64           `thrift:"post_id,1" json:"post_id" path:"post_id" vd:"$>0"`
+	PostID  int64           `thrift:"post_id,1" json:"post_id,string" path:"post_id" vd:"$>0"`
 	PageReq *common.PageReq `thrift:"page_req,2" form:"page_req" json:"page_req"`
 }
 

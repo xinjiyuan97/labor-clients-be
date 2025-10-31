@@ -22,7 +22,7 @@ func CreateUser(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := adminlogic.CreateUserLogic(&req)
+	resp, err := adminlogic.CreateUserLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

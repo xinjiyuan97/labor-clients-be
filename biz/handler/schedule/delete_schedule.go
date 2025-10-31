@@ -22,7 +22,7 @@ func DeleteSchedule(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := schedulelogic.DeleteScheduleLogic(&req)
+	resp, err := schedulelogic.DeleteScheduleLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

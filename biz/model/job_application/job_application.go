@@ -11,7 +11,7 @@ import (
 
 // 申请岗位请求
 type ApplyJobReq struct {
-	JobID int64 `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID int64 `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 }
 
 func NewApplyJobReq() *ApplyJobReq {
@@ -150,8 +150,8 @@ func (p *ApplyJobReq) String() string {
 // 申请岗位响应
 type ApplyJobResp struct {
 	Base          *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	ApplicationID int64            `thrift:"application_id,2" form:"application_id" json:"application_id"`
-	JobID         int64            `thrift:"job_id,3" form:"job_id" json:"job_id"`
+	ApplicationID int64            `thrift:"application_id,2" json:"application_id,string" form:"application_id" `
+	JobID         int64            `thrift:"job_id,3" json:"job_id,string" form:"job_id" `
 	Status        string           `thrift:"status,4" form:"status" json:"status"`
 	AppliedAt     string           `thrift:"applied_at,5" form:"applied_at" json:"applied_at"`
 }
@@ -1379,7 +1379,7 @@ func (p *GetMyApplicationsResp) String() string {
 
 // 获取申请详情请求
 type GetApplicationDetailReq struct {
-	ApplicationID int64 `thrift:"application_id,1" json:"application_id" path:"application_id" vd:"$>0"`
+	ApplicationID int64 `thrift:"application_id,1" json:"application_id,string" path:"application_id" vd:"$>0"`
 }
 
 func NewGetApplicationDetailReq() *GetApplicationDetailReq {
@@ -1713,7 +1713,7 @@ func (p *GetApplicationDetailResp) String() string {
 
 // 取消申请请求
 type CancelApplicationReq struct {
-	ApplicationID int64  `thrift:"application_id,1" json:"application_id" path:"application_id" vd:"$>0"`
+	ApplicationID int64  `thrift:"application_id,1" json:"application_id,string" path:"application_id" vd:"$>0"`
 	CancelReason  string `thrift:"cancel_reason,2" form:"cancel_reason" json:"cancel_reason" vd:"len($)>0"`
 }
 
@@ -2041,7 +2041,7 @@ func (p *CancelApplicationResp) String() string {
 
 // 确认申请请求
 type ConfirmApplicationReq struct {
-	ApplicationID int64 `thrift:"application_id,1" json:"application_id" path:"application_id" vd:"$>0"`
+	ApplicationID int64 `thrift:"application_id,1" json:"application_id,string" path:"application_id" vd:"$>0"`
 }
 
 func NewConfirmApplicationReq() *ConfirmApplicationReq {

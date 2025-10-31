@@ -1,6 +1,7 @@
 package message
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,8 +13,8 @@ import (
 )
 
 // MarkMessageReadLogic 标记消息已读业务逻辑
-func MarkMessageReadLogic(req *message.MarkMessageReadReq) (*message.MarkMessageReadResp, error) {
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+func MarkMessageReadLogic(ctx context.Context, req *message.MarkMessageReadReq) (*message.MarkMessageReadResp, error) {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.MarkMessageRead(tx, req.MessageID)
 	})
 

@@ -830,7 +830,7 @@ func (p *GetJobListResp) String() string {
 
 // 获取岗位详情请求
 type GetJobDetailReq struct {
-	JobID int64 `thrift:"job_id,1" json:"job_id" path:"job_id" vd:"$>0"`
+	JobID int64 `thrift:"job_id,1" json:"job_id,string" path:"job_id" vd:"$>0"`
 }
 
 func NewGetJobDetailReq() *GetJobDetailReq {

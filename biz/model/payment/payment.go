@@ -554,7 +554,7 @@ func (p *GetPaymentRecordsResp) String() string {
 
 // 获取支付详情请求
 type GetPaymentDetailReq struct {
-	PaymentID int64 `thrift:"payment_id,1" json:"payment_id" path:"payment_id" vd:"$>0"`
+	PaymentID int64 `thrift:"payment_id,1" json:"payment_id,string" path:"payment_id" vd:"$>0"`
 }
 
 func NewGetPaymentDetailReq() *GetPaymentDetailReq {
@@ -1119,7 +1119,7 @@ func (p *ApplyWithdrawReq) String() string {
 // 申请提现响应
 type ApplyWithdrawResp struct {
 	Base       *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	WithdrawID int64            `thrift:"withdraw_id,2" form:"withdraw_id" json:"withdraw_id"`
+	WithdrawID int64            `thrift:"withdraw_id,2" json:"withdraw_id,string" form:"withdraw_id" `
 }
 
 func NewApplyWithdrawResp() *ApplyWithdrawResp {

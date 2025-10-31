@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // ChangePasswordLogic 修改密码业务逻辑
-func ChangePasswordLogic(userID int64, req *auth.ChangePasswordReq) (*auth.ChangePasswordResp, error) {
+func ChangePasswordLogic(ctx context.Context, userID int64, req *auth.ChangePasswordReq) (*auth.ChangePasswordResp, error) {
 	// 获取用户信息
 	user, err := mysql.GetUserByID(nil, userID)
 	if err != nil {
@@ -61,7 +62,7 @@ func ChangePasswordLogic(userID int64, req *auth.ChangePasswordReq) (*auth.Chang
 	}
 
 	// 更新密码
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateUserPassword(tx, userID, hashedPassword)
 	})
 

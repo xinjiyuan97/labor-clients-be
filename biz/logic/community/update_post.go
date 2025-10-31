@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // UpdatePostLogic 更新帖子业务逻辑
-func UpdatePostLogic(req *community.UpdatePostReq) (*community.UpdatePostResp, error) {
+func UpdatePostLogic(ctx context.Context, req *community.UpdatePostReq) (*community.UpdatePostResp, error) {
 	// 获取现有帖子
 	post, err := mysql.GetCommunityPostByID(nil, req.PostID)
 	if err != nil {
@@ -47,7 +48,7 @@ func UpdatePostLogic(req *community.UpdatePostReq) (*community.UpdatePostResp, e
 		post.PostType = req.PostType
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateCommunityPost(tx, post)
 	})
 

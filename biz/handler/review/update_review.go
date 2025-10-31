@@ -22,7 +22,7 @@ func UpdateReview(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := reviewlogic.UpdateReviewLogic(&req)
+	resp, err := reviewlogic.UpdateReviewLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

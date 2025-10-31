@@ -1,6 +1,7 @@
 package review
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // UpdateReviewLogic 更新评价业务逻辑
-func UpdateReviewLogic(req *review.UpdateReviewReq) (*review.UpdateReviewResp, error) {
+func UpdateReviewLogic(ctx context.Context, req *review.UpdateReviewReq) (*review.UpdateReviewResp, error) {
 	// 获取现有评价
 	reviewModel, err := mysql.GetReviewByID(nil, req.ReviewID)
 	if err != nil {
@@ -44,7 +45,7 @@ func UpdateReviewLogic(req *review.UpdateReviewReq) (*review.UpdateReviewResp, e
 		reviewModel.Content = req.Content
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateReview(tx, reviewModel)
 	})
 

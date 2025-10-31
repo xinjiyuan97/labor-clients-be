@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // FavoriteJobLogic 收藏工作业务逻辑
-func FavoriteJobLogic(req *user.FavoriteJobReq, userID int64) (*user.FavoriteJobResp, error) {
+func FavoriteJobLogic(ctx context.Context, req *user.FavoriteJobReq, userID int64) (*user.FavoriteJobResp, error) {
 	// 检查是否已经收藏
 	exists, err := mysql.CheckUserFavoriteJob(nil, userID, req.JobID)
 	if err != nil {
@@ -39,7 +40,7 @@ func FavoriteJobLogic(req *user.FavoriteJobReq, userID int64) (*user.FavoriteJob
 
 	// 使用事务创建收藏记录
 	var favoriteID int64
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		favorite := &models.UserFavoriteJob{
 			UserID: userID,
 			JobID:  req.JobID,

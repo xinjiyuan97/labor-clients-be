@@ -22,7 +22,7 @@ func ResetAdminPassword(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := adminlogic.ResetAdminPasswordLogic(&req)
+	resp, err := adminlogic.ResetAdminPasswordLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

@@ -22,7 +22,7 @@ func MarkMessageRead(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := messagelogic.MarkMessageReadLogic(&req)
+	resp, err := messagelogic.MarkMessageReadLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

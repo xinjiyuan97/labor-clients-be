@@ -1,6 +1,7 @@
 package schedule
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // UpdateScheduleStatusLogic 更新日程状态业务逻辑
-func UpdateScheduleStatusLogic(req *schedule.UpdateScheduleStatusReq) (*schedule.UpdateScheduleStatusResp, error) {
+func UpdateScheduleStatusLogic(ctx context.Context, req *schedule.UpdateScheduleStatusReq) (*schedule.UpdateScheduleStatusResp, error) {
 	// 检查日程是否存在
 	existingSchedule, err := mysql.GetScheduleByID(nil, req.ScheduleID)
 	if err != nil {
@@ -57,7 +58,7 @@ func UpdateScheduleStatusLogic(req *schedule.UpdateScheduleStatusReq) (*schedule
 	}
 
 	// 更新日程状态
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateScheduleStatus(tx, req.ScheduleID, req.Status)
 	})
 

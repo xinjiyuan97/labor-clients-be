@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // EnableAdminLogic 启用管理员业务逻辑
-func EnableAdminLogic(req *admin.EnableAdminReq) (*admin.EnableAdminResp, error) {
+func EnableAdminLogic(ctx context.Context, req *admin.EnableAdminReq) (*admin.EnableAdminResp, error) {
 	// 获取管理员信息
 	adminUser, err := mysql.GetAdminByID(nil, req.AdminID)
 	if err != nil {
@@ -37,7 +38,7 @@ func EnableAdminLogic(req *admin.EnableAdminReq) (*admin.EnableAdminResp, error)
 	}
 
 	// 更新账号状态为启用
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateUserStatus(tx, req.AdminID, "active")
 	})
 

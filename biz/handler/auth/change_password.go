@@ -30,7 +30,7 @@ func ChangePassword(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := authlogic.ChangePasswordLogic(int64(userID), &req)
+	resp, err := authlogic.ChangePasswordLogic(ctx, int64(userID), &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

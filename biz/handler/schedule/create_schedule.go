@@ -22,7 +22,7 @@ func CreateSchedule(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := schedulelogic.CreateScheduleLogic(&req)
+	resp, err := schedulelogic.CreateScheduleLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

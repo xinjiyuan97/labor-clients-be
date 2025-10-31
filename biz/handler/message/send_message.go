@@ -22,7 +22,7 @@ func SendMessage(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := messagelogic.SendMessageLogic(&req)
+	resp, err := messagelogic.SendMessageLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // ResetAdminPasswordLogic 重置管理员密码业务逻辑
-func ResetAdminPasswordLogic(req *admin.ResetAdminPasswordReq) (*admin.ResetAdminPasswordResp, error) {
+func ResetAdminPasswordLogic(ctx context.Context, req *admin.ResetAdminPasswordReq) (*admin.ResetAdminPasswordResp, error) {
 	// 获取管理员信息
 	adminUser, err := mysql.GetAdminByID(nil, req.AdminID)
 	if err != nil {
@@ -50,7 +51,7 @@ func ResetAdminPasswordLogic(req *admin.ResetAdminPasswordReq) (*admin.ResetAdmi
 	}
 
 	// 更新密码
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateUserPassword(tx, req.AdminID, hashedPassword)
 	})
 

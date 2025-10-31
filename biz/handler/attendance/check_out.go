@@ -29,7 +29,7 @@ func CheckOut(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := attendancelogic.CheckOutLogic(int64(userID), &req)
+	resp, err := attendancelogic.CheckOutLogic(ctx, int64(userID), &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

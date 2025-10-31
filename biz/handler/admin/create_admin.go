@@ -22,7 +22,7 @@ func CreateAdmin(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := adminlogic.CreateAdminLogic(&req)
+	resp, err := adminlogic.CreateAdminLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

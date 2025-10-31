@@ -1,19 +1,19 @@
 package admin
 
 import (
+	"context"
 	"time"
-
-	"gorm.io/gorm"
 
 	"github.com/xinjiyuan97/labor-clients/biz/model/admin"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
+	"github.com/xinjiyuan97/labor-clients/errno"
 	"github.com/xinjiyuan97/labor-clients/models"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
 // CreateUserLogic 创建用户业务逻辑
-func CreateUserLogic(req *admin.CreateUserReq) (*admin.CreateUserResp, error) {
+func CreateUserLogic(ctx context.Context, req *admin.CreateUserReq) (*admin.CreateUserResp, error) {
 	// 检查手机号是否已存在
 	existingUser, err := mysql.GetUserByPhone(nil, req.Phone)
 	if err != nil {
@@ -58,9 +58,7 @@ func CreateUserLogic(req *admin.CreateUserReq) (*admin.CreateUserResp, error) {
 		Role:         req.Role,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
-		return mysql.CreateUser(tx, user)
-	})
+	err = mysql.CreateUser(ctx, user)
 
 	if err != nil {
 		utils.Errorf("创建用户失败: %v", err)
@@ -70,7 +68,7 @@ func CreateUserLogic(req *admin.CreateUserReq) (*admin.CreateUserResp, error) {
 				Message:   "创建用户失败",
 				Timestamp: time.Now().Format(time.RFC3339),
 			},
-		}, nil
+		}, errno.NewError(500, "创建用户失败")
 	}
 
 	return &admin.CreateUserResp{

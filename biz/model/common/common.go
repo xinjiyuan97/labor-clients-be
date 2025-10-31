@@ -653,7 +653,7 @@ func (p *PageResp) String() string {
 
 // 用户基础信息
 type UserInfo struct {
-	UserID   int64  `thrift:"user_id,1" form:"user_id" json:"user_id"`
+	UserID   int64  `thrift:"user_id,1" json:"user_id,string" form:"user_id" `
 	Username string `thrift:"username,2" form:"username" json:"username"`
 	Phone    string `thrift:"phone,3" form:"phone" json:"phone"`
 	Avatar   string `thrift:"avatar,4" form:"avatar" json:"avatar"`
@@ -975,7 +975,7 @@ func (p *UserInfo) String() string {
 
 // 零工详细信息
 type WorkerInfo struct {
-	UserID         int64   `thrift:"user_id,1" form:"user_id" json:"user_id"`
+	UserID         int64   `thrift:"user_id,1" json:"user_id,string" form:"user_id" `
 	RealName       string  `thrift:"real_name,2" form:"real_name" json:"real_name"`
 	Gender         string  `thrift:"gender,3" form:"gender" json:"gender"`
 	Age            int32   `thrift:"age,4" form:"age" json:"age"`
@@ -1481,7 +1481,7 @@ func (p *WorkerInfo) String() string {
 
 // 品牌信息
 type BrandInfo struct {
-	BrandID     int64  `thrift:"brand_id,1" form:"brand_id" json:"brand_id"`
+	BrandID     int64  `thrift:"brand_id,1" json:"brand_id,string" form:"brand_id" `
 	Name        string `thrift:"name,2" form:"name" json:"name"`
 	Logo        string `thrift:"logo,3" form:"logo" json:"logo"`
 	Description string `thrift:"description,4" form:"description" json:"description"`
@@ -1803,9 +1803,9 @@ func (p *BrandInfo) String() string {
 
 // 雇主信息
 type EmployerInfo struct {
-	EmployerID    int64  `thrift:"employer_id,1" form:"employer_id" json:"employer_id"`
-	UserID        int64  `thrift:"user_id,2" form:"user_id" json:"user_id"`
-	BrandID       int64  `thrift:"brand_id,3" form:"brand_id" json:"brand_id"`
+	EmployerID    int64  `thrift:"employer_id,1" json:"employer_id,string" form:"employer_id" `
+	UserID        int64  `thrift:"user_id,2" json:"user_id,string" form:"user_id" `
+	BrandID       int64  `thrift:"brand_id,3" json:"brand_id,string" form:"brand_id" `
 	CompanyName   string `thrift:"company_name,4" form:"company_name" json:"company_name"`
 	ContactPerson string `thrift:"contact_person,5" form:"contact_person" json:"contact_person"`
 	ContactPhone  string `thrift:"contact_phone,6" form:"contact_phone" json:"contact_phone"`
@@ -2539,7 +2539,7 @@ func (p *JobCategoryInfo) String() string {
 
 // 岗位标签信息
 type JobTagInfo struct {
-	JobID   int64  `thrift:"job_id,1" form:"job_id" json:"job_id"`
+	JobID   int64  `thrift:"job_id,1" json:"job_id,string" form:"job_id" `
 	TagName string `thrift:"tag_name,2" form:"tag_name" json:"tag_name"`
 	TagType string `thrift:"tag_type,3" form:"tag_type" json:"tag_type"`
 }
@@ -2769,7 +2769,7 @@ func (p *JobTagInfo) String() string {
 
 // 岗位信息
 type JobInfo struct {
-	JobID          int64            `thrift:"job_id,1" form:"job_id" json:"job_id"`
+	JobID          int64            `thrift:"job_id,1" json:"job_id,string" form:"job_id" `
 	Title          string           `thrift:"title,2" form:"title" json:"title"`
 	JobType        string           `thrift:"job_type,3" form:"job_type" json:"job_type"`
 	Description    string           `thrift:"description,4" form:"description" json:"description"`
@@ -2785,9 +2785,9 @@ type JobInfo struct {
 	Status         string           `thrift:"status,14" form:"status" json:"status"`
 	ApplicantCount int32            `thrift:"applicant_count,15" form:"applicant_count" json:"applicant_count"`
 	MaxApplicants  int32            `thrift:"max_applicants,16" form:"max_applicants" json:"max_applicants"`
-	EmployerID     int64            `thrift:"employer_id,17" form:"employer_id" json:"employer_id"`
-	BrandID        int64            `thrift:"brand_id,18" form:"brand_id" json:"brand_id"`
-	CategoryID     int64            `thrift:"category_id,19" form:"category_id" json:"category_id"`
+	EmployerID     int64            `thrift:"employer_id,17" json:"employer_id,string" form:"employer_id" `
+	BrandID        int64            `thrift:"brand_id,18" json:"brand_id,string" form:"brand_id" `
+	CategoryID     int64            `thrift:"category_id,19" json:"category_id,string" form:"category_id" `
 	Distance       float64          `thrift:"distance,20" form:"distance" json:"distance"`
 	BrandInfo      *BrandInfo       `thrift:"brand_info,21" form:"brand_info" json:"brand_info"`
 	EmployerInfo   *EmployerInfo    `thrift:"employer_info,22" form:"employer_info" json:"employer_info"`
@@ -4002,9 +4002,9 @@ func (p *JobInfo) String() string {
 
 // 日程信息
 type ScheduleInfo struct {
-	ScheduleID      int64    `thrift:"schedule_id,1" form:"schedule_id" json:"schedule_id"`
-	WorkerID        int64    `thrift:"worker_id,2" form:"worker_id" json:"worker_id"`
-	JobID           int64    `thrift:"job_id,3" form:"job_id" json:"job_id"`
+	ScheduleID      int64    `thrift:"schedule_id,1" json:"schedule_id,string" form:"schedule_id" `
+	WorkerID        int64    `thrift:"worker_id,2" json:"worker_id,string" form:"worker_id" `
+	JobID           int64    `thrift:"job_id,3" json:"job_id,string" form:"job_id" `
 	Title           string   `thrift:"title,4" form:"title" json:"title"`
 	StartTime       string   `thrift:"start_time,5" form:"start_time" json:"start_time"`
 	EndTime         string   `thrift:"end_time,6" form:"end_time" json:"end_time"`
@@ -4606,9 +4606,9 @@ func (p *ScheduleInfo) String() string {
 
 // 岗位申请信息
 type JobApplicationInfo struct {
-	ApplicationID  int64    `thrift:"application_id,1" form:"application_id" json:"application_id"`
-	JobID          int64    `thrift:"job_id,2" form:"job_id" json:"job_id"`
-	WorkerID       int64    `thrift:"worker_id,3" form:"worker_id" json:"worker_id"`
+	ApplicationID  int64    `thrift:"application_id,1" json:"application_id,string" form:"application_id" `
+	JobID          int64    `thrift:"job_id,2" json:"job_id,string" form:"job_id" `
+	WorkerID       int64    `thrift:"worker_id,3" json:"worker_id,string" form:"worker_id" `
 	Status         string   `thrift:"status,4" form:"status" json:"status"`
 	AppliedAt      string   `thrift:"applied_at,5" form:"applied_at" json:"applied_at"`
 	ConfirmedAt    string   `thrift:"confirmed_at,6" form:"confirmed_at" json:"confirmed_at"`
@@ -5210,9 +5210,9 @@ func (p *JobApplicationInfo) String() string {
 
 // 消息信息
 type MessageInfo struct {
-	MessageID   int64  `thrift:"message_id,1" form:"message_id" json:"message_id"`
-	FromUser    int64  `thrift:"from_user,2" form:"from_user" json:"from_user"`
-	ToUser      int64  `thrift:"to_user,3" form:"to_user" json:"to_user"`
+	MessageID   int64  `thrift:"message_id,1" json:"message_id,string" form:"message_id" `
+	FromUser    int64  `thrift:"from_user,2" json:"from_user,string" form:"from_user" `
+	ToUser      int64  `thrift:"to_user,3" json:"to_user,string" form:"to_user" `
 	MessageType string `thrift:"message_type,4" form:"message_type" json:"message_type"`
 	Content     string `thrift:"content,5" form:"content" json:"content"`
 	MsgCategory string `thrift:"msg_category,6" form:"msg_category" json:"msg_category"`
@@ -5671,8 +5671,8 @@ func (p *MessageInfo) String() string {
 // 考勤记录信息
 type AttendanceRecordInfo struct {
 	RecordID         int32    `thrift:"record_id,1" form:"record_id" json:"record_id"`
-	JobID            int64    `thrift:"job_id,2" form:"job_id" json:"job_id"`
-	WorkerID         int64    `thrift:"worker_id,3" form:"worker_id" json:"worker_id"`
+	JobID            int64    `thrift:"job_id,2" json:"job_id,string" form:"job_id" `
+	WorkerID         int64    `thrift:"worker_id,3" json:"worker_id,string" form:"worker_id" `
 	CheckIn          string   `thrift:"check_in,4" form:"check_in" json:"check_in"`
 	CheckOut         string   `thrift:"check_out,5" form:"check_out" json:"check_out"`
 	WorkHours        float64  `thrift:"work_hours,6" form:"work_hours" json:"work_hours"`
@@ -6228,10 +6228,10 @@ func (p *AttendanceRecordInfo) String() string {
 
 // 评价信息
 type ReviewInfo struct {
-	ReviewID     int64         `thrift:"review_id,1" form:"review_id" json:"review_id"`
-	JobID        int64         `thrift:"job_id,2" form:"job_id" json:"job_id"`
-	EmployerID   int64         `thrift:"employer_id,3" form:"employer_id" json:"employer_id"`
-	WorkerID     int64         `thrift:"worker_id,4" form:"worker_id" json:"worker_id"`
+	ReviewID     int64         `thrift:"review_id,1" json:"review_id,string" form:"review_id" `
+	JobID        int64         `thrift:"job_id,2" json:"job_id,string" form:"job_id" `
+	EmployerID   int64         `thrift:"employer_id,3" json:"employer_id,string" form:"employer_id" `
+	WorkerID     int64         `thrift:"worker_id,4" json:"worker_id,string" form:"worker_id" `
 	Rating       int32         `thrift:"rating,5" form:"rating" json:"rating"`
 	Content      string        `thrift:"content,6" form:"content" json:"content"`
 	ReviewType   string        `thrift:"review_type,7" form:"review_type" json:"review_type"`
@@ -6792,10 +6792,10 @@ func (p *ReviewInfo) String() string {
 
 // 支付信息
 type PaymentInfo struct {
-	PaymentID     int64    `thrift:"payment_id,1" form:"payment_id" json:"payment_id"`
-	JobID         int64    `thrift:"job_id,2" form:"job_id" json:"job_id"`
-	WorkerID      int64    `thrift:"worker_id,3" form:"worker_id" json:"worker_id"`
-	EmployerID    int64    `thrift:"employer_id,4" form:"employer_id" json:"employer_id"`
+	PaymentID     int64    `thrift:"payment_id,1" json:"payment_id,string" form:"payment_id" `
+	JobID         int64    `thrift:"job_id,2" json:"job_id,string" form:"job_id" `
+	WorkerID      int64    `thrift:"worker_id,3" json:"worker_id,string" form:"worker_id" `
+	EmployerID    int64    `thrift:"employer_id,4" json:"employer_id,string" form:"employer_id" `
 	Amount        float64  `thrift:"amount,5" form:"amount" json:"amount"`
 	PaymentMethod string   `thrift:"payment_method,6" form:"payment_method" json:"payment_method"`
 	Status        string   `thrift:"status,7" form:"status" json:"status"`
@@ -7350,8 +7350,8 @@ func (p *PaymentInfo) String() string {
 
 // 社区帖子信息
 type CommunityPostInfo struct {
-	PostID     int64     `thrift:"post_id,1" form:"post_id" json:"post_id"`
-	AuthorID   int64     `thrift:"author_id,2" form:"author_id" json:"author_id"`
+	PostID     int64     `thrift:"post_id,1" json:"post_id,string" form:"post_id" `
+	AuthorID   int64     `thrift:"author_id,2" json:"author_id,string" form:"author_id" `
 	Title      string    `thrift:"title,3" form:"title" json:"title"`
 	Content    string    `thrift:"content,4" form:"content" json:"content"`
 	PostType   string    `thrift:"post_type,5" form:"post_type" json:"post_type"`
@@ -7908,9 +7908,9 @@ func (p *CommunityPostInfo) String() string {
 
 // 用户收藏信息
 type UserFavoriteJobInfo struct {
-	FavoriteID int64    `thrift:"favorite_id,1" form:"favorite_id" json:"favorite_id"`
-	UserID     int64    `thrift:"user_id,2" form:"user_id" json:"user_id"`
-	JobID      int64    `thrift:"job_id,3" form:"job_id" json:"job_id"`
+	FavoriteID int64    `thrift:"favorite_id,1" json:"favorite_id,string" form:"favorite_id" `
+	UserID     int64    `thrift:"user_id,2" json:"user_id,string" form:"user_id" `
+	JobID      int64    `thrift:"job_id,3" json:"job_id,string" form:"job_id" `
 	CreatedAt  string   `thrift:"created_at,4" form:"created_at" json:"created_at"`
 	JobInfo    *JobInfo `thrift:"job_info,5" form:"job_info" json:"job_info"`
 }

@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // CreatePostLogic 创建帖子业务逻辑
-func CreatePostLogic(userID int64, req *community.CreatePostReq) (*community.CreatePostResp, error) {
+func CreatePostLogic(ctx context.Context, userID int64, req *community.CreatePostReq) (*community.CreatePostResp, error) {
 	// 创建帖子
 	post := &models.CommunityPost{
 		AuthorID: userID,
@@ -23,7 +24,7 @@ func CreatePostLogic(userID int64, req *community.CreatePostReq) (*community.Cre
 		Status:   "published",
 	}
 
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateCommunityPost(tx, post)
 	})
 

@@ -30,7 +30,7 @@ func FavoriteJob(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := userlogic.FavoriteJobLogic(&req, userID)
+	resp, err := userlogic.FavoriteJobLogic(ctx, &req, userID)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

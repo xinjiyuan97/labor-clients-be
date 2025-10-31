@@ -18,7 +18,7 @@ struct GetMessageListResp {
 
 // 获取消息详情请求
 struct GetMessageDetailReq {
-    1: i64 message_id (api.path="message_id", api.vd="$>0");
+    1: i64 message_id (api.path="message_id", api.vd="$>0" go.tag="json:\"message_id,string\"");
 }
 
 // 获取消息详情响应
@@ -29,7 +29,7 @@ struct GetMessageDetailResp {
 
 // 发送消息请求
 struct SendMessageReq {
-    1: i64 to_user (api.body="to_user", api.vd="$>0");
+    1: i64 to_user (api.body="to_user", api.vd="$>0" go.tag="json:\"to_user,string\"");
     2: string message_type (api.body="message_type", api.vd="len($)>0");
     3: string content (api.body="content", api.vd="len($)>0");
     4: string msg_category (api.body="msg_category");
@@ -38,12 +38,12 @@ struct SendMessageReq {
 // 发送消息响应
 struct SendMessageResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 message_id (api.body="message_id");
+    2: i64 message_id (api.body="message_id" go.tag="json:\"message_id,string\"");
 }
 
 // 标记消息已读请求
 struct MarkMessageReadReq {
-    1: i64 message_id (api.path="message_id", api.vd="$>0");
+    1: i64 message_id (api.path="message_id", api.vd="$>0" go.tag="json:\"message_id,string\"");
 }
 
 // 标记消息已读响应
@@ -53,7 +53,7 @@ struct MarkMessageReadResp {
 
 // 批量标记已读请求
 struct BatchMarkReadReq {
-    1: list<i64> message_ids (api.body="message_ids", api.vd="len($)>0");
+    1: list<i64> message_ids (api.body="message_ids", api.vd="len($)>0" go.tag="json:\"message_ids\"");
 }
 
 // 批量标记已读响应

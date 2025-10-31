@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // UpdateProfileLogic 更新用户信息业务逻辑
-func UpdateProfileLogic(req *user.UpdateProfileReq, userID int64) (*user.UpdateProfileResp, error) {
+func UpdateProfileLogic(ctx context.Context, req *user.UpdateProfileReq, userID int64) (*user.UpdateProfileResp, error) {
 	// 获取当前用户信息
 	currentUser, err := mysql.GetUserByID(nil, userID)
 	if err != nil {
@@ -38,7 +39,7 @@ func UpdateProfileLogic(req *user.UpdateProfileReq, userID int64) (*user.UpdateP
 	}
 
 	// 使用事务更新用户信息
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		// 更新用户基础信息
 		if req.Username != "" {
 			currentUser.Username = req.Username

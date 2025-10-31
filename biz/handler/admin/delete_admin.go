@@ -22,7 +22,7 @@ func DeleteAdmin(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := adminlogic.DeleteAdminLogic(&req)
+	resp, err := adminlogic.DeleteAdminLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

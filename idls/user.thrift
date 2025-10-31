@@ -38,7 +38,7 @@ struct UploadCertResp {
     1: common.BaseResp base (api.body="base");
     2: string cert_type (api.body="cert_type");
     3: string file_url (api.body="file_url");
-    4: i64 cert_id (api.body="cert_id");
+    4: i64 cert_id (api.body="cert_id" go.tag="json:\"cert_id,string\"");
 }
 
 // 获取我的收藏请求
@@ -55,18 +55,18 @@ struct GetMyFavoritesResp {
 
 // 收藏岗位请求
 struct FavoriteJobReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
 }
 
 // 收藏岗位响应
 struct FavoriteJobResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 favorite_id (api.body="favorite_id");
+    2: i64 favorite_id (api.body="favorite_id" go.tag="json:\"favorite_id,string\"");
 }
 
 // 取消收藏请求
 struct UnfavoriteJobReq {
-    1: i64 job_id (api.path="job_id", api.vd="$>0");
+    1: i64 job_id (api.path="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
 }
 
 // 取消收藏响应

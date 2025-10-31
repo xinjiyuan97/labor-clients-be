@@ -1,6 +1,7 @@
 package schedule
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // DeleteScheduleLogic 删除日程业务逻辑
-func DeleteScheduleLogic(req *schedule.DeleteScheduleReq) (*schedule.DeleteScheduleResp, error) {
+func DeleteScheduleLogic(ctx context.Context, req *schedule.DeleteScheduleReq) (*schedule.DeleteScheduleResp, error) {
 	// 检查日程是否存在
 	existingSchedule, err := mysql.GetScheduleByID(nil, req.ScheduleID)
 	if err != nil {
@@ -37,7 +38,7 @@ func DeleteScheduleLogic(req *schedule.DeleteScheduleReq) (*schedule.DeleteSched
 	}
 
 	// 删除日程
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.DeleteSchedule(tx, req.ScheduleID)
 	})
 

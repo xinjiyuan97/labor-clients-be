@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,14 +13,14 @@ import (
 )
 
 // UploadCertLogic 上传证书业务逻辑
-func UploadCertLogic(req *user.UploadCertReq, userID int64) (*user.UploadCertResp, error) {
+func UploadCertLogic(ctx context.Context, req *user.UploadCertReq, userID int64) (*user.UploadCertResp, error) {
 	// 这里应该实现文件上传逻辑，将文件保存到文件服务器或云存储
 	// 目前简化处理，直接返回一个模拟的URL
 	fileURL := "https://example.com/certs/" + req.CertFile
 
 	// 使用事务保存证书信息
 	var certID int64
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		// 创建证书记录（这里假设有一个证书表，实际项目中需要根据业务需求设计）
 		// 由于没有证书表模型，这里简化处理
 		certID = time.Now().Unix() // 使用时间戳作为证书ID

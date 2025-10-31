@@ -9,6 +9,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	adminlogic "github.com/xinjiyuan97/labor-clients/biz/logic/admin"
 	admin "github.com/xinjiyuan97/labor-clients/biz/model/admin"
+	"github.com/xinjiyuan97/labor-clients/errno"
 )
 
 // CreateBrand .
@@ -23,9 +24,10 @@ func CreateBrand(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// 调用业务逻辑
-	resp, err := adminlogic.CreateBrandLogic(&req)
+	resp, err := adminlogic.CreateBrandLogic(ctx, &req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, resp)
+		resp.Base = errno.GetBaseResp(err)
+		c.JSON(200, resp)
 		return
 	}
 

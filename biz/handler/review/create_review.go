@@ -29,7 +29,7 @@ func CreateReview(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := reviewlogic.CreateReviewLogic(int64(userID), &req)
+	resp, err := reviewlogic.CreateReviewLogic(ctx, int64(userID), &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

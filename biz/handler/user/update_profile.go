@@ -30,7 +30,7 @@ func UpdateProfile(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := userlogic.UpdateProfileLogic(&req, userID)
+	resp, err := userlogic.UpdateProfileLogic(ctx, &req, userID)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

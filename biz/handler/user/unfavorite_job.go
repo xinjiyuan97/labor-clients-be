@@ -30,7 +30,7 @@ func UnfavoriteJob(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := userlogic.UnfavoriteJobLogic(&req, userID)
+	resp, err := userlogic.UnfavoriteJobLogic(ctx, &req, userID)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

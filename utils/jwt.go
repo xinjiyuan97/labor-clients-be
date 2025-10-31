@@ -16,16 +16,25 @@ var (
 
 // Claims JWT声明
 type Claims struct {
-	UserID int64  `json:"user_id"`
-	Role   string `json:"role"`
+	UserID  int64  `json:"user_id"`
+	Role    string `json:"role"`
+	BrandID *int64 `json:"brand_id,omitempty"` // 品牌ID（用于品牌管理员和门店管理员）
+	StoreID *int64 `json:"store_id,omitempty"` // 门店ID（用于门店管理员）
 	jwt.RegisteredClaims
 }
 
 // GenerateToken 生成JWT token
 func GenerateToken(userID int64, role string) (string, error) {
+	return GenerateTokenWithExtra(userID, role, nil, nil)
+}
+
+// GenerateTokenWithExtra 生成JWT token（包含额外的品牌ID和门店ID）
+func GenerateTokenWithExtra(userID int64, role string, brandID, storeID *int64) (string, error) {
 	claims := Claims{
-		UserID: userID,
-		Role:   role,
+		UserID:  userID,
+		Role:    role,
+		BrandID: brandID,
+		StoreID: storeID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(TokenExpire)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -41,9 +50,16 @@ func GenerateToken(userID int64, role string) (string, error) {
 
 // GenerateRefreshToken 生成refresh token
 func GenerateRefreshToken(userID int64, role string) (string, error) {
+	return GenerateRefreshTokenWithExtra(userID, role, nil, nil)
+}
+
+// GenerateRefreshTokenWithExtra 生成refresh token（包含额外的品牌ID和门店ID）
+func GenerateRefreshTokenWithExtra(userID int64, role string, brandID, storeID *int64) (string, error) {
 	claims := Claims{
-		UserID: userID,
-		Role:   role,
+		UserID:  userID,
+		Role:    role,
+		BrandID: brandID,
+		StoreID: storeID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(RefreshExpire)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

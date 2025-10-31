@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // SubmitFeedbackLogic 提交反馈业务逻辑
-func SubmitFeedbackLogic(req *system.SubmitFeedbackReq) (*system.SubmitFeedbackResp, error) {
+func SubmitFeedbackLogic(ctx context.Context, req *system.SubmitFeedbackReq) (*system.SubmitFeedbackResp, error) {
 	// 创建反馈
 	feedback := &models.Feedback{
 		UserID:  0, // 需要从JWT token中获取
@@ -23,7 +24,7 @@ func SubmitFeedbackLogic(req *system.SubmitFeedbackReq) (*system.SubmitFeedbackR
 		Status:  "pending",
 	}
 
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateFeedback(tx, feedback)
 	})
 

@@ -3,6 +3,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -148,6 +149,12 @@ func initBaseComponents(cfg *config.Config) error {
 		utils.SetTOSClient(tos.GetClient())
 	}
 
+	// 加载菜单配置
+	menuConfigPath := "conf/menus.yaml"
+	if err := config.LoadMenuConfig(menuConfigPath); err != nil {
+		return fmt.Errorf("加载菜单配置失败: %v", err)
+	}
+
 	return nil
 }
 
@@ -187,7 +194,7 @@ func runMigrate(cfg *config.Config) {
 	utils.Info("启动数据库迁移模式...")
 
 	// 确保 MySQL 连接已初始化
-	if mysql.GetDB() == nil {
+	if mysql.GetDB(context.Background()) == nil {
 		log.Fatal("MySQL 数据库连接未初始化，请检查配置")
 	}
 
@@ -226,7 +233,7 @@ func runMigrate(cfg *config.Config) {
 	utils.Info("数据库迁移完成")
 
 	// 显示迁移后的表信息
-	db := mysql.GetDB()
+	db := mysql.GetDB(context.Background())
 	var tables []string
 	if err := db.Raw("SHOW TABLES").Scan(&tables).Error; err != nil {
 		utils.Errorf("获取表列表失败: %v", err)
@@ -250,7 +257,7 @@ func runCreateAdmin(cfg *config.Config, phone, password, role string) {
 	}
 
 	// 确保 MySQL 连接已初始化
-	if mysql.GetDB() == nil {
+	if mysql.GetDB(context.Background()) == nil {
 		log.Fatal("MySQL 数据库连接未初始化，请检查配置")
 	}
 

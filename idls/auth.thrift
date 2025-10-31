@@ -13,7 +13,7 @@ struct RegisterReq {
 // 用户注册响应
 struct RegisterResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 user_id (api.body="user_id");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
     3: string token (api.body="token");
     4: string expires_at (api.body="expires_at");
 }
@@ -27,7 +27,7 @@ struct LoginReq {
 // 用户登录响应
 struct LoginResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 user_id (api.body="user_id");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
     3: string token (api.body="token");
     4: string expires_at (api.body="expires_at");
 }

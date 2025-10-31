@@ -30,7 +30,7 @@ func UploadCert(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := userlogic.UploadCertLogic(&req, userID)
+	resp, err := userlogic.UploadCertLogic(ctx, &req, userID)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

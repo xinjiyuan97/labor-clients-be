@@ -1,6 +1,7 @@
 package attendance
 
 import (
+	"context"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -14,7 +15,7 @@ import (
 )
 
 // ApplyMakeupLogic 申请补签业务逻辑
-func ApplyMakeupLogic(workerID int64, req *attendance.ApplyMakeupReq) (*attendance.ApplyMakeupResp, error) {
+func ApplyMakeupLogic(ctx context.Context, workerID int64, req *attendance.ApplyMakeupReq) (*attendance.ApplyMakeupResp, error) {
 	// 解析补签日期和时间
 	makeupDate, err := time.Parse("2006-01-02 15:04:05", req.MakeupTime)
 	if err != nil {
@@ -63,7 +64,7 @@ func ApplyMakeupLogic(workerID int64, req *attendance.ApplyMakeupReq) (*attendan
 		WorkHours: decimal.Zero,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateAttendanceRecord(tx, record)
 	})
 

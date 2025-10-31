@@ -149,9 +149,10 @@ func (s *TOSUploadService) GetSignedURL(fileURL string, expireSeconds int64) (st
 
 	// 生成预签名URL
 	output, err := client.PreSignedURL(&tos.PreSignedURLInput{
-		Bucket:  s.cfg.Bucket,
-		Key:     objectKey,
-		Expires: expireSeconds,
+		HTTPMethod: "GET",
+		Bucket:     s.cfg.Bucket,
+		Key:        objectKey,
+		Expires:    expireSeconds,
 	})
 	if err != nil {
 		return "", fmt.Errorf("生成签名URL失败: %v", err)
@@ -238,6 +239,7 @@ func (s *LocalUploadService) DeleteFile(fileURL string) error {
 // GetSignedURL 获取文件的预签名URL（本地实现直接返回原URL）
 func (s *LocalUploadService) GetSignedURL(fileURL string, expireSeconds int64) (string, error) {
 	// 本地模式直接返回原URL
+
 	return fileURL, nil
 }
 

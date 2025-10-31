@@ -5,7 +5,7 @@ include "common.thrift"
 // 获取考勤记录请求
 struct GetAttendanceRecordsReq {
     1: common.PageReq page_req (api.body="page_req");
-    2: i64 job_id (api.query="job_id");
+    2: i64 job_id (api.query="job_id" go.tag="json:\"job_id,string\"");
     3: string start_date (api.query="start_date");
     4: string end_date (api.query="end_date");
 }
@@ -30,7 +30,7 @@ struct GetAttendanceDetailResp {
 
 // 打卡请求
 struct CheckInReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
     2: string check_in_location (api.body="check_in_location", api.vd="len($)>0");
     3: double latitude (api.body="latitude");
     4: double longitude (api.body="longitude");
@@ -45,7 +45,7 @@ struct CheckInResp {
 
 // 签退请求
 struct CheckOutReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
     2: string check_out_location (api.body="check_out_location", api.vd="len($)>0");
     3: double latitude (api.body="latitude");
     4: double longitude (api.body="longitude");
@@ -61,7 +61,7 @@ struct CheckOutResp {
 
 // 申请请假请求
 struct ApplyLeaveReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
     2: string leave_date (api.body="leave_date", api.vd="len($)>0");
     3: string leave_reason (api.body="leave_reason", api.vd="len($)>0");
 }
@@ -69,12 +69,12 @@ struct ApplyLeaveReq {
 // 申请请假响应
 struct ApplyLeaveResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 leave_id (api.body="leave_id");
+    2: i64 leave_id (api.body="leave_id" go.tag="json:\"leave_id,string\"");
 }
 
 // 申请补卡请求
 struct ApplyMakeupReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
     2: string makeup_date (api.body="makeup_date", api.vd="len($)>0");
     3: string makeup_reason (api.body="makeup_reason", api.vd="len($)>0");
     4: string makeup_time (api.body="makeup_time", api.vd="len($)>0");
@@ -83,7 +83,7 @@ struct ApplyMakeupReq {
 // 申请补卡响应
 struct ApplyMakeupResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 makeup_id (api.body="makeup_id");
+    2: i64 makeup_id (api.body="makeup_id" go.tag="json:\"makeup_id,string\"");
 }
 
 service AttendanceService {

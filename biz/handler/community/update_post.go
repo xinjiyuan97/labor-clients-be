@@ -22,7 +22,7 @@ func UpdatePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.UpdatePostLogic(&req)
+	resp, err := communitylogic.UpdatePostLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

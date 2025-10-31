@@ -1,6 +1,7 @@
 package attendance
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +13,7 @@ import (
 )
 
 // CheckOutLogic 签退业务逻辑
-func CheckOutLogic(workerID int64, req *attendance.CheckOutReq) (*attendance.CheckOutResp, error) {
+func CheckOutLogic(ctx context.Context, workerID int64, req *attendance.CheckOutReq) (*attendance.CheckOutResp, error) {
 	// 获取今日打卡记录
 	record, err := mysql.GetTodayAttendanceRecord(nil, workerID, req.JobID)
 	if err != nil {
@@ -56,7 +57,7 @@ func CheckOutLogic(workerID int64, req *attendance.CheckOutReq) (*attendance.Che
 		record.WorkHours = mysql.CalculateWorkHours(*record.CheckIn, now)
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.UpdateAttendanceRecord(tx, record)
 	})
 

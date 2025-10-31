@@ -4,6 +4,7 @@ package admin
 
 import (
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/xinjiyuan97/labor-clients/constants"
 	"github.com/xinjiyuan97/labor-clients/middleware"
 )
 
@@ -26,7 +27,6 @@ func _adminMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
 		middleware.JWTAuth(),
-		middleware.RequireAdminRole(),
 	}
 }
 
@@ -37,7 +37,9 @@ func _getadminlistMw() []app.HandlerFunc {
 
 func _createadminMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.RequireAnyRole(constants.RoleAdmin),
+	}
 }
 
 func _brandsMw() []app.HandlerFunc {
@@ -77,7 +79,9 @@ func _updatebrandMw() []app.HandlerFunc {
 
 func _createbrandMw() []app.HandlerFunc {
 	// your code...
-	return nil
+	return []app.HandlerFunc{
+		middleware.RequireAdminRole(),
+	}
 }
 
 func _jobsMw() []app.HandlerFunc {
@@ -241,6 +245,102 @@ func _disableadminMw() []app.HandlerFunc {
 }
 
 func _enableadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _storesMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getstorelistMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _store_idMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getstoredetailMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createstoreMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatestoreMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deletestoreMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _assignstoreadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _removestoreadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getmenusMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.RequireAnyRole(constants.RoleAdmin, constants.RoleEmployer),
+	}
+}
+
+func _createbrandadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getbrandadminsMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _createstoreadminMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.RequireAnyRole(constants.RoleAdmin, constants.RoleEmployer),
+	}
+}
+
+func _brand_adminsMw() []app.HandlerFunc {
+	// your code...
+	return []app.HandlerFunc{
+		middleware.RequireAnyRole(constants.RoleAdmin, constants.RoleEmployer),
+	}
+}
+
+func _role_idMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _deletebrandadminMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _updatebrandadminstatusMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _getadmininfoMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }

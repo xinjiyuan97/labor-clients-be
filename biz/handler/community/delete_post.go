@@ -22,7 +22,7 @@ func DeletePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.DeletePostLogic(&req)
+	resp, err := communitylogic.DeletePostLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

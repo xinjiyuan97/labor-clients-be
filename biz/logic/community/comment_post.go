@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // CommentPostLogic 评论帖子业务逻辑
-func CommentPostLogic(userID int64, req *community.CommentPostReq) (*community.CommentPostResp, error) {
+func CommentPostLogic(ctx context.Context, userID int64, req *community.CommentPostReq) (*community.CommentPostResp, error) {
 	// 创建评论
 	comment := &models.PostComment{
 		PostID:   req.PostID,
@@ -22,7 +23,7 @@ func CommentPostLogic(userID int64, req *community.CommentPostReq) (*community.C
 		ParentID: &req.ParentID,
 	}
 
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreatePostComment(tx, comment)
 	})
 

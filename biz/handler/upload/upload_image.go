@@ -20,7 +20,7 @@ func UploadImage(ctx context.Context, c *app.RequestContext) {
 	uploadType := c.PostForm("upload_type")
 
 	// 获取上传的文件
-	fileHeader, err := c.FormFile("image_file")
+	fileHeader, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(consts.StatusBadRequest, &upload.UploadImageResp{
 			Base: &common.BaseResp{

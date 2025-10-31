@@ -22,7 +22,7 @@ func UnlikePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.UnlikePostLogic(&req)
+	resp, err := communitylogic.UnlikePostLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

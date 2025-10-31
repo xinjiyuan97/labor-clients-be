@@ -11,6 +11,7 @@ type Job struct {
 	BaseModel
 	EmployerID     int64           `json:"employer_id" gorm:"column:employer_id;type:bigint;not null;index;comment:雇主ID"`
 	BrandID        int64           `json:"brand_id" gorm:"column:brand_id;type:bigint;not null;index;comment:所属品牌ID"`
+	StoreID        *int64          `json:"store_id" gorm:"column:store_id;type:bigint;index;comment:所属门店ID"`
 	CategoryID     int64           `json:"category_id" gorm:"column:category_id;type:bigint;not null;index;comment:分类ID"`
 	Title          string          `json:"title" gorm:"column:title;type:varchar(100);not null;comment:岗位标题"`
 	JobType        string          `json:"job_type" gorm:"column:job_type;type:enum('standard','rush','transfer');not null;default:standard;index;comment:岗位类型"`

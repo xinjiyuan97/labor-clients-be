@@ -1,6 +1,7 @@
 package attendance
 
 import (
+	"context"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -14,7 +15,7 @@ import (
 )
 
 // CheckInLogic 打卡签到业务逻辑
-func CheckInLogic(workerID int64, req *attendance.CheckInReq) (*attendance.CheckInResp, error) {
+func CheckInLogic(ctx context.Context, workerID int64, req *attendance.CheckInReq) (*attendance.CheckInResp, error) {
 
 	// 检查今天是否已经打卡
 	existingRecord, err := mysql.GetTodayAttendanceRecord(nil, workerID, req.JobID)
@@ -50,7 +51,7 @@ func CheckInLogic(workerID int64, req *attendance.CheckInReq) (*attendance.Check
 		WorkHours:       decimal.Zero,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateAttendanceRecord(tx, record)
 	})
 

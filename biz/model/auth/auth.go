@@ -288,7 +288,7 @@ func (p *RegisterReq) String() string {
 // 用户注册响应
 type RegisterResp struct {
 	Base      *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	UserID    int64            `thrift:"user_id,2" form:"user_id" json:"user_id"`
+	UserID    int64            `thrift:"user_id,2" json:"user_id,string" form:"user_id" `
 	Token     string           `thrift:"token,3" form:"token" json:"token"`
 	ExpiresAt string           `thrift:"expires_at,4" form:"expires_at" json:"expires_at"`
 }
@@ -754,7 +754,7 @@ func (p *LoginReq) String() string {
 // 用户登录响应
 type LoginResp struct {
 	Base      *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	UserID    int64            `thrift:"user_id,2" form:"user_id" json:"user_id"`
+	UserID    int64            `thrift:"user_id,2" json:"user_id,string" form:"user_id" `
 	Token     string           `thrift:"token,3" form:"token" json:"token"`
 	ExpiresAt string           `thrift:"expires_at,4" form:"expires_at" json:"expires_at"`
 }

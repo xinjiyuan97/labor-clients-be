@@ -1,6 +1,7 @@
 package review
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // CreateReviewLogic 创建评价业务逻辑
-func CreateReviewLogic(workerID int64, req *review.CreateReviewReq) (*review.CreateReviewResp, error) {
+func CreateReviewLogic(ctx context.Context, workerID int64, req *review.CreateReviewReq) (*review.CreateReviewResp, error) {
 	// 检查是否已经评价过
 	existingReview, err := mysql.GetReviewByJobAndUsers(nil, req.JobID, req.EmployerID, workerID, req.ReviewType)
 	if err != nil {
@@ -47,7 +48,7 @@ func CreateReviewLogic(workerID int64, req *review.CreateReviewReq) (*review.Cre
 		ReviewType: req.ReviewType,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateReview(tx, reviewModel)
 	})
 

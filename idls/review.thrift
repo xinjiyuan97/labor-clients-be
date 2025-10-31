@@ -32,7 +32,7 @@ struct GetGivenReviewsResp {
 
 // 获取评价详情请求
 struct GetReviewDetailReq {
-    1: i64 review_id (api.path="review_id", api.vd="$>0");
+    1: i64 review_id (api.path="review_id", api.vd="$>0" go.tag="json:\"review_id,string\"");
 }
 
 // 获取评价详情响应
@@ -43,8 +43,8 @@ struct GetReviewDetailResp {
 
 // 发布评价请求
 struct CreateReviewReq {
-    1: i64 job_id (api.body="job_id", api.vd="$>0");
-    2: i64 employer_id (api.body="employer_id", api.vd="$>0");
+    1: i64 job_id (api.body="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
+    2: i64 employer_id (api.body="employer_id", api.vd="$>0" go.tag="json:\"employer_id,string\"");
     3: i32 rating (api.body="rating", api.vd="$>=1&&$<=5");
     4: string content (api.body="content", api.vd="len($)>0");
     5: string review_type (api.body="review_type", api.vd="len($)>0");
@@ -53,12 +53,12 @@ struct CreateReviewReq {
 // 发布评价响应
 struct CreateReviewResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 review_id (api.body="review_id");
+    2: i64 review_id (api.body="review_id" go.tag="json:\"review_id,string\"");
 }
 
 // 更新评价请求
 struct UpdateReviewReq {
-    1: i64 review_id (api.path="review_id", api.vd="$>0");
+    1: i64 review_id (api.path="review_id", api.vd="$>0" go.tag="json:\"review_id,string\"");
     2: i32 rating (api.body="rating", api.vd="$>=1&&$<=5");
     3: string content (api.body="content", api.vd="len($)>0");
 }

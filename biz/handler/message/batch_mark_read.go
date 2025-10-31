@@ -22,7 +22,7 @@ func BatchMarkRead(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := messagelogic.BatchMarkReadLogic(&req)
+	resp, err := messagelogic.BatchMarkReadLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

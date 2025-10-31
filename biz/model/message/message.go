@@ -508,7 +508,7 @@ func (p *GetMessageListResp) String() string {
 
 // 获取消息详情请求
 type GetMessageDetailReq struct {
-	MessageID int64 `thrift:"message_id,1" json:"message_id" path:"message_id" vd:"$>0"`
+	MessageID int64 `thrift:"message_id,1" json:"message_id,string" path:"message_id" vd:"$>0"`
 }
 
 func NewGetMessageDetailReq() *GetMessageDetailReq {
@@ -842,7 +842,7 @@ func (p *GetMessageDetailResp) String() string {
 
 // 发送消息请求
 type SendMessageReq struct {
-	ToUser      int64  `thrift:"to_user,1" form:"to_user" json:"to_user" vd:"$>0"`
+	ToUser      int64  `thrift:"to_user,1" json:"to_user,string" form:"to_user" vd:"$>0"`
 	MessageType string `thrift:"message_type,2" form:"message_type" json:"message_type" vd:"len($)>0"`
 	Content     string `thrift:"content,3" form:"content" json:"content" vd:"len($)>0"`
 	MsgCategory string `thrift:"msg_category,4" form:"msg_category" json:"msg_category"`
@@ -1119,7 +1119,7 @@ func (p *SendMessageReq) String() string {
 // 发送消息响应
 type SendMessageResp struct {
 	Base      *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	MessageID int64            `thrift:"message_id,2" form:"message_id" json:"message_id"`
+	MessageID int64            `thrift:"message_id,2" json:"message_id,string" form:"message_id" `
 }
 
 func NewSendMessageResp() *SendMessageResp {
@@ -1308,7 +1308,7 @@ func (p *SendMessageResp) String() string {
 
 // 标记消息已读请求
 type MarkMessageReadReq struct {
-	MessageID int64 `thrift:"message_id,1" json:"message_id" path:"message_id" vd:"$>0"`
+	MessageID int64 `thrift:"message_id,1" json:"message_id,string" path:"message_id" vd:"$>0"`
 }
 
 func NewMarkMessageReadReq() *MarkMessageReadReq {
@@ -1590,7 +1590,7 @@ func (p *MarkMessageReadResp) String() string {
 
 // 批量标记已读请求
 type BatchMarkReadReq struct {
-	MessageIds []int64 `thrift:"message_ids,1" form:"message_ids" json:"message_ids" vd:"len($)>0"`
+	MessageIds []int64 `thrift:"message_ids,1" json:"message_ids" form:"message_ids" vd:"len($)>0"`
 }
 
 func NewBatchMarkReadReq() *BatchMarkReadReq {

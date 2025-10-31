@@ -22,7 +22,7 @@ func GetPostDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.GetPostDetailLogic(&req)
+	resp, err := communitylogic.GetPostDetailLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

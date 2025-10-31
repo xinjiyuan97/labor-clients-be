@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // CreateAdminLogic 创建管理员业务逻辑
-func CreateAdminLogic(req *admin.CreateAdminReq) (*admin.CreateAdminResp, error) {
+func CreateAdminLogic(ctx context.Context, req *admin.CreateAdminReq) (*admin.CreateAdminResp, error) {
 	// 检查手机号是否已存在
 	existingUser, err := mysql.GetUserByPhone(nil, req.Phone)
 	if err != nil {
@@ -58,8 +59,8 @@ func CreateAdminLogic(req *admin.CreateAdminReq) (*admin.CreateAdminResp, error)
 		Role:         req.Role,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
-		return mysql.CreateUser(tx, adminUser)
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
+		return mysql.CreateUser(ctx, adminUser)
 	})
 
 	if err != nil {

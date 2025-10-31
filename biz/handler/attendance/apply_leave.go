@@ -29,7 +29,7 @@ func ApplyLeave(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := attendancelogic.ApplyLeaveLogic(int64(userID), &req)
+	resp, err := attendancelogic.ApplyLeaveLogic(ctx, int64(userID), &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

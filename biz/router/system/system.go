@@ -29,6 +29,7 @@ func Register(r *server.Hertz) {
 				_notices := _system.Group("/notices", _noticesMw()...)
 				_notices.GET("/:notice_id", append(_getnoticedetailMw(), system.GetNoticeDetail)...)
 				_system.GET("/version", append(_getversionMw(), system.GetVersion)...)
+				_system.GET("/wechat-user-info", append(_getwechatuserinfoMw(), system.GetWeChatUserInfo)...)
 			}
 		}
 	}

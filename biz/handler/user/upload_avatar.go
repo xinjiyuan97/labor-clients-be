@@ -30,7 +30,7 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := userlogic.UploadAvatarLogic(&req, userID)
+	resp, err := userlogic.UploadAvatarLogic(ctx, &req, userID)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

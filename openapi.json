@@ -397,7 +397,7 @@
             "required": true,
             "description": "notice_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -616,7 +616,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -687,7 +687,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -748,7 +748,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -821,7 +821,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -882,7 +882,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -955,7 +955,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -1039,7 +1039,7 @@
             "required": true,
             "description": "post_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -1273,7 +1273,7 @@
             "required": true,
             "description": "job_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2252,7 +2252,7 @@
             "required": true,
             "description": "schedule_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2323,7 +2323,7 @@
             "required": true,
             "description": "schedule_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2384,7 +2384,7 @@
             "required": true,
             "description": "schedule_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2457,7 +2457,7 @@
             "required": true,
             "description": "schedule_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -2516,9 +2516,18 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UploadImageReq"
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "upload_type": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -2578,9 +2587,18 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UploadFileReq"
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "upload_type": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -2640,9 +2658,18 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UploadCertFileReq"
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "upload_type": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -2654,6 +2681,81 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UploadCertFileResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/upload/signed-url": {
+      "get": {
+        "tags": [
+          "upload"
+        ],
+        "summary": "GetSignedURL",
+        "description": "GetSignedURL 接口",
+        "operationId": "upload_GetSignedURL",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSignedURLResp"
                 }
               }
             }
@@ -2802,7 +2904,7 @@
             "required": true,
             "description": "record_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3269,7 +3371,7 @@
             "required": true,
             "description": "brand_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3340,7 +3442,7 @@
             "required": true,
             "description": "brand_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3413,7 +3515,7 @@
             "required": true,
             "description": "brand_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3486,6 +3588,357 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BatchImportBrandsResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/stores": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "GetStoreList",
+        "description": "GetStoreList 接口",
+        "operationId": "admin_GetStoreList",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStoreListResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "CreateStore",
+        "description": "CreateStore 接口",
+        "operationId": "admin_CreateStore",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateStoreResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/stores/{store_id}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "GetStoreDetail",
+        "description": "GetStoreDetail 接口",
+        "operationId": "admin_GetStoreDetail",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "description": "store_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStoreDetailResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "UpdateStore",
+        "description": "UpdateStore 接口",
+        "operationId": "admin_UpdateStore",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStoreReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "description": "store_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateStoreResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "DeleteStore",
+        "description": "DeleteStore 接口",
+        "operationId": "admin_DeleteStore",
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "description": "store_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteStoreResp"
                 }
               }
             }
@@ -3683,7 +4136,7 @@
             "required": true,
             "description": "user_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3756,7 +4209,7 @@
             "required": true,
             "description": "user_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -3904,7 +4357,7 @@
             "required": true,
             "description": "job_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -4549,7 +5002,7 @@
             "required": true,
             "description": "settlement_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -4633,7 +5086,7 @@
             "required": true,
             "description": "config_key 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -4704,7 +5157,7 @@
             "required": true,
             "description": "config_key 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -4912,7 +5365,7 @@
             "required": true,
             "description": "admin_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -4985,7 +5438,7 @@
             "required": true,
             "description": "admin_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5048,7 +5501,7 @@
             "required": true,
             "description": "admin_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5121,7 +5574,7 @@
             "required": true,
             "description": "admin_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5132,6 +5585,500 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResetAdminPasswordResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/menus": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "GetMenus",
+        "description": "GetMenus 接口",
+        "operationId": "admin_GetMenus",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMenusResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/info": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "GetAdminInfo",
+        "description": "GetAdminInfo 接口",
+        "operationId": "admin_GetAdminInfo",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAdminInfoResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/brands/{brand_id}/admins": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "GetBrandAdmins",
+        "description": "GetBrandAdmins 接口",
+        "operationId": "admin_GetBrandAdmins",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "每页数量",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "brand_id",
+            "in": "path",
+            "required": true,
+            "description": "brand_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBrandAdminsResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/brands/admins": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "CreateBrandAdmin",
+        "description": "CreateBrandAdmin 接口",
+        "operationId": "admin_CreateBrandAdmin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBrandAdminReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/stores/admins": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "CreateStoreAdmin",
+        "description": "CreateStoreAdmin 接口",
+        "operationId": "admin_CreateStoreAdmin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStoreAdminReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateStoreAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/brand-admins/{role_id}": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "DeleteBrandAdmin",
+        "description": "DeleteBrandAdmin 接口",
+        "operationId": "admin_DeleteBrandAdmin",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "description": "role_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteBrandAdminResp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务器内部错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResp"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/brand-admins/{role_id}/status": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "UpdateBrandAdminStatus",
+        "description": "UpdateBrandAdminStatus 接口",
+        "operationId": "admin_UpdateBrandAdminStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBrandAdminStatusReq"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "path",
+            "required": true,
+            "description": "role_id 参数",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateBrandAdminStatusResp"
                 }
               }
             }
@@ -5355,7 +6302,7 @@
             "required": true,
             "description": "review_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5426,7 +6373,7 @@
             "required": true,
             "description": "review_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5782,7 +6729,7 @@
             "required": true,
             "description": "application_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5855,7 +6802,7 @@
             "required": true,
             "description": "application_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5928,7 +6875,7 @@
             "required": true,
             "description": "application_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -6087,7 +7034,7 @@
             "required": true,
             "description": "payment_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -6608,7 +7555,7 @@
             "required": true,
             "description": "job_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -7052,7 +7999,7 @@
             "required": true,
             "description": "message_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -7125,7 +8072,7 @@
             "required": true,
             "description": "message_id 参数",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -7362,7 +8309,7 @@
         "type": "object",
         "properties": {
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "username": {
             "type": "string"
@@ -7382,7 +8329,7 @@
         "type": "object",
         "properties": {
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "real_name": {
             "type": "string"
@@ -7414,7 +8361,7 @@
         "type": "object",
         "properties": {
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "name": {
             "type": "string"
@@ -7434,13 +8381,13 @@
         "type": "object",
         "properties": {
           "employer_id": {
-            "type": "integer"
+            "type": "string"
           },
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "company_name": {
             "type": "string"
@@ -7480,7 +8427,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "tag_name": {
             "type": "string"
@@ -7494,7 +8441,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -7542,13 +8489,13 @@
             "type": "integer"
           },
           "employer_id": {
-            "type": "integer"
+            "type": "string"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "category_id": {
-            "type": "integer"
+            "type": "string"
           },
           "distance": {
             "type": "number"
@@ -7574,13 +8521,13 @@
         "type": "object",
         "properties": {
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           },
           "worker_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -7612,13 +8559,13 @@
         "type": "object",
         "properties": {
           "application_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "worker_id": {
-            "type": "integer"
+            "type": "string"
           },
           "status": {
             "type": "string"
@@ -7650,13 +8597,13 @@
         "type": "object",
         "properties": {
           "message_id": {
-            "type": "integer"
+            "type": "string"
           },
           "from_user": {
-            "type": "integer"
+            "type": "string"
           },
           "to_user": {
-            "type": "integer"
+            "type": "string"
           },
           "message_type": {
             "type": "string"
@@ -7682,10 +8629,10 @@
             "type": "integer"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "worker_id": {
-            "type": "integer"
+            "type": "string"
           },
           "check_in": {
             "type": "string"
@@ -7714,16 +8661,16 @@
         "type": "object",
         "properties": {
           "review_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "employer_id": {
-            "type": "integer"
+            "type": "string"
           },
           "worker_id": {
-            "type": "integer"
+            "type": "string"
           },
           "rating": {
             "type": "integer"
@@ -7749,16 +8696,16 @@
         "type": "object",
         "properties": {
           "payment_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "worker_id": {
-            "type": "integer"
+            "type": "string"
           },
           "employer_id": {
-            "type": "integer"
+            "type": "string"
           },
           "amount": {
             "type": "number"
@@ -7784,10 +8731,10 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           },
           "author_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -7819,13 +8766,13 @@
         "type": "object",
         "properties": {
           "favorite_id": {
-            "type": "integer"
+            "type": "string"
           },
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "created_at": {
             "type": "string"
@@ -7906,7 +8853,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "feedback_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -7958,7 +8905,7 @@
         "type": "object",
         "properties": {
           "notice_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8014,7 +8961,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8057,7 +9004,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "post_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -8065,7 +9012,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -8096,7 +9043,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8115,7 +9062,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8137,7 +9084,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8159,13 +9106,13 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           },
           "content": {
             "type": "string"
           },
           "parent_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8180,7 +9127,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "comment_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -8188,7 +9135,7 @@
         "type": "object",
         "properties": {
           "post_id": {
-            "type": "integer"
+            "type": "string"
           },
           "page_req": {
             "$ref": "#/components/schemas/PageReq"
@@ -8253,7 +9200,10 @@
             "type": "integer"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
           },
           "category_id": {
             "type": "integer"
@@ -8303,7 +9253,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8503,7 +9453,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "token": {
             "type": "string"
@@ -8535,7 +9485,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "token": {
             "type": "string"
@@ -8637,7 +9587,7 @@
             "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "start_time": {
             "type": "string"
@@ -8668,7 +9618,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -8738,7 +9688,7 @@
         "type": "object",
         "properties": {
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8760,7 +9710,7 @@
         "type": "object",
         "properties": {
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -8800,7 +9750,7 @@
         "type": "object",
         "properties": {
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           },
           "status": {
             "type": "string"
@@ -8826,7 +9776,7 @@
         "type": "object",
         "properties": {
           "schedule_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -8864,11 +9814,14 @@
           "image_url": {
             "type": "string"
           },
+          "display_url": {
+            "type": "string"
+          },
           "file_name": {
             "type": "string"
           },
           "file_size": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -8895,11 +9848,14 @@
           "file_url": {
             "type": "string"
           },
+          "display_url": {
+            "type": "string"
+          },
           "file_name": {
             "type": "string"
           },
           "file_size": {
-            "type": "integer"
+            "type": "string"
           },
           "file_type": {
             "type": "string"
@@ -8930,6 +9886,9 @@
           "file_url": {
             "type": "string"
           },
+          "display_url": {
+            "type": "string"
+          },
           "cert_type": {
             "type": "string"
           },
@@ -8937,7 +9896,38 @@
             "type": "string"
           },
           "file_size": {
-            "type": "integer"
+            "type": "string"
+          }
+        }
+      },
+      "GetSignedURLReq": {
+        "type": "object",
+        "properties": {
+          "file_url": {
+            "type": "string"
+          },
+          "expire_seconds": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file_url"
+        ]
+      },
+      "GetSignedURLResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "signed_url": {
+            "type": "string"
+          },
+          "expire_seconds": {
+            "type": "string"
+          },
+          "expire_time": {
+            "type": "string"
           }
         }
       },
@@ -8948,7 +9938,7 @@
             "$ref": "#/components/schemas/PageReq"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "start_date": {
             "type": "string"
@@ -9001,7 +9991,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "check_in_location": {
             "type": "string"
@@ -9036,7 +10026,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "check_out_location": {
             "type": "string"
@@ -9074,7 +10064,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "leave_date": {
             "type": "string"
@@ -9096,7 +10086,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "leave_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -9104,7 +10094,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "makeup_date": {
             "type": "string"
@@ -9130,7 +10120,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "makeup_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -9138,7 +10128,7 @@
         "type": "object",
         "properties": {
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "company_name": {
             "type": "string"
@@ -9245,7 +10235,7 @@
         "type": "object",
         "properties": {
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -9335,7 +10325,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -9343,7 +10333,7 @@
         "type": "object",
         "properties": {
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "company_name": {
             "type": "string"
@@ -9375,6 +10365,12 @@
           "business_scope": {
             "type": "string"
           },
+          "established_date": {
+            "type": "string"
+          },
+          "registered_capital": {
+            "type": "number"
+          },
           "contact_person": {
             "type": "string"
           },
@@ -9382,6 +10378,33 @@
             "type": "string"
           },
           "contact_email": {
+            "type": "string"
+          },
+          "contact_position": {
+            "type": "string"
+          },
+          "id_card_number": {
+            "type": "string"
+          },
+          "id_card_front": {
+            "type": "string"
+          },
+          "id_card_back": {
+            "type": "string"
+          },
+          "business_license": {
+            "type": "string"
+          },
+          "tax_certificate": {
+            "type": "string"
+          },
+          "org_code_certificate": {
+            "type": "string"
+          },
+          "bank_license": {
+            "type": "string"
+          },
+          "other_certificates": {
             "type": "string"
           },
           "bank_account": {
@@ -9392,6 +10415,9 @@
           },
           "deposit_amount": {
             "type": "number"
+          },
+          "auth_status": {
+            "type": "string"
           },
           "account_status": {
             "type": "string"
@@ -9413,7 +10439,7 @@
         "type": "object",
         "properties": {
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "action": {
             "type": "string"
@@ -9472,11 +10498,222 @@
           }
         }
       },
+      "StoreDetail": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          },
+          "contact_phone": {
+            "type": "string"
+          },
+          "contact_person": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "GetStoreListReq": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page",
+          "limit"
+        ]
+      },
+      "GetStoreListResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "page_info": {
+            "$ref": "#/components/schemas/PageResp"
+          },
+          "stores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreDetail"
+            }
+          }
+        }
+      },
+      "GetStoreDetailReq": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id"
+        ]
+      },
+      "GetStoreDetailResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "store_info": {
+            "$ref": "#/components/schemas/StoreDetail"
+          }
+        }
+      },
+      "CreateStoreReq": {
+        "type": "object",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          },
+          "contact_phone": {
+            "type": "string"
+          },
+          "contact_person": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "brand_id",
+          "name",
+          "address"
+        ]
+      },
+      "CreateStoreResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "store_id": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateStoreReq": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          },
+          "contact_phone": {
+            "type": "string"
+          },
+          "contact_person": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id"
+        ]
+      },
+      "UpdateStoreResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "DeleteStoreReq": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id"
+        ]
+      },
+      "DeleteStoreResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
       "BrandUserInfo": {
         "type": "object",
         "properties": {
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "username": {
             "type": "string"
@@ -9485,7 +10722,7 @@
             "type": "string"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "brand_name": {
             "type": "string"
@@ -9504,6 +10741,12 @@
           },
           "account_status": {
             "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          },
+          "store_name": {
+            "type": "string"
           }
         }
       },
@@ -9517,7 +10760,7 @@
             "type": "integer"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "role": {
             "type": "string"
@@ -9564,7 +10807,10 @@
             "type": "string"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
           },
           "role": {
             "type": "string"
@@ -9582,7 +10828,6 @@
         "required": [
           "phone",
           "real_name",
-          "brand_id",
           "role"
         ]
       },
@@ -9593,7 +10838,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "user_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -9601,7 +10846,7 @@
         "type": "object",
         "properties": {
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "real_name": {
             "type": "string"
@@ -9619,6 +10864,12 @@
             "type": "string"
           },
           "phone": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "store_id": {
             "type": "string"
           }
         },
@@ -9638,7 +10889,7 @@
         "type": "object",
         "properties": {
           "user_id": {
-            "type": "integer"
+            "type": "string"
           },
           "new_password": {
             "type": "string"
@@ -9661,7 +10912,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "action": {
             "type": "string"
@@ -9850,7 +11101,7 @@
         "type": "object",
         "properties": {
           "notice_id": {
-            "type": "integer"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -9921,7 +11172,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "notice_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -9929,7 +11180,7 @@
         "type": "object",
         "properties": {
           "template_id": {
-            "type": "integer"
+            "type": "string"
           },
           "template_name": {
             "type": "string"
@@ -9989,7 +11240,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "template_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10054,10 +11305,10 @@
         "type": "object",
         "properties": {
           "settlement_id": {
-            "type": "integer"
+            "type": "string"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "brand_name": {
             "type": "string"
@@ -10092,7 +11343,7 @@
             "type": "integer"
           },
           "brand_id": {
-            "type": "integer"
+            "type": "string"
           },
           "status": {
             "type": "string"
@@ -10130,7 +11381,7 @@
         "type": "object",
         "properties": {
           "settlement_id": {
-            "type": "integer"
+            "type": "string"
           },
           "action": {
             "type": "string"
@@ -10202,7 +11453,7 @@
         "type": "object",
         "properties": {
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           },
           "username": {
             "type": "string"
@@ -10260,7 +11511,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10306,7 +11557,7 @@
         "type": "object",
         "properties": {
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10325,7 +11576,7 @@
         "type": "object",
         "properties": {
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10344,7 +11595,7 @@
         "type": "object",
         "properties": {
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10363,7 +11614,7 @@
         "type": "object",
         "properties": {
           "admin_id": {
-            "type": "integer"
+            "type": "string"
           },
           "new_password": {
             "type": "string"
@@ -10375,6 +11626,328 @@
         ]
       },
       "ResetAdminPasswordResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "MenuItem": {
+        "type": "object",
+        "properties": {
+          "menu_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "parent_id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "sort_order": {
+            "type": "integer"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "permission": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItem"
+            }
+          }
+        }
+      },
+      "GetMenusReq": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetMenusResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "menus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItem"
+            }
+          }
+        }
+      },
+      "AdminRoleInfo": {
+        "type": "object",
+        "properties": {
+          "role_type": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "brand_name": {
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          },
+          "store_name": {
+            "type": "string"
+          }
+        }
+      },
+      "GetAdminInfoReq": {
+        "type": "object",
+        "properties": {
+          "brand_id": {
+            "type": "string"
+          }
+        }
+      },
+      "GetAdminInfoResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "avatar": {
+            "type": "string"
+          },
+          "base_role": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminRoleInfo"
+            }
+          },
+          "menus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItem"
+            }
+          }
+        }
+      },
+      "BrandAdminInfo": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "role_type": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "brand_name": {
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          },
+          "store_name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "GetBrandAdminsReq": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "role_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "page",
+          "limit",
+          "brand_id"
+        ]
+      },
+      "GetBrandAdminsResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "page_info": {
+            "$ref": "#/components/schemas/PageResp"
+          },
+          "admins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrandAdminInfo"
+            }
+          }
+        }
+      },
+      "CreateBrandAdminReq": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "role_type": {
+            "type": "string"
+          },
+          "real_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "phone",
+          "brand_id",
+          "role_type"
+        ]
+      },
+      "CreateBrandAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "role_id": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateStoreAdminReq": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string"
+          },
+          "brand_id": {
+            "type": "string"
+          },
+          "store_id": {
+            "type": "string"
+          },
+          "real_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "phone",
+          "brand_id",
+          "store_id"
+        ]
+      },
+      "CreateStoreAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          },
+          "role_id": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteBrandAdminReq": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "role_id"
+        ]
+      },
+      "DeleteBrandAdminResp": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "$ref": "#/components/schemas/BaseResp"
+          }
+        }
+      },
+      "UpdateBrandAdminStatusReq": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "role_id",
+          "status"
+        ]
+      },
+      "UpdateBrandAdminStatusResp": {
         "type": "object",
         "properties": {
           "base": {
@@ -10448,7 +12021,7 @@
         "type": "object",
         "properties": {
           "review_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10470,10 +12043,10 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "employer_id": {
-            "type": "integer"
+            "type": "string"
           },
           "rating": {
             "type": "integer"
@@ -10500,7 +12073,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "review_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10508,7 +12081,7 @@
         "type": "object",
         "properties": {
           "review_id": {
-            "type": "integer"
+            "type": "string"
           },
           "rating": {
             "type": "integer"
@@ -10538,7 +12111,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10552,10 +12125,10 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "application_id": {
-            "type": "integer"
+            "type": "string"
           },
           "job_id": {
-            "type": "integer"
+            "type": "string"
           },
           "status": {
             "type": "string"
@@ -10625,7 +12198,7 @@
         "type": "object",
         "properties": {
           "application_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10647,7 +12220,7 @@
         "type": "object",
         "properties": {
           "application_id": {
-            "type": "integer"
+            "type": "string"
           },
           "cancel_reason": {
             "type": "string"
@@ -10670,7 +12243,7 @@
         "type": "object",
         "properties": {
           "application_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10723,7 +12296,7 @@
         "type": "object",
         "properties": {
           "payment_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10767,7 +12340,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "withdraw_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10883,7 +12456,7 @@
             "type": "string"
           },
           "cert_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10916,7 +12489,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -10930,7 +12503,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "favorite_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -10938,7 +12511,7 @@
         "type": "object",
         "properties": {
           "job_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -11090,7 +12663,7 @@
         "type": "object",
         "properties": {
           "message_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -11113,7 +12686,7 @@
         "type": "object",
         "properties": {
           "to_user": {
-            "type": "integer"
+            "type": "string"
           },
           "message_type": {
             "type": "string"
@@ -11138,7 +12711,7 @@
             "$ref": "#/components/schemas/BaseResp"
           },
           "message_id": {
-            "type": "integer"
+            "type": "string"
           }
         }
       },
@@ -11146,7 +12719,7 @@
         "type": "object",
         "properties": {
           "message_id": {
-            "type": "integer"
+            "type": "string"
           }
         },
         "required": [
@@ -11167,7 +12740,7 @@
           "message_ids": {
             "type": "array",
             "items": {
-              "type": "integer"
+              "type": "string"
             }
           }
         },

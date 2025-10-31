@@ -25,7 +25,7 @@ struct GetJobListResp {
 
 // 获取岗位详情请求
 struct GetJobDetailReq {
-    1: i64 job_id (api.path="job_id", api.vd="$>0");
+    1: i64 job_id (api.path="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
 }
 
 // 获取岗位详情响应

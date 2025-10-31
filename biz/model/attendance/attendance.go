@@ -12,7 +12,7 @@ import (
 // 获取考勤记录请求
 type GetAttendanceRecordsReq struct {
 	PageReq   *common.PageReq `thrift:"page_req,1" form:"page_req" json:"page_req"`
-	JobID     int64           `thrift:"job_id,2" json:"job_id" query:"job_id"`
+	JobID     int64           `thrift:"job_id,2" json:"job_id,string" query:"job_id" `
 	StartDate string          `thrift:"start_date,3" json:"start_date" query:"start_date"`
 	EndDate   string          `thrift:"end_date,4" json:"end_date" query:"end_date"`
 }
@@ -888,7 +888,7 @@ func (p *GetAttendanceDetailResp) String() string {
 
 // 打卡请求
 type CheckInReq struct {
-	JobID           int64   `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID           int64   `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 	CheckInLocation string  `thrift:"check_in_location,2" form:"check_in_location" json:"check_in_location" vd:"len($)>0"`
 	Latitude        float64 `thrift:"latitude,3" form:"latitude" json:"latitude"`
 	Longitude       float64 `thrift:"longitude,4" form:"longitude" json:"longitude"`
@@ -1400,7 +1400,7 @@ func (p *CheckInResp) String() string {
 
 // 签退请求
 type CheckOutReq struct {
-	JobID            int64   `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID            int64   `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 	CheckOutLocation string  `thrift:"check_out_location,2" form:"check_out_location" json:"check_out_location" vd:"len($)>0"`
 	Latitude         float64 `thrift:"latitude,3" form:"latitude" json:"latitude"`
 	Longitude        float64 `thrift:"longitude,4" form:"longitude" json:"longitude"`
@@ -1958,7 +1958,7 @@ func (p *CheckOutResp) String() string {
 
 // 申请请假请求
 type ApplyLeaveReq struct {
-	JobID       int64  `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID       int64  `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 	LeaveDate   string `thrift:"leave_date,2" form:"leave_date" json:"leave_date" vd:"len($)>0"`
 	LeaveReason string `thrift:"leave_reason,3" form:"leave_reason" json:"leave_reason" vd:"len($)>0"`
 }
@@ -2189,7 +2189,7 @@ func (p *ApplyLeaveReq) String() string {
 // 申请请假响应
 type ApplyLeaveResp struct {
 	Base    *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	LeaveID int64            `thrift:"leave_id,2" form:"leave_id" json:"leave_id"`
+	LeaveID int64            `thrift:"leave_id,2" json:"leave_id,string" form:"leave_id" `
 }
 
 func NewApplyLeaveResp() *ApplyLeaveResp {
@@ -2378,7 +2378,7 @@ func (p *ApplyLeaveResp) String() string {
 
 // 申请补卡请求
 type ApplyMakeupReq struct {
-	JobID        int64  `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID        int64  `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 	MakeupDate   string `thrift:"makeup_date,2" form:"makeup_date" json:"makeup_date" vd:"len($)>0"`
 	MakeupReason string `thrift:"makeup_reason,3" form:"makeup_reason" json:"makeup_reason" vd:"len($)>0"`
 	MakeupTime   string `thrift:"makeup_time,4" form:"makeup_time" json:"makeup_time" vd:"len($)>0"`
@@ -2655,7 +2655,7 @@ func (p *ApplyMakeupReq) String() string {
 // 申请补卡响应
 type ApplyMakeupResp struct {
 	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	MakeupID int64            `thrift:"makeup_id,2" form:"makeup_id" json:"makeup_id"`
+	MakeupID int64            `thrift:"makeup_id,2" json:"makeup_id,string" form:"makeup_id" `
 }
 
 func NewApplyMakeupResp() *ApplyMakeupResp {

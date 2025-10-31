@@ -22,7 +22,7 @@ func LikePost(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := communitylogic.LikePostLogic(&req)
+	resp, err := communitylogic.LikePostLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

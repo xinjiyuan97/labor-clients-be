@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '岗位ID',
     employer_id BIGINT NOT NULL COMMENT '雇主ID',
     brand_id BIGINT NOT NULL COMMENT '所属品牌ID',
+    store_id BIGINT NULL COMMENT '所属门店ID',
     category_id BIGINT NOT NULL COMMENT '分类ID',
     title VARCHAR(100) NOT NULL COMMENT '岗位标题',
     job_type ENUM('standard', 'rush', 'transfer') NOT NULL DEFAULT 'standard' COMMENT '岗位类型',
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     deleted_at DATETIME DEFAULT NULL COMMENT '删除时间',
     INDEX idx_employer_id (employer_id),
     INDEX idx_brand_id (brand_id),  -- 新增索引
+    INDEX idx_store_id (store_id),  -- 门店索引
     INDEX idx_category_id (category_id),
     INDEX idx_job_type (job_type),
     INDEX idx_status (status),

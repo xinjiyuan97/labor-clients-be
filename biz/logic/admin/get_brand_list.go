@@ -5,6 +5,7 @@ import (
 
 	"github.com/xinjiyuan97/labor-clients/biz/model/admin"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
+	"github.com/xinjiyuan97/labor-clients/config"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
@@ -48,10 +49,27 @@ func GetBrandListLogic(req *admin.GetBrandListReq) (*admin.GetBrandListResp, err
 		}, nil
 	}
 
+	// 获取上传服务用于签名URL
+	uploadService, err := utils.GetUploadService(&config.GetGlobalConfig().OSS)
+	if err != nil {
+		utils.Warnf("获取上传服务失败，将使用原始URL: %v", err)
+	}
+
 	// 转换为响应对象
 	brandList := make([]*admin.BrandDetail, 0, len(brands))
 	for _, brand := range brands {
 		brandDetail := brand.ToThriftBrand()
+
+		// 如果logo不为空且上传服务可用，则生成签名URL
+		if brandDetail.Logo != "" && uploadService != nil {
+			signedURL, signErr := uploadService.GetSignedURL(brandDetail.Logo, 3600) // 1小时有效期
+			if signErr != nil {
+				utils.Warnf("为品牌 %d 的logo生成签名URL失败: %v, 使用原始URL", brand.ID, signErr)
+			} else {
+				brandDetail.Logo = signedURL
+			}
+		}
+
 		brandList = append(brandList, brandDetail)
 	}
 

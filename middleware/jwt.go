@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
+	"github.com/xinjiyuan97/labor-clients/constants"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
@@ -160,20 +161,7 @@ func RequireAuth() app.HandlerFunc {
 
 // RequireRole 要求特定角色的中间件
 func RequireRole(requiredRole string) app.HandlerFunc {
-	return func(ctx context.Context, c *app.RequestContext) {
-		userRole, exists := GetUserRoleFromContext(c)
-		utils.Infof("userRole: %s, requiredRole: %s", userRole, requiredRole)
-		if !exists || userRole != requiredRole {
-			c.JSON(403, &common.BaseResp{
-				Code:      403,
-				Message:   "权限不足",
-				Timestamp: GetCurrentTime(),
-			})
-			c.Abort()
-			return
-		}
-		c.Next(ctx)
-	}
+	return RequireAnyRole(constants.Role(requiredRole))
 }
 
 // RequireWorkerRole 要求worker角色的中间件
@@ -189,4 +177,71 @@ func RequireEmployerRole() app.HandlerFunc {
 // RequireAdminRole 要求admin角色的中间件
 func RequireAdminRole() app.HandlerFunc {
 	return RequireRole("admin")
+}
+
+// RequireAnyRole 要求满足任一角色的中间件
+func RequireAnyRole(roles ...constants.Role) app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		userID, exists := GetUserIDFromContext(c)
+		if !exists || userID == 0 {
+			c.JSON(401, &common.BaseResp{
+				Code:      401,
+				Message:   "需要登录",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		role, exists := GetUserRoleFromContext(c)
+		if !exists {
+			c.JSON(401, &common.BaseResp{
+				Code:      401,
+				Message:   "需要登录",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		if !utils.Contains(roles, constants.Role(role)) {
+			c.JSON(403, &common.BaseResp{
+				Code:      403,
+				Message:   "权限不足",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		c.Next(ctx)
+	}
+}
+
+// GetBrandIDFromContext 从上下文中获取品牌ID（从JWT claims中）
+func GetBrandIDFromContext(c *app.RequestContext) (int64, bool) {
+	claims, exists := GetJWTClaimsFromContext(c)
+	if !exists {
+		return 0, false
+	}
+
+	if claims.BrandID != nil {
+		return *claims.BrandID, true
+	}
+
+	return 0, false
+}
+
+// GetStoreIDFromContext 从上下文中获取门店ID（从JWT claims中）
+func GetStoreIDFromContext(c *app.RequestContext) (int64, bool) {
+	claims, exists := GetJWTClaimsFromContext(c)
+	if !exists {
+		return 0, false
+	}
+
+	if claims.StoreID != nil {
+		return *claims.StoreID, true
+	}
+
+	return 0, false
 }

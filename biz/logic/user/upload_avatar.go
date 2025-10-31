@@ -1,6 +1,7 @@
 package user
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -13,13 +14,13 @@ import (
 )
 
 // UploadAvatarLogic 上传头像业务逻辑
-func UploadAvatarLogic(req *user.UploadAvatarReq, userID int64) (*user.UploadAvatarResp, error) {
+func UploadAvatarLogic(ctx context.Context, req *user.UploadAvatarReq, userID int64) (*user.UploadAvatarResp, error) {
 	// 这里应该实现文件上传逻辑，将文件保存到文件服务器或云存储
 	// 目前简化处理，直接返回一个模拟的URL
 	avatarURL := "https://example.com/avatars/" + req.AvatarFile
 
 	// 使用事务更新用户头像
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		// 获取当前用户信息
 		currentUser, err := mysql.GetUserByID(tx, userID)
 		if err != nil {

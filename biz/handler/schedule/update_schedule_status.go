@@ -22,7 +22,7 @@ func UpdateScheduleStatus(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := schedulelogic.UpdateScheduleStatusLogic(&req)
+	resp, err := schedulelogic.UpdateScheduleStatusLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

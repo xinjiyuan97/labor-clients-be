@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ import (
 )
 
 // LikePostLogic 点赞帖子业务逻辑
-func LikePostLogic(req *community.LikePostReq) (*community.LikePostResp, error) {
+func LikePostLogic(ctx context.Context, req *community.LikePostReq) (*community.LikePostResp, error) {
 	userID := int64(0) // 需要从JWT token中获取
 
 	// 检查是否已点赞
@@ -40,7 +41,7 @@ func LikePostLogic(req *community.LikePostReq) (*community.LikePostResp, error) 
 	}
 
 	// 创建点赞记录并增加点赞数
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		// 创建点赞记录
 		like := &models.PostLike{
 			PostID: req.PostID,

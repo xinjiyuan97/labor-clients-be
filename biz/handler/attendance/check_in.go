@@ -29,7 +29,7 @@ func CheckIn(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := attendancelogic.CheckInLogic(int64(userID), &req)
+	resp, err := attendancelogic.CheckInLogic(ctx, int64(userID), &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

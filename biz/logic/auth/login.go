@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"time"
 
 	"github.com/xinjiyuan97/labor-clients/biz/model/auth"
@@ -10,9 +11,9 @@ import (
 )
 
 // LoginLogic 用户登录业务逻辑
-func LoginLogic(req *auth.LoginReq) (*auth.LoginResp, error) {
+func LoginLogic(ctx context.Context, req *auth.LoginReq) (*auth.LoginResp, error) {
 	// 根据手机号查询用户
-	user, err := mysql.GetUserByPhone(nil, req.Phone)
+	user, err := mysql.GetUserByPhone(ctx, req.Phone)
 	if err != nil {
 		utils.Errorf("查询用户失败: %v", err)
 		return &auth.LoginResp{

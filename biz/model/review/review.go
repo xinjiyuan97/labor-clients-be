@@ -1005,7 +1005,7 @@ func (p *GetGivenReviewsResp) String() string {
 
 // 获取评价详情请求
 type GetReviewDetailReq struct {
-	ReviewID int64 `thrift:"review_id,1" json:"review_id" path:"review_id" vd:"$>0"`
+	ReviewID int64 `thrift:"review_id,1" json:"review_id,string" path:"review_id" vd:"$>0"`
 }
 
 func NewGetReviewDetailReq() *GetReviewDetailReq {
@@ -1339,8 +1339,8 @@ func (p *GetReviewDetailResp) String() string {
 
 // 发布评价请求
 type CreateReviewReq struct {
-	JobID      int64  `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
-	EmployerID int64  `thrift:"employer_id,2" form:"employer_id" json:"employer_id" vd:"$>0"`
+	JobID      int64  `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
+	EmployerID int64  `thrift:"employer_id,2" json:"employer_id,string" form:"employer_id" vd:"$>0"`
 	Rating     int32  `thrift:"rating,3" form:"rating" json:"rating" vd:"$>=1&&$<=5"`
 	Content    string `thrift:"content,4" form:"content" json:"content" vd:"len($)>0"`
 	ReviewType string `thrift:"review_type,5" form:"review_type" json:"review_type" vd:"len($)>0"`
@@ -1662,7 +1662,7 @@ func (p *CreateReviewReq) String() string {
 // 发布评价响应
 type CreateReviewResp struct {
 	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	ReviewID int64            `thrift:"review_id,2" form:"review_id" json:"review_id"`
+	ReviewID int64            `thrift:"review_id,2" json:"review_id,string" form:"review_id" `
 }
 
 func NewCreateReviewResp() *CreateReviewResp {
@@ -1851,7 +1851,7 @@ func (p *CreateReviewResp) String() string {
 
 // 更新评价请求
 type UpdateReviewReq struct {
-	ReviewID int64  `thrift:"review_id,1" json:"review_id" path:"review_id" vd:"$>0"`
+	ReviewID int64  `thrift:"review_id,1" json:"review_id,string" path:"review_id" vd:"$>0"`
 	Rating   int32  `thrift:"rating,2" form:"rating" json:"rating" vd:"$>=1&&$<=5"`
 	Content  string `thrift:"content,3" form:"content" json:"content" vd:"len($)>0"`
 }

@@ -1010,7 +1010,7 @@ type UploadCertResp struct {
 	Base     *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
 	CertType string           `thrift:"cert_type,2" form:"cert_type" json:"cert_type"`
 	FileURL  string           `thrift:"file_url,3" form:"file_url" json:"file_url"`
-	CertID   int64            `thrift:"cert_id,4" form:"cert_id" json:"cert_id"`
+	CertID   int64            `thrift:"cert_id,4" json:"cert_id,string" form:"cert_id" `
 }
 
 func NewUploadCertResp() *UploadCertResp {
@@ -1694,7 +1694,7 @@ func (p *GetMyFavoritesResp) String() string {
 
 // 收藏岗位请求
 type FavoriteJobReq struct {
-	JobID int64 `thrift:"job_id,1" form:"job_id" json:"job_id" vd:"$>0"`
+	JobID int64 `thrift:"job_id,1" json:"job_id,string" form:"job_id" vd:"$>0"`
 }
 
 func NewFavoriteJobReq() *FavoriteJobReq {
@@ -1833,7 +1833,7 @@ func (p *FavoriteJobReq) String() string {
 // 收藏岗位响应
 type FavoriteJobResp struct {
 	Base       *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
-	FavoriteID int64            `thrift:"favorite_id,2" form:"favorite_id" json:"favorite_id"`
+	FavoriteID int64            `thrift:"favorite_id,2" json:"favorite_id,string" form:"favorite_id" `
 }
 
 func NewFavoriteJobResp() *FavoriteJobResp {
@@ -2022,7 +2022,7 @@ func (p *FavoriteJobResp) String() string {
 
 // 取消收藏请求
 type UnfavoriteJobReq struct {
-	JobID int64 `thrift:"job_id,1" json:"job_id" path:"job_id" vd:"$>0"`
+	JobID int64 `thrift:"job_id,1" json:"job_id,string" path:"job_id" vd:"$>0"`
 }
 
 func NewUnfavoriteJobReq() *UnfavoriteJobReq {

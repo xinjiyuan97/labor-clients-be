@@ -22,7 +22,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp, err := authlogic.RegisterLogic(&req)
+	resp, err := authlogic.RegisterLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

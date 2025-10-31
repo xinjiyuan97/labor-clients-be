@@ -6,7 +6,7 @@ include "common.thrift"
 
 // 品牌方信息
 struct BrandDetail {
-    1: i64 brand_id (api.body="brand_id");
+    1: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
     2: string company_name (api.body="company_name");
     3: string company_short_name (api.body="company_short_name");
     4: string logo (api.body="logo");
@@ -64,7 +64,7 @@ struct GetBrandListResp {
 
 // 获取品牌方详情请求
 struct GetBrandDetailReq {
-    1: i64 brand_id (api.path="brand_id", api.vd="$>0");
+    1: i64 brand_id (api.path="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
 }
 
 // 获取品牌方详情响应
@@ -98,12 +98,12 @@ struct CreateBrandReq {
 // 创建品牌方响应
 struct CreateBrandResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 brand_id (api.body="brand_id");
+    2: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
 }
 
 // 更新品牌方请求
 struct UpdateBrandReq {
-    1: i64 brand_id (api.path="brand_id", api.vd="$>0");
+    1: i64 brand_id (api.path="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
     2: string company_name (api.body="company_name");
     3: string company_short_name (api.body="company_short_name");
     4: string logo (api.body="logo");
@@ -114,13 +114,25 @@ struct UpdateBrandReq {
     9: string credit_code (api.body="credit_code");
     10: string company_address (api.body="company_address");
     11: string business_scope (api.body="business_scope");
-    12: string contact_person (api.body="contact_person");
-    13: string contact_phone (api.body="contact_phone");
-    14: string contact_email (api.body="contact_email");
-    15: string bank_account (api.body="bank_account");
-    16: string settlement_cycle (api.body="settlement_cycle");
-    17: double deposit_amount (api.body="deposit_amount");
-    18: string account_status (api.body="account_status");
+    12: string established_date (api.body="established_date");
+    13: double registered_capital (api.body="registered_capital");
+    14: string contact_person (api.body="contact_person");
+    15: string contact_phone (api.body="contact_phone");
+    16: string contact_email (api.body="contact_email");
+    17: string contact_position (api.body="contact_position");
+    18: string id_card_number (api.body="id_card_number");
+    19: string id_card_front (api.body="id_card_front");
+    20: string id_card_back (api.body="id_card_back");
+    21: string business_license (api.body="business_license");
+    22: string tax_certificate (api.body="tax_certificate");
+    23: string org_code_certificate (api.body="org_code_certificate");
+    24: string bank_license (api.body="bank_license");
+    25: string other_certificates (api.body="other_certificates");
+    26: string bank_account (api.body="bank_account");
+    27: string settlement_cycle (api.body="settlement_cycle");
+    28: double deposit_amount (api.body="deposit_amount");
+    29: string auth_status (api.body="auth_status");
+    30: string account_status (api.body="account_status");
 }
 
 // 更新品牌方响应
@@ -130,7 +142,7 @@ struct UpdateBrandResp {
 
 // 品牌方审核请求
 struct ReviewBrandReq {
-    1: i64 brand_id (api.path="brand_id", api.vd="$>0");
+    1: i64 brand_id (api.path="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
     2: string action (api.body="action", api.vd="len($)>0"); // pass, reject, freeze, request_more
     3: string auth_level (api.body="auth_level"); // A, B, C
     4: string reason (api.body="reason");
@@ -155,27 +167,120 @@ struct BatchImportBrandsResp {
     4: list<string> fail_reasons (api.body="fail_reasons");
 }
 
+// ==================== 门店管理 ====================
+
+// 门店信息
+struct StoreDetail {
+    1: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
+    2: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
+    3: string name (api.body="name");
+    4: string address (api.body="address");
+    5: string latitude (api.body="latitude");
+    6: string longitude (api.body="longitude");
+    7: string contact_phone (api.body="contact_phone");
+    8: string contact_person (api.body="contact_person");
+    9: string description (api.body="description");
+    10: string status (api.body="status");
+    11: string created_at (api.body="created_at");
+    12: string updated_at (api.body="updated_at");
+}
+
+// 获取门店列表请求
+struct GetStoreListReq {
+    1: i32 page (api.query="page", api.vd="$>=1");
+    2: i32 limit (api.query="limit", api.vd="$>=1&&$<=100");
+    3: i64 brand_id (api.query="brand_id" go.tag="json:\"brand_id,string\"");
+    4: string status (api.query="status");
+    5: string name (api.query="name");
+}
+
+// 获取门店列表响应
+struct GetStoreListResp {
+    1: common.BaseResp base (api.body="base");
+    2: common.PageResp page_info (api.body="page_info");
+    3: list<StoreDetail> stores (api.body="stores");
+}
+
+// 获取门店详情请求
+struct GetStoreDetailReq {
+    1: i64 store_id (api.path="store_id", api.vd="$>0" go.tag="json:\"store_id,string\"");
+}
+
+// 获取门店详情响应
+struct GetStoreDetailResp {
+    1: common.BaseResp base (api.body="base");
+    2: StoreDetail store_info (api.body="store_info");
+}
+
+// 创建门店请求
+struct CreateStoreReq {
+    1: i64 brand_id (api.body="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
+    2: string name (api.body="name", api.vd="len($)>0");
+    3: string address (api.body="address", api.vd="len($)>0");
+    4: string latitude (api.body="latitude");
+    5: string longitude (api.body="longitude");
+    6: string contact_phone (api.body="contact_phone");
+    7: string contact_person (api.body="contact_person");
+    8: string description (api.body="description");
+}
+
+// 创建门店响应
+struct CreateStoreResp {
+    1: common.BaseResp base (api.body="base");
+    2: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
+}
+
+// 更新门店请求
+struct UpdateStoreReq {
+    1: i64 store_id (api.path="store_id", api.vd="$>0" go.tag="json:\"store_id,string\"");
+    2: string name (api.body="name");
+    3: string address (api.body="address");
+    4: string latitude (api.body="latitude");
+    5: string longitude (api.body="longitude");
+    6: string contact_phone (api.body="contact_phone");
+    7: string contact_person (api.body="contact_person");
+    8: string description (api.body="description");
+    9: string status (api.body="status");
+}
+
+// 更新门店响应
+struct UpdateStoreResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// 删除门店请求
+struct DeleteStoreReq {
+    1: i64 store_id (api.path="store_id", api.vd="$>0" go.tag="json:\"store_id,string\"");
+}
+
+// 删除门店响应
+struct DeleteStoreResp {
+    1: common.BaseResp base (api.body="base");
+}
+
 // ==================== 用户管理 ====================
 
 // 品牌方用户信息
 struct BrandUserInfo {
-    1: i64 user_id (api.body="user_id");
+    1: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
     2: string username (api.body="username");
     3: string real_name (api.body="real_name");
-    4: i64 brand_id (api.body="brand_id");
+    4: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
     5: string brand_name (api.body="brand_name");
     6: string role (api.body="role");
     7: string permissions (api.body="permissions");
     8: string created_at (api.body="created_at");
     9: string last_login_at (api.body="last_login_at");
     10: string account_status (api.body="account_status");
+    11: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
+    12: string store_name (api.body="store_name");
 }
 
 // 获取用户列表请求
 struct GetUserListReq {
     1: i32 page (api.query="page", api.vd="$>=1");
     2: i32 limit (api.query="limit", api.vd="$>=1&&$<=100");
-    3: i64 brand_id (api.query="brand_id");
+    3: i64 brand_id (api.query="brand_id" go.tag="json:\"brand_id,string\"");
     4: string role (api.query="role");
     5: string account_status (api.query="account_status");
     6: string username (api.query="username");
@@ -193,28 +298,31 @@ struct GetUserListResp {
 struct CreateUserReq {
     1: string phone (api.body="phone", api.vd="len($)>0");
     2: string real_name (api.body="real_name", api.vd="len($)>0");
-    3: i64 brand_id (api.body="brand_id", api.vd="$>0");
-    4: string role (api.body="role", api.vd="len($)>0");
-    5: string password (api.body="password");
-    6: string email (api.body="email");
-    7: string permissions (api.body="permissions");
+    3: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
+    4: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
+    5: string role (api.body="role", api.vd="len($)>0");
+    6: string password (api.body="password");
+    7: string email (api.body="email");
+    8: string permissions (api.body="permissions");
 }
 
 // 创建用户响应
 struct CreateUserResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 user_id (api.body="user_id");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
 }
 
 // 更新用户请求
 struct UpdateUserReq {
-    1: i64 user_id (api.path="user_id", api.vd="$>0");
+    1: i64 user_id (api.path="user_id", api.vd="$>0" go.tag="json:\"user_id,string\"");
     2: string real_name (api.body="real_name");
     3: string role (api.body="role");
     4: string permissions (api.body="permissions");
     5: string account_status (api.body="account_status");
     6: string email (api.body="email");
     7: string phone (api.body="phone");
+    8: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
+    9: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
 }
 
 // 更新用户响应
@@ -224,7 +332,7 @@ struct UpdateUserResp {
 
 // 重置密码请求
 struct ResetPasswordReq {
-    1: i64 user_id (api.path="user_id", api.vd="$>0");
+    1: i64 user_id (api.path="user_id", api.vd="$>0" go.tag="json:\"user_id,string\"");
     2: string new_password (api.body="new_password", api.vd="len($)>0");
 }
 
@@ -239,14 +347,15 @@ struct ResetPasswordResp {
 struct GetJobListReq {
     1: i32 page (api.query="page", api.vd="$>=1");
     2: i32 limit (api.query="limit", api.vd="$>=1&&$<=100");
-    3: i64 brand_id (api.query="brand_id");
-    4: i32 category_id (api.query="category_id");
-    5: double min_salary (api.query="min_salary");
-    6: double max_salary (api.query="max_salary");
-    7: string start_date (api.query="start_date");
-    8: string end_date (api.query="end_date");
-    9: string status (api.query="status");
-    10: string title (api.query="title");
+    3: i64 brand_id (api.query="brand_id" go.tag="json:\"brand_id,string\"");
+    4: i64 store_id (api.query="store_id" go.tag="json:\"store_id,string\"");
+    5: i32 category_id (api.query="category_id");
+    6: double min_salary (api.query="min_salary");
+    7: double max_salary (api.query="max_salary");
+    8: string start_date (api.query="start_date");
+    9: string end_date (api.query="end_date");
+    10: string status (api.query="status");
+    11: string title (api.query="title");
 }
 
 // 获取岗位列表响应
@@ -258,7 +367,7 @@ struct GetJobListResp {
 
 // 审核岗位请求
 struct ReviewJobReq {
-    1: i64 job_id (api.path="job_id", api.vd="$>0");
+    1: i64 job_id (api.path="job_id", api.vd="$>0" go.tag="json:\"job_id,string\"");
     2: string action (api.body="action", api.vd="len($)>0"); // pass, reject, modify, offline
     3: string reason (api.body="reason");
     4: string remarks (api.body="remarks");
@@ -344,7 +453,7 @@ struct GetUserStatisticsResp {
 
 // 系统通知信息
 struct SystemNoticeInfo {
-    1: i64 notice_id (api.body="notice_id");
+    1: i64 notice_id (api.body="notice_id" go.tag="json:\"notice_id,string\"");
     2: string title (api.body="title");
     3: string content (api.body="content");
     4: string notice_type (api.body="notice_type");
@@ -370,7 +479,7 @@ struct SendSystemNoticeReq {
 // 发送系统通知响应
 struct SendSystemNoticeResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 notice_id (api.body="notice_id");
+    2: i64 notice_id (api.body="notice_id" go.tag="json:\"notice_id,string\"");
 }
 
 // 获取通知列表请求
@@ -392,7 +501,7 @@ struct GetNoticeListResp {
 
 // 消息模板信息
 struct MessageTemplateInfo {
-    1: i64 template_id (api.body="template_id");
+    1: i64 template_id (api.body="template_id" go.tag="json:\"template_id,string\"");
     2: string template_name (api.body="template_name");
     3: string template_type (api.body="template_type");
     4: string subject (api.body="subject");
@@ -415,7 +524,7 @@ struct CreateMessageTemplateReq {
 // 创建消息模板响应
 struct CreateMessageTemplateResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 template_id (api.body="template_id");
+    2: i64 template_id (api.body="template_id" go.tag="json:\"template_id,string\"");
 }
 
 // ==================== 财务管理 ====================
@@ -447,8 +556,8 @@ struct GetIncomeStatisticsResp {
 
 // 品牌方结算信息
 struct BrandSettlementInfo {
-    1: i64 settlement_id (api.body="settlement_id");
-    2: i64 brand_id (api.body="brand_id");
+    1: i64 settlement_id (api.body="settlement_id" go.tag="json:\"settlement_id,string\"");
+    2: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
     3: string brand_name (api.body="brand_name");
     4: double amount (api.body="amount");
     5: string settlement_cycle (api.body="settlement_cycle");
@@ -462,7 +571,7 @@ struct BrandSettlementInfo {
 struct GetSettlementListReq {
     1: i32 page (api.query="page", api.vd="$>=1");
     2: i32 limit (api.query="limit", api.vd="$>=1&&$<=100");
-    3: i64 brand_id (api.query="brand_id");
+    3: i64 brand_id (api.query="brand_id" go.tag="json:\"brand_id,string\"");
     4: string status (api.query="status");
     5: string start_date (api.query="start_date");
     6: string end_date (api.query="end_date");
@@ -477,7 +586,7 @@ struct GetSettlementListResp {
 
 // 处理结算请求
 struct ProcessSettlementReq {
-    1: i64 settlement_id (api.path="settlement_id", api.vd="$>0");
+    1: i64 settlement_id (api.path="settlement_id", api.vd="$>0" go.tag="json:\"settlement_id,string\"");
     2: string action (api.body="action", api.vd="len($)>0"); // approve, reject, complete
     3: string remarks (api.body="remarks");
 }
@@ -523,7 +632,7 @@ struct UpdateSystemConfigResp {
 
 // 管理员信息
 struct AdminInfo {
-    1: i64 admin_id (api.body="admin_id");
+    1: i64 admin_id (api.body="admin_id" go.tag="json:\"admin_id,string\"");
     2: string username (api.body="username");
     3: string real_name (api.body="real_name");
     4: string role (api.body="role");
@@ -545,7 +654,7 @@ struct CreateAdminReq {
 // 创建管理员响应
 struct CreateAdminResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 admin_id (api.body="admin_id");
+    2: i64 admin_id (api.body="admin_id" go.tag="json:\"admin_id,string\"");
 }
 
 // 获取管理员列表请求
@@ -565,7 +674,7 @@ struct GetAdminListResp {
 
 // 停用管理员请求
 struct DisableAdminReq {
-    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0" go.tag="json:\"admin_id,string\"");
 }
 
 // 停用管理员响应
@@ -575,7 +684,7 @@ struct DisableAdminResp {
 
 // 启用管理员请求
 struct EnableAdminReq {
-    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0" go.tag="json:\"admin_id,string\"");
 }
 
 // 启用管理员响应
@@ -585,7 +694,7 @@ struct EnableAdminResp {
 
 // 删除管理员请求
 struct DeleteAdminReq {
-    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0" go.tag="json:\"admin_id,string\"");
 }
 
 // 删除管理员响应
@@ -595,12 +704,142 @@ struct DeleteAdminResp {
 
 // 重置管理员密码请求
 struct ResetAdminPasswordReq {
-    1: i64 admin_id (api.path="admin_id", api.vd="$>0");
+    1: i64 admin_id (api.path="admin_id", api.vd="$>0" go.tag="json:\"admin_id,string\"");
     2: string new_password (api.body="new_password", api.vd="len($)>0");
 }
 
 // 重置管理员密码响应
 struct ResetAdminPasswordResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// ==================== 菜单管理 ====================
+
+// 菜单项
+struct MenuItem {
+    1: string menu_id (api.body="menu_id");
+    2: string name (api.body="name");
+    3: string label (api.body="label");
+    4: string path (api.body="path");
+    5: string icon (api.body="icon");
+    6: string parent_id (api.body="parent_id");
+    7: string type (api.body="type");
+    8: i32 sort_order (api.body="sort_order");
+    9: bool visible (api.body="visible");
+    10: bool disabled (api.body="disabled");
+    11: string permission (api.body="permission");
+    12: list<string> roles (api.body="roles");
+    13: list<MenuItem> children (api.body="children" go.tag="json:\"children,omitempty\"");
+}
+
+// ==================== 管理员信息 ====================
+
+// 管理员角色信息
+struct AdminRoleInfo {
+    1: string role_type (api.body="role_type");  // admin, employer, worker, brand_admin, store_admin
+    2: i64 role_id (api.body="role_id" go.tag="json:\"role_id,string,omitempty\"");  // 如果是扩展角色，这是user_roles表的ID
+    3: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string,omitempty\"");  // 关联的品牌ID
+    4: string brand_name (api.body="brand_name");  // 品牌名称
+    5: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string,omitempty\"");  // 关联的门店ID
+    6: string store_name (api.body="store_name");  // 门店名称
+}
+
+// 获取管理员信息请求
+struct GetAdminInfoReq {
+    // 临时逻辑：一个账号只能绑定一个品牌，不再需要brand_id参数
+}
+
+// 获取管理员信息响应
+struct GetAdminInfoResp {
+    1: common.BaseResp base (api.body="base");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");  // 用户ID
+    3: string username (api.body="username");  // 用户名
+    4: string phone (api.body="phone");  // 手机号
+    5: string avatar (api.body="avatar");  // 头像
+    6: string base_role (api.body="base_role");  // 基础角色（users表的role字段）
+    7: list<AdminRoleInfo> roles (api.body="roles");  // 所有角色列表
+    8: list<MenuItem> menus (api.body="menus");  // 可访问的菜单列表
+}
+
+// ==================== 品牌用户角色管理 ====================
+
+// 品牌管理员信息
+struct BrandAdminInfo {
+    1: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
+    2: i64 role_id (api.body="role_id" go.tag="json:\"role_id,string\"");
+    3: string username (api.body="username");
+    4: string phone (api.body="phone");
+    5: string role_type (api.body="role_type");  // brand_admin, store_admin
+    6: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
+    7: string brand_name (api.body="brand_name");
+    8: i64 store_id (api.body="store_id" go.tag="json:\"store_id,string\"");
+    9: string store_name (api.body="store_name");
+    10: string status (api.body="status");
+    11: string created_at (api.body="created_at");
+}
+
+// 获取品牌管理员列表请求
+struct GetBrandAdminsReq {
+    1: i32 page (api.query="page", api.vd="$>=1");
+    2: i32 limit (api.query="limit", api.vd="$>=1&&$<=100");
+    3: i64 brand_id (api.path="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
+    4: string role_type (api.query="role_type");  // 可选: brand_admin, store_admin
+    5: string status (api.query="status");  // 可选: active, disabled
+}
+
+// 获取品牌管理员列表响应
+struct GetBrandAdminsResp {
+    1: common.BaseResp base (api.body="base");
+    2: common.PageResp page_info (api.body="page_info");
+    3: list<BrandAdminInfo> admins (api.body="admins");
+}
+
+// 创建品牌管理员请求
+struct CreateBrandAdminReq {
+    1: string phone (api.body="phone", api.vd="len($)>0");  // 手机号
+    2: i64 brand_id (api.body="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
+    3: string role_type (api.body="role_type", api.vd="len($)>0");  // brand_admin
+    4: string real_name (api.body="real_name");  // 真实姓名（可选）
+}
+
+// 创建品牌管理员响应
+struct CreateBrandAdminResp {
+    1: common.BaseResp base (api.body="base");
+    2: i64 role_id (api.body="role_id" go.tag="json:\"role_id,string\"");
+}
+
+// 创建门店管理员请求
+struct CreateStoreAdminReq {
+    1: string phone (api.body="phone", api.vd="len($)>0");  // 手机号
+    2: i64 brand_id (api.body="brand_id", api.vd="$>0" go.tag="json:\"brand_id,string\"");
+    3: i64 store_id (api.body="store_id", api.vd="$>0" go.tag="json:\"store_id,string\"");
+    4: string real_name (api.body="real_name");  // 真实姓名（可选）
+}
+
+// 创建门店管理员响应
+struct CreateStoreAdminResp {
+    1: common.BaseResp base (api.body="base");
+    2: i64 role_id (api.body="role_id" go.tag="json:\"role_id,string\"");
+}
+
+// 删除品牌/门店管理员请求
+struct DeleteBrandAdminReq {
+    1: i64 role_id (api.path="role_id", api.vd="$>0" go.tag="json:\"role_id,string\"");
+}
+
+// 删除品牌/门店管理员响应
+struct DeleteBrandAdminResp {
+    1: common.BaseResp base (api.body="base");
+}
+
+// 更新品牌/门店管理员状态请求
+struct UpdateBrandAdminStatusReq {
+    1: i64 role_id (api.path="role_id", api.vd="$>0" go.tag="json:\"role_id,string\"");
+    2: string status (api.body="status", api.vd="len($)>0");  // active, disabled
+}
+
+// 更新品牌/门店管理员状态响应
+struct UpdateBrandAdminStatusResp {
     1: common.BaseResp base (api.body="base");
 }
 
@@ -614,6 +853,13 @@ service AdminService {
     UpdateBrandResp UpdateBrand(1: UpdateBrandReq request) (api.put="/api/v1/admin/brands/:brand_id");
     ReviewBrandResp ReviewBrand(1: ReviewBrandReq request) (api.post="/api/v1/admin/brands/:brand_id/review");
     BatchImportBrandsResp BatchImportBrands(1: BatchImportBrandsReq request) (api.post="/api/v1/admin/brands/batch-import");
+
+    // 门店管理
+    GetStoreListResp GetStoreList(1: GetStoreListReq request) (api.get="/api/v1/admin/stores");
+    GetStoreDetailResp GetStoreDetail(1: GetStoreDetailReq request) (api.get="/api/v1/admin/stores/:store_id");
+    CreateStoreResp CreateStore(1: CreateStoreReq request) (api.post="/api/v1/admin/stores");
+    UpdateStoreResp UpdateStore(1: UpdateStoreReq request) (api.put="/api/v1/admin/stores/:store_id");
+    DeleteStoreResp DeleteStore(1: DeleteStoreReq request) (api.delete="/api/v1/admin/stores/:store_id");
 
     // 用户管理
     GetUserListResp GetUserList(1: GetUserListReq request) (api.get="/api/v1/admin/users");
@@ -651,4 +897,14 @@ service AdminService {
     EnableAdminResp EnableAdmin(1: EnableAdminReq request) (api.post="/api/v1/admin/admins/:admin_id/enable");
     DeleteAdminResp DeleteAdmin(1: DeleteAdminReq request) (api.delete="/api/v1/admin/admins/:admin_id");
     ResetAdminPasswordResp ResetAdminPassword(1: ResetAdminPasswordReq request) (api.post="/api/v1/admin/admins/:admin_id/reset-password");
+    
+    // 管理员信息
+    GetAdminInfoResp GetAdminInfo(1: GetAdminInfoReq request) (api.get="/api/v1/admin/info");
+    
+    // 品牌用户角色管理
+    GetBrandAdminsResp GetBrandAdmins(1: GetBrandAdminsReq request) (api.get="/api/v1/admin/brands/:brand_id/admins");
+    CreateBrandAdminResp CreateBrandAdmin(1: CreateBrandAdminReq request) (api.post="/api/v1/admin/brands/admins");
+    CreateStoreAdminResp CreateStoreAdmin(1: CreateStoreAdminReq request) (api.post="/api/v1/admin/stores/admins");
+    DeleteBrandAdminResp DeleteBrandAdmin(1: DeleteBrandAdminReq request) (api.delete="/api/v1/admin/brand-admins/:role_id");
+    UpdateBrandAdminStatusResp UpdateBrandAdminStatus(1: UpdateBrandAdminStatusReq request) (api.put="/api/v1/admin/brand-admins/:role_id/status");
 }

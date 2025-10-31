@@ -22,7 +22,7 @@ struct PageResp {
 
 // 用户基础信息
 struct UserInfo {
-    1: i64 user_id (api.body="user_id");
+    1: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
     2: string username (api.body="username");
     3: string phone (api.body="phone");
     4: string avatar (api.body="avatar");
@@ -31,7 +31,7 @@ struct UserInfo {
 
 // 零工详细信息
 struct WorkerInfo {
-    1: i64 user_id (api.body="user_id");
+    1: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
     2: string real_name (api.body="real_name");
     3: string gender (api.body="gender");
     4: i32 age (api.body="age");
@@ -44,7 +44,7 @@ struct WorkerInfo {
 
 // 品牌信息
 struct BrandInfo {
-    1: i64 brand_id (api.body="brand_id");
+    1: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
     2: string name (api.body="name");
     3: string logo (api.body="logo");
     4: string description (api.body="description");
@@ -53,9 +53,9 @@ struct BrandInfo {
 
 // 雇主信息
 struct EmployerInfo {
-    1: i64 employer_id (api.body="employer_id");
-    2: i64 user_id (api.body="user_id");
-    3: i64 brand_id (api.body="brand_id");
+    1: i64 employer_id (api.body="employer_id" go.tag="json:\"employer_id,string\"");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
+    3: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
     4: string company_name (api.body="company_name");
     5: string contact_person (api.body="contact_person");
     6: string contact_phone (api.body="contact_phone");
@@ -73,14 +73,14 @@ struct JobCategoryInfo {
 
 // 岗位标签信息
 struct JobTagInfo {
-    1: i64 job_id (api.body="job_id");
+    1: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
     2: string tag_name (api.body="tag_name");
     3: string tag_type (api.body="tag_type");
 }
 
 // 岗位信息
 struct JobInfo {
-    1: i64 job_id (api.body="job_id");
+    1: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
     2: string title (api.body="title");
     3: string job_type (api.body="job_type");
     4: string description (api.body="description");
@@ -96,9 +96,9 @@ struct JobInfo {
     14: string status (api.body="status");
     15: i32 applicant_count (api.body="applicant_count");
     16: i32 max_applicants (api.body="max_applicants");
-    17: i64 employer_id (api.body="employer_id");
-    18: i64 brand_id (api.body="brand_id");
-    19: i64 category_id (api.body="category_id");
+    17: i64 employer_id (api.body="employer_id" go.tag="json:\"employer_id,string\"");
+    18: i64 brand_id (api.body="brand_id" go.tag="json:\"brand_id,string\"");
+    19: i64 category_id (api.body="category_id" go.tag="json:\"category_id,string\"");
     20: double distance (api.body="distance");
     21: BrandInfo brand_info (api.body="brand_info");
     22: EmployerInfo employer_info (api.body="employer_info");
@@ -108,9 +108,9 @@ struct JobInfo {
 
 // 日程信息
 struct ScheduleInfo {
-    1: i64 schedule_id (api.body="schedule_id");
-    2: i64 worker_id (api.body="worker_id");
-    3: i64 job_id (api.body="job_id");
+    1: i64 schedule_id (api.body="schedule_id" go.tag="json:\"schedule_id,string\"");
+    2: i64 worker_id (api.body="worker_id" go.tag="json:\"worker_id,string\"");
+    3: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
     4: string title (api.body="title");
     5: string start_time (api.body="start_time");
     6: string end_time (api.body="end_time");
@@ -123,9 +123,9 @@ struct ScheduleInfo {
 
 // 岗位申请信息
 struct JobApplicationInfo {
-    1: i64 application_id (api.body="application_id");
-    2: i64 job_id (api.body="job_id");
-    3: i64 worker_id (api.body="worker_id");
+    1: i64 application_id (api.body="application_id" go.tag="json:\"application_id,string\"");
+    2: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
+    3: i64 worker_id (api.body="worker_id" go.tag="json:\"worker_id,string\"");
     4: string status (api.body="status");
     5: string applied_at (api.body="applied_at");
     6: string confirmed_at (api.body="confirmed_at");
@@ -138,9 +138,9 @@ struct JobApplicationInfo {
 
 // 消息信息
 struct MessageInfo {
-    1: i64 message_id (api.body="message_id");
-    2: i64 from_user (api.body="from_user");
-    3: i64 to_user (api.body="to_user");
+    1: i64 message_id (api.body="message_id" go.tag="json:\"message_id,string\"");
+    2: i64 from_user (api.body="from_user" go.tag="json:\"from_user,string\"");
+    3: i64 to_user (api.body="to_user" go.tag="json:\"to_user,string\"");
     4: string message_type (api.body="message_type");
     5: string content (api.body="content");
     6: string msg_category (api.body="msg_category");
@@ -151,8 +151,8 @@ struct MessageInfo {
 // 考勤记录信息
 struct AttendanceRecordInfo {
     1: i32 record_id (api.body="record_id");
-    2: i64 job_id (api.body="job_id");
-    3: i64 worker_id (api.body="worker_id");
+    2: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
+    3: i64 worker_id (api.body="worker_id" go.tag="json:\"worker_id,string\"");
     4: string check_in (api.body="check_in");
     5: string check_out (api.body="check_out");
     6: double work_hours (api.body="work_hours");
@@ -164,10 +164,10 @@ struct AttendanceRecordInfo {
 
 // 评价信息
 struct ReviewInfo {
-    1: i64 review_id (api.body="review_id");
-    2: i64 job_id (api.body="job_id");
-    3: i64 employer_id (api.body="employer_id");
-    4: i64 worker_id (api.body="worker_id");
+    1: i64 review_id (api.body="review_id" go.tag="json:\"review_id,string\"");
+    2: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
+    3: i64 employer_id (api.body="employer_id" go.tag="json:\"employer_id,string\"");
+    4: i64 worker_id (api.body="worker_id" go.tag="json:\"worker_id,string\"");
     5: i32 rating (api.body="rating");
     6: string content (api.body="content");
     7: string review_type (api.body="review_type");
@@ -178,10 +178,10 @@ struct ReviewInfo {
 
 // 支付信息
 struct PaymentInfo {
-    1: i64 payment_id (api.body="payment_id");
-    2: i64 job_id (api.body="job_id");
-    3: i64 worker_id (api.body="worker_id");
-    4: i64 employer_id (api.body="employer_id");
+    1: i64 payment_id (api.body="payment_id" go.tag="json:\"payment_id,string\"");
+    2: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
+    3: i64 worker_id (api.body="worker_id" go.tag="json:\"worker_id,string\"");
+    4: i64 employer_id (api.body="employer_id" go.tag="json:\"employer_id,string\"");
     5: double amount (api.body="amount");
     6: string payment_method (api.body="payment_method");
     7: string status (api.body="status");
@@ -192,8 +192,8 @@ struct PaymentInfo {
 
 // 社区帖子信息
 struct CommunityPostInfo {
-    1: i64 post_id (api.body="post_id");
-    2: i64 author_id (api.body="author_id");
+    1: i64 post_id (api.body="post_id" go.tag="json:\"post_id,string\"");
+    2: i64 author_id (api.body="author_id" go.tag="json:\"author_id,string\"");
     3: string title (api.body="title");
     4: string content (api.body="content");
     5: string post_type (api.body="post_type");
@@ -206,9 +206,9 @@ struct CommunityPostInfo {
 
 // 用户收藏信息
 struct UserFavoriteJobInfo {
-    1: i64 favorite_id (api.body="favorite_id");
-    2: i64 user_id (api.body="user_id");
-    3: i64 job_id (api.body="job_id");
+    1: i64 favorite_id (api.body="favorite_id" go.tag="json:\"favorite_id,string\"");
+    2: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
+    3: i64 job_id (api.body="job_id" go.tag="json:\"job_id,string\"");
     4: string created_at (api.body="created_at");
     5: JobInfo job_info (api.body="job_info");
 }

@@ -1,6 +1,7 @@
 package community
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,8 +13,8 @@ import (
 )
 
 // DeletePostLogic 删除帖子业务逻辑
-func DeletePostLogic(req *community.DeletePostReq) (*community.DeletePostResp, error) {
-	err := mysql.Transaction(func(tx *gorm.DB) error {
+func DeletePostLogic(ctx context.Context, req *community.DeletePostReq) (*community.DeletePostResp, error) {
+	err := mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.DeleteCommunityPost(tx, req.PostID)
 	})
 

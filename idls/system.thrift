@@ -36,7 +36,7 @@ struct SubmitFeedbackReq {
 // 提交反馈响应
 struct SubmitFeedbackResp {
     1: common.BaseResp base (api.body="base");
-    2: i64 feedback_id (api.body="feedback_id");
+    2: i64 feedback_id (api.body="feedback_id" go.tag="json:\"feedback_id,string\"");
 }
 
 // 获取公告列表请求
@@ -54,7 +54,7 @@ struct GetNoticeListResp {
 
 // 获取公告详情请求
 struct GetNoticeDetailReq {
-    1: i64 notice_id (api.path="notice_id", api.vd="$>0");
+    1: i64 notice_id (api.path="notice_id", api.vd="$>0" go.tag="json:\"notice_id,string\"");
 }
 
 // 获取公告详情响应
@@ -63,10 +63,25 @@ struct GetNoticeDetailResp {
     2: common.CommunityPostInfo notice (api.body="notice");
 }
 
+// 获取微信用户信息请求
+struct GetWeChatUserInfoReq {
+}
+
+// 获取微信用户信息响应
+struct GetWeChatUserInfoResp {
+    1: common.BaseResp base (api.body="base");
+    2: string openid (api.body="openid");
+    3: string unionid (api.body="unionid");
+    4: string appid (api.body="appid");
+    5: string env (api.body="env");
+    6: string cloudbase_access_token (api.body="cloudbase_access_token");
+}
+
 service SystemService {
     GetSystemConfigResp GetSystemConfig(1: GetSystemConfigReq request) (api.get="/api/v1/system/config");
     GetVersionResp GetVersion(1: GetVersionReq request) (api.get="/api/v1/system/version");
     SubmitFeedbackResp SubmitFeedback(1: SubmitFeedbackReq request) (api.post="/api/v1/system/feedback");
     GetNoticeListResp GetNoticeList(1: GetNoticeListReq request) (api.get="/api/v1/system/notices");
     GetNoticeDetailResp GetNoticeDetail(1: GetNoticeDetailReq request) (api.get="/api/v1/system/notices/:notice_id");
+    GetWeChatUserInfoResp GetWeChatUserInfo(1: GetWeChatUserInfoReq request) (api.get="/api/v1/system/wechat-user-info");
 }

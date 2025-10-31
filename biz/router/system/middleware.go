@@ -55,3 +55,8 @@ func _getversionMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _getwechatuserinfoMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

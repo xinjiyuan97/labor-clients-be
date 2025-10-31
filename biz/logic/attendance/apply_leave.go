@@ -1,6 +1,7 @@
 package attendance
 
 import (
+	"context"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -14,7 +15,7 @@ import (
 )
 
 // ApplyLeaveLogic 申请请假业务逻辑
-func ApplyLeaveLogic(workerID int64, req *attendance.ApplyLeaveReq) (*attendance.ApplyLeaveResp, error) {
+func ApplyLeaveLogic(ctx context.Context, workerID int64, req *attendance.ApplyLeaveReq) (*attendance.ApplyLeaveResp, error) {
 	// 解析请假日期
 	leaveDate, err := time.Parse("2006-01-02", req.LeaveDate)
 	if err != nil {
@@ -59,7 +60,7 @@ func ApplyLeaveLogic(workerID int64, req *attendance.ApplyLeaveReq) (*attendance
 		WorkHours: decimal.Zero,
 	}
 
-	err = mysql.Transaction(func(tx *gorm.DB) error {
+	err = mysql.Transaction(ctx, func(tx *gorm.DB) error {
 		return mysql.CreateAttendanceRecord(tx, record)
 	})
 
