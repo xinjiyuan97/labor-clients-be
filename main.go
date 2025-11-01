@@ -214,6 +214,7 @@ func runMigrate(cfg *config.Config) {
 		&models.CommunityPost{},
 		&models.UserFavoriteJob{},
 		&models.ThirdPartyBinding{},
+		&models.SMSVerificationCode{},
 	}
 
 	utils.LogWithFields(map[string]interface{}{

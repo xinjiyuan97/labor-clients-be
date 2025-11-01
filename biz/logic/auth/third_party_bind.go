@@ -2,13 +2,11 @@ package auth
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/xinjiyuan97/labor-clients/biz/model/auth"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
-	redis "github.com/xinjiyuan97/labor-clients/dal/redis"
 	"github.com/xinjiyuan97/labor-clients/models"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
@@ -16,36 +14,36 @@ import (
 // ThirdPartyLoginBindLogic 第三方登录绑定业务逻辑
 func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBindReq) (*auth.ThirdPartyLoginBindResp, error) {
 	// 1. 验证短信验证码
-	key := fmt.Sprintf("sms_code:%s", req.Phone)
-	storedCode, err := redis.Get(key)
+	smsCode, err := mysql.GetSMSVerificationCode(ctx, req.Phone, req.Code)
 	if err != nil {
-		utils.Errorf("从Redis获取验证码失败: %v", err)
+		utils.Errorf("从MySQL获取验证码失败: %v", err)
 		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
-				Code:      400,
-				Message:   "验证码已过期或无效",
+				Code:      500,
+				Message:   "系统错误",
 				Timestamp: time.Now().Format(time.RFC3339),
 			},
 		}, nil
 	}
 
-	if storedCode != req.Code {
+	// 检查验证码是否存在或已使用
+	if smsCode == nil {
 		utils.LogWithFields(map[string]interface{}{
 			"phone": req.Phone,
-		}).Warn("验证码错误")
+		}).Warn("验证码不存在或已使用")
 		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      400,
-				Message:   "验证码错误",
+				Message:   "验证码错误或已过期",
 				Timestamp: time.Now().Format(time.RFC3339),
 			},
 		}, nil
 	}
 
-	// 2. 删除已使用的验证码
-	err = redis.Del(key)
+	// 2. 标记验证码为已使用
+	err = mysql.MarkSMSVerificationCodeUsed(ctx, req.Phone, req.Code)
 	if err != nil {
-		utils.Warnf("删除已使用的验证码失败: %v", err)
+		utils.Warnf("标记验证码已使用失败: %v", err)
 	}
 
 	// 3. 检查是否已有该平台的绑定
