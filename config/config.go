@@ -2,7 +2,10 @@ package config
 
 import (
 	"fmt"
+	"net/url"
 	"os"
+	"regexp"
+	"strconv"
 
 	"gopkg.in/yaml.v3"
 )
@@ -20,8 +23,8 @@ func GetGlobalConfig() *Config {
 // Config 应用配置结构
 type Config struct {
 	Server    ServerConfig    `yaml:"server"`
-	Database  DatabaseConfig  `yaml:"database"`
-	Redis     RedisConfig     `yaml:"redis"`
+	Database  *DatabaseConfig `yaml:"database"`
+	Redis     *RedisConfig    `yaml:"redis"`
 	OSS       OSSConfig       `yaml:"oss"`
 	Log       LogConfig       `yaml:"log"`
 	Auth      AuthConfig      `yaml:"auth"`
@@ -182,26 +185,32 @@ func (c *Config) Validate() error {
 	if c.Server.Mode == "" {
 		c.Server.Mode = "release"
 	}
-	if c.Database.Driver == "" {
-		c.Database.Driver = "mysql"
+	// 只有在 Database 配置存在时才验证
+	if c.Database != nil {
+		if c.Database.Driver == "" {
+			c.Database.Driver = "mysql"
+		}
+		if c.Database.Host == "" {
+			return fmt.Errorf("数据库主机地址不能为空")
+		}
+		if c.Database.Port == 0 {
+			c.Database.Port = 3306
+		}
+		if c.Database.Username == "" {
+			return fmt.Errorf("数据库用户名不能为空")
+		}
+		if c.Database.Database == "" {
+			return fmt.Errorf("数据库名不能为空")
+		}
 	}
-	if c.Database.Host == "" {
-		return fmt.Errorf("数据库主机地址不能为空")
-	}
-	if c.Database.Port == 0 {
-		c.Database.Port = 3306
-	}
-	if c.Database.Username == "" {
-		return fmt.Errorf("数据库用户名不能为空")
-	}
-	if c.Database.Database == "" {
-		return fmt.Errorf("数据库名不能为空")
-	}
-	if c.Redis.Host == "" {
-		c.Redis.Host = "127.0.0.1"
-	}
-	if c.Redis.Port == 0 {
-		c.Redis.Port = 6379
+	// 只有在 Redis 配置存在时才验证
+	if c.Redis != nil {
+		if c.Redis.Host == "" {
+			c.Redis.Host = "127.0.0.1"
+		}
+		if c.Redis.Port == 0 {
+			c.Redis.Port = 6379
+		}
 	}
 	if c.Auth.JWTSecret == "" {
 		return fmt.Errorf("JWT密钥不能为空")
@@ -223,4 +232,125 @@ func (c *Config) Validate() error {
 	}
 
 	return nil
+}
+
+// ParseDSN 从DSN字符串解析数据库配置
+// DSN格式: username:password@tcp(host:port)/database?charset=utf8mb4&parseTime=True&loc=Local
+func ParseDSN(dsn string) (*DatabaseConfig, error) {
+	cfg := &DatabaseConfig{}
+	
+	// 正则表达式匹配 DSN 格式
+	// username:password@tcp(host:port)/database?charset=utf8mb4&parseTime=True&loc=Local
+	// 或者 username:password@tcp(host:port)/database（无查询参数）
+	re := regexp.MustCompile(`^([^:]+):([^@]+)@tcp\(([^:]+):(\d+)\)/([^\?]+)(?:\?(.*))?$`)
+	matches := re.FindStringSubmatch(dsn)
+	
+	if len(matches) < 6 {
+		return nil, fmt.Errorf("无效的DSN格式")
+	}
+	
+	cfg.Username = matches[1]
+	cfg.Password = matches[2]
+	cfg.Host = matches[3]
+	
+	// 解析端口
+	port, err := strconv.Atoi(matches[4])
+	if err != nil {
+		return nil, fmt.Errorf("无效的端口号: %v", err)
+	}
+	cfg.Port = port
+	
+	cfg.Database = matches[5]
+	
+	// 解析查询参数（可选）
+	if len(matches) >= 7 && matches[6] != "" {
+		params, err := url.ParseQuery(matches[6])
+		if err != nil {
+			return nil, fmt.Errorf("解析查询参数失败: %v", err)
+		}
+		
+		if charset := params.Get("charset"); charset != "" {
+			cfg.Charset = charset
+		} else {
+			cfg.Charset = "utf8mb4" // 默认字符集
+		}
+	} else {
+		cfg.Charset = "utf8mb4" // 默认字符集
+	}
+	
+	// 设置默认值
+	cfg.Driver = "mysql"
+	if cfg.MaxOpenConns == 0 {
+		cfg.MaxOpenConns = 100
+	}
+	if cfg.MaxIdleConns == 0 {
+		cfg.MaxIdleConns = 10
+	}
+	if cfg.ConnMaxLifetime == 0 {
+		cfg.ConnMaxLifetime = 3600
+	}
+	if cfg.LogLevel == "" {
+		cfg.LogLevel = "info"
+	}
+	
+	return cfg, nil
+}
+
+// LoadConfigFromDSN 从DSN字符串加载配置
+func LoadConfigFromDSN(dsn string) (*Config, error) {
+	// 解析DSN
+	dbConfig, err := ParseDSN(dsn)
+	if err != nil {
+		return nil, fmt.Errorf("解析DSN失败: %v", err)
+	}
+	
+	// 创建配置对象
+	config := &Config{
+		Database: dbConfig,
+	}
+	
+	// 设置其他默认配置
+	config.Server = ServerConfig{
+		Host:         "0.0.0.0",
+		Port:         8080,
+		ReadTimeout:  30,
+		WriteTimeout: 30,
+		IdleTimeout:  120,
+		Mode:         "release",
+	}
+	
+	config.Redis = &RedisConfig{
+		Host:         "127.0.0.1",
+		Port:         6379,
+		Password:     "",
+		Database:     0,
+		PoolSize:     100,
+		MinIdleConns: 10,
+		DialTimeout:  5,
+		ReadTimeout:  3,
+		WriteTimeout: 3,
+	}
+	
+	config.Log = LogConfig{
+		Level:      "info",
+		Format:     "json",
+		Output:     "stdout",
+		FilePath:   "logs/app.log",
+		MaxSize:    100,
+		MaxBackups: 10,
+		MaxAge:     7,
+		Compress:   true,
+	}
+	
+	config.Auth = AuthConfig{
+		JWTExpire:     24,
+		RefreshExpire: 7,
+		Algorithm:     "HS256",
+	}
+	
+	config.Snowflake = SnowflakeConfig{
+		NodeID: 1,
+	}
+	
+	return config, nil
 }

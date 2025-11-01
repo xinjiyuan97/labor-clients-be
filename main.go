@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/xinjiyuan97/labor-clients/config"
+	"github.com/xinjiyuan97/labor-clients/dal"
 	"github.com/xinjiyuan97/labor-clients/dal/mysql"
 	"github.com/xinjiyuan97/labor-clients/models"
 	"github.com/xinjiyuan97/labor-clients/utils"
@@ -28,6 +29,7 @@ func main() {
 	var (
 		mode       = flag.String("mode", ModeServer, "运行模式: server(启动服务器) | migrate(数据库迁移) | create-admin(创建管理员)")
 		env        = flag.String("env", "example", "环境配置: example | prod")
+		dsn        = flag.String("dsn", "", "数据库连接字符串DSN（如果配置文件没有database配置，使用此DSN）")
 		help       = flag.Bool("help", false, "显示帮助信息")
 		version    = flag.Bool("version", false, "显示版本信息")
 		adminPhone = flag.String("phone", "", "管理员手机号（create-admin模式）")
@@ -54,7 +56,7 @@ func main() {
 	}
 
 	// 加载配置
-	cfg, err := loadConfig(*env)
+	cfg, err := loadConfig(*env, *dsn)
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
 	}
@@ -80,10 +82,15 @@ func main() {
 }
 
 // loadConfig 加载配置文件
-func loadConfig(env string) (*config.Config, error) {
+func loadConfig(env string, dsn string) (*config.Config, error) {
 	// 优先使用环境变量
 	if envVar := os.Getenv("ENV"); envVar != "" {
 		env = envVar
+	}
+
+	// 如果命令行没有提供DSN，尝试从环境变量获取
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_DSN")
 	}
 
 	// 构建配置文件路径
@@ -97,10 +104,38 @@ func loadConfig(env string) (*config.Config, error) {
 		}
 	}
 
-	// 加载配置
-	cfg, err := config.LoadConfig(cfgPath)
-	if err != nil {
-		return nil, fmt.Errorf("加载配置文件 %s 失败: %v", cfgPath, err)
+	var cfg *config.Config
+
+	// 尝试加载配置文件
+	if _, err := os.Stat(cfgPath); err == nil {
+		cfg, err = config.LoadConfig(cfgPath)
+		if err != nil {
+			return nil, fmt.Errorf("加载配置文件 %s 失败: %v", cfgPath, err)
+		}
+		utils.Infof("从配置文件加载: %s", cfgPath)
+	} else {
+		// 配置文件不存在，检查是否有DSN
+		if dsn == "" {
+			return nil, fmt.Errorf("配置文件不存在且未提供DSN，无法加载配置")
+		}
+		// 从DSN加载配置
+		cfg, err = config.LoadConfigFromDSN(dsn)
+		if err != nil {
+			return nil, fmt.Errorf("从DSN加载配置失败: %v", err)
+		}
+		utils.Infof("从DSN加载配置")
+	}
+
+	// 如果配置文件没有database配置，但有DSN，则使用DSN
+	if cfg.Database == nil || cfg.Database.Database == "" {
+		if dsn != "" {
+			dbConfig, err := config.ParseDSN(dsn)
+			if err != nil {
+				return nil, fmt.Errorf("解析DSN失败: %v", err)
+			}
+			cfg.Database = dbConfig
+			utils.Infof("使用DSN配置数据库")
+		}
 	}
 
 	// 验证配置
@@ -134,9 +169,9 @@ func initBaseComponents(cfg *config.Config) error {
 	}
 
 	// 初始化数据访问层
-	// if err := dal.InitDAL(cfg); err != nil {
-	// 	return fmt.Errorf("初始化数据访问层失败: %v", err)
-	// }
+	if err := dal.InitDAL(cfg); err != nil {
+		return fmt.Errorf("初始化数据访问层失败: %v", err)
+	}
 
 	// // 初始化TOS客户端（仅当provider为volcengine时）
 	// if cfg.OSS.Provider == "volcengine" {

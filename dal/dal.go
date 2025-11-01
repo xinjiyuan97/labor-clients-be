@@ -10,15 +10,19 @@ import (
 // InitDAL 初始化所有数据访问层
 func InitDAL(cfg *config.Config) error {
 	// 初始化MySQL
-	if err := mysql.InitMySQL(&cfg.Database); err != nil {
-		utils.Errorf("初始化MySQL失败: %v", err)
-		return err
+	if cfg.Database != nil {
+		if err := mysql.InitMySQL(cfg.Database); err != nil {
+			utils.Errorf("初始化MySQL失败: %v", err)
+			return err
+		}
 	}
 
 	// 初始化Redis
-	if err := redis.InitRedis(&cfg.Redis); err != nil {
-		utils.Errorf("初始化Redis失败: %v", err)
-		return err
+	if cfg.Redis != nil {
+		if err := redis.InitRedis(cfg.Redis); err != nil {
+			utils.Errorf("初始化Redis失败: %v", err)
+			return err
+		}
 	}
 
 	utils.Info("数据访问层初始化成功")
