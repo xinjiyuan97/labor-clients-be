@@ -94,19 +94,20 @@ struct LoginWithSMSCodeReq {
     2: string code (api.body="code", api.vd="len($)>0");
 }
 
-// 微信登录绑定请求
-struct WeChatLoginBindReq {
-    1: string openid (api.body="openid", api.vd="len($)>0");
-    2: string unionid (api.body="unionid");
-    3: string appid (api.body="appid", api.vd="len($)>0");
-    4: string phone (api.body="phone", api.vd="len($)>0");
-    5: string code (api.body="code", api.vd="len($)>0");
-    6: string nickname (api.body="nickname");
-    7: string avatar (api.body="avatar");
+// 第三方登录绑定请求
+struct ThirdPartyLoginBindReq {
+    1: string platform (api.body="platform", api.vd="len($)>0");
+    2: string openid (api.body="openid", api.vd="len($)>0");
+    3: string unionid (api.body="unionid");
+    4: string appid (api.body="appid", api.vd="len($)>0");
+    5: string phone (api.body="phone", api.vd="len($)>0");
+    6: string code (api.body="code", api.vd="len($)>0");
+    7: string nickname (api.body="nickname");
+    8: string avatar (api.body="avatar");
 }
 
-// 微信登录绑定响应
-struct WeChatLoginBindResp {
+// 第三方登录绑定响应
+struct ThirdPartyLoginBindResp {
     1: common.BaseResp base (api.body="base");
     2: bool is_new_user (api.body="is_new_user");
     3: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
@@ -123,5 +124,5 @@ service AuthService {
     ChangePasswordResp ChangePassword(1: ChangePasswordReq request) (api.post="/api/v1/auth/change-password");
     SendSMSCodeResp SendSMSCode(1: SendSMSCodeReq request) (api.post="/api/v1/auth/send-sms-code");
     LoginResp LoginWithSMSCode(1: LoginWithSMSCodeReq request) (api.post="/api/v1/auth/login-with-sms");
-    WeChatLoginBindResp WeChatLoginBind(1: WeChatLoginBindReq request) (api.post="/api/v1/auth/wechat-bind");
+    ThirdPartyLoginBindResp ThirdPartyLoginBind(1: ThirdPartyLoginBindReq request) (api.post="/api/v1/auth/third-party-bind");
 }

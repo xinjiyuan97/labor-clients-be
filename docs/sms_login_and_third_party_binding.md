@@ -1,41 +1,54 @@
-# 短信验证码登录和微信账号绑定功能文档
+# 短信验证码登录和第三方账号绑定功能文档
 
 ## 功能概述
 
 新增了三个核心功能：
 1. **发送短信验证码** - 用于手机号验证
 2. **短信验证码登录** - 使用手机号和验证码登录
-3. **微信账号绑定** - 将微信openid与现有账号绑定
+3. **第三方账号绑定** - 将第三方平台账号（微信、支付宝等）与现有账号绑定
 
 ## 数据库设计
 
-### wechat_bindings 表
+### third_party_bindings 表
 
-记录微信账号与用户账号的绑定关系。
+记录第三方平台账号与用户账号的绑定关系。支持多个平台（微信、支付宝、QQ等）。
 
 **表结构**：
 ```sql
-CREATE TABLE IF NOT EXISTS wechat_bindings (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    openid VARCHAR(255) UNIQUE NOT NULL,
-    unionid VARCHAR(255),
-    appid VARCHAR(100) NOT NULL,
-    nickname VARCHAR(100),
-    avatar VARCHAR(500),
-    status ENUM('active', 'disabled') NOT NULL DEFAULT 'active',
-    last_login_at DATETIME,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at DATETIME DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS third_party_bindings (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    platform VARCHAR(50) NOT NULL COMMENT '第三方平台',
+    openid VARCHAR(255) NOT NULL COMMENT '第三方平台OpenID',
+    unionid VARCHAR(255) COMMENT '第三方平台UnionID',
+    appid VARCHAR(100) NOT NULL COMMENT '应用AppID',
+    nickname VARCHAR(100) COMMENT '第三方平台昵称',
+    avatar VARCHAR(500) COMMENT '第三方平台头像',
+    status ENUM('active', 'disabled') NOT NULL DEFAULT 'active' COMMENT '绑定状态',
+    last_login_at DATETIME COMMENT '最后登录时间',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_at DATETIME DEFAULT NULL COMMENT '删除时间',
+    INDEX idx_user_id (user_id),
+    INDEX idx_platform (platform),
+    UNIQUE KEY idx_platform_openid (platform, openid),
+    INDEX idx_unionid (unionid),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 ```
 
 **索引**：
 - `user_id` - 用户ID索引
-- `openid` - OpenID唯一索引
+- `platform` - 平台索引
+- `idx_platform_openid` - 平台和OpenID联合唯一索引
 - `unionid` - UnionID索引
+
+**支持的平台**：
+- `wechat` - 微信小程序/公众号
+- `alipay` - 支付宝小程序
+- `qq` - QQ登录
+- `apple` - Apple登录
+- 其他平台可按需扩展
 
 ## API接口
 
@@ -111,20 +124,21 @@ CREATE TABLE IF NOT EXISTS wechat_bindings (
 5. 生成JWT token
 6. 返回登录结果
 
-### 3. 微信登录绑定
+### 3. 第三方登录绑定
 
-**接口**: `POST /api/v1/auth/wechat-bind`
+**接口**: `POST /api/v1/auth/third-party-bind`
 
 **请求**:
 ```json
 {
+  "platform": "wechat",
   "openid": "oxxxxxxxxxxxxxxxxxxxxxx",
   "unionid": "oxxxxxxxxxxxxxxxxxxxxxx",
   "appid": "wx1234567890abcdef",
   "phone": "13800138000",
   "code": "123456",
-  "nickname": "微信昵称",
-  "avatar": "https://wx.qlogo.cn/..."
+  "nickname": "第三方昵称",
+  "avatar": "https://example.com/avatar.jpg"
 }
 ```
 
@@ -143,6 +157,12 @@ CREATE TABLE IF NOT EXISTS wechat_bindings (
 }
 ```
 
+**平台参数说明**:
+- `wechat` - 微信小程序/公众号
+- `alipay` - 支付宝小程序
+- `qq` - QQ登录
+- `apple` - Apple登录
+
 **错误响应**:
 - 验证码错误：`code: 400`
 - 验证码过期：`code: 400`
@@ -151,18 +171,19 @@ CREATE TABLE IF NOT EXISTS wechat_bindings (
 **流程**:
 1. 验证短信验证码
 2. 删除已使用的验证码
-3. 检查是否已有微信绑定
+3. 检查该平台是否已有绑定
 4. 查询或创建用户
    - 如果用户不存在，创建新用户（角色默认为worker）
    - 如果用户存在，使用现有用户
-5. 更新或创建微信绑定
+5. 更新或创建第三方绑定
 6. 生成JWT token
 7. 返回绑定结果
 
 **特性**:
 - 支持新用户自动注册
-- 支持已有账号绑定微信
-- 如果openid已绑定，更新绑定信息
+- 支持已有账号绑定第三方平台
+- 同一个用户可以绑定多个第三方平台
+- 如果该平台已绑定，更新绑定信息
 - 记录最后登录时间
 
 ## 使用场景
@@ -174,14 +195,14 @@ CREATE TABLE IF NOT EXISTS wechat_bindings (
 3. 填写手机号
 4. 请求发送验证码
 5. 输入验证码
-6. 调用微信绑定接口
+6. 调用第三方绑定接口（platform: "wechat"）
 7. 系统自动创建账号并返回token
 
 ### 场景2: 已有账号绑定微信
 
 1. 用户通过手机号+短信验证码登录
 2. 在小程序中获取微信openid
-3. 调用微信绑定接口绑定openid
+3. 调用第三方绑定接口绑定openid
 4. 后续可使用微信快速登录
 
 ### 场景3: 短信验证码登录
@@ -192,19 +213,41 @@ CREATE TABLE IF NOT EXISTS wechat_bindings (
 4. 调用短信验证码登录接口
 5. 系统返回token
 
+### 场景4: 绑定多个第三方平台
+
+用户可以同时绑定多个第三方平台：
+```json
+// 绑定微信
+{
+  "platform": "wechat",
+  "openid": "wechat_openid_123",
+  "phone": "13800138000",
+  "code": "123456"
+}
+
+// 绑定支付宝
+{
+  "platform": "alipay",
+  "openid": "alipay_openid_456",
+  "phone": "13800138000",
+  "code": "789012"
+}
+```
+
 ## 数据模型
 
-### WeChatBinding 模型
+### ThirdPartyBinding 模型
 
 ```go
-type WeChatBinding struct {
+type ThirdPartyBinding struct {
     BaseModel
     UserID      int64  // 用户ID
-    OpenID      string // 微信OpenID
-    UnionID     string // 微信UnionID
-    AppID       string // 小程序AppID
-    Nickname    string // 微信昵称
-    Avatar      string // 微信头像
+    Platform    string // 第三方平台
+    OpenID      string // 第三方平台OpenID
+    UnionID     string // 第三方平台UnionID
+    AppID       string // 应用AppID
+    Nickname    string // 第三方平台昵称
+    Avatar      string // 第三方平台头像
     Status      string // 绑定状态
     LastLoginAt string // 最后登录时间
 }
@@ -228,21 +271,21 @@ TTL: 300s
 ## 代码结构
 
 ### 数据库访问层
-- `dal/mysql/wechat_binding.go` - 微信绑定CRUD操作
+- `dal/mysql/third_party_binding.go` - 第三方绑定CRUD操作
 
 ### 业务逻辑层
 - `biz/logic/auth/send_sms_code.go` - 发送验证码逻辑
 - `biz/logic/auth/login_with_sms_code.go` - 短信登录逻辑
-- `biz/logic/auth/wechat_login_bind.go` - 微信绑定逻辑
+- `biz/logic/auth/third_party_bind.go` - 第三方绑定逻辑
 
 ### Handler层
 - `biz/handler/auth/send_smscode.go` - 发送验证码接口
 - `biz/handler/auth/login_with_smscode.go` - 短信登录接口
-- `biz/handler/auth/we_chat_login_bind.go` - 微信绑定接口
+- `biz/handler/auth/third_party_login_bind.go` - 第三方绑定接口
 
 ### 数据模型
-- `models/wechat_binding.go` - 微信绑定模型
-- `schemas/wechat_bindings.sql` - 数据库表结构
+- `models/third_party_binding.go` - 第三方绑定模型
+- `schemas/third_party_bindings.sql` - 数据库表结构
 
 ## 待完善功能
 
@@ -294,19 +337,37 @@ curl -X POST http://localhost:8888/api/v1/auth/login-with-sms \
   }'
 ```
 
-### 3. 微信绑定测试
+### 3. 第三方绑定测试
 
+**微信绑定**:
 ```bash
-curl -X POST http://localhost:8888/api/v1/auth/wechat-bind \
+curl -X POST http://localhost:8888/api/v1/auth/third-party-bind \
   -H "Content-Type: application/json" \
   -d '{
+    "platform": "wechat",
     "openid": "test_openid_12345",
     "unionid": "test_unionid_12345",
     "appid": "wx1234567890abcdef",
     "phone": "13800138000",
     "code": "123456",
-    "nickname": "测试用户",
+    "nickname": "微信用户",
     "avatar": "https://example.com/avatar.jpg"
+  }'
+```
+
+**支付宝绑定**:
+```bash
+curl -X POST http://localhost:8888/api/v1/auth/third-party-bind \
+  -H "Content-Type: application/json" \
+  -d '{
+    "platform": "alipay",
+    "openid": "alipay_openid_67890",
+    "unionid": "alipay_unionid_67890",
+    "appid": "alipay_app_id",
+    "phone": "13800138000",
+    "code": "123456",
+    "nickname": "支付宝用户",
+    "avatar": "https://example.com/alipay_avatar.jpg"
   }'
 ```
 
@@ -319,7 +380,7 @@ curl -X POST http://localhost:8888/api/v1/auth/wechat-bind \
 ./labor-clients -mode migrate -env prod
 
 # 方式2: 手动执行SQL
-mysql -u root -p labors < schemas/wechat_bindings.sql
+mysql -u root -p labors < schemas/third_party_bindings.sql
 ```
 
 ## 日志输出
@@ -347,9 +408,10 @@ mysql -u root -p labors < schemas/wechat_bindings.sql
 
 {
   "level": "info",
-  "msg": "微信登录绑定成功",
+  "msg": "第三方登录绑定成功",
   "user_id": 123456,
   "phone": "13800138000",
+  "platform": "wechat",
   "openid": "test_openid_12345",
   "is_new_user": true,
   "time": "2025-01-23T10:00:00Z"
@@ -362,12 +424,12 @@ mysql -u root -p labors < schemas/wechat_bindings.sql
 2. **验证码安全**：生产环境应从响应中移除验证码字段
 3. **用户创建**：新用户默认角色为worker，需要根据业务调整
 4. **默认密码**：当前使用固定默认密码，建议改进
-5. **绑定唯一性**：一个openid只能绑定一个账号
+5. **绑定唯一性**：同一个平台+openid只能绑定一个账号
 6. **软删除**：支持软删除绑定记录
+7. **平台扩展**：支持新增其他第三方平台，只需传入不同的platform参数
 
 ## 相关文档
 
 - [微信云托管部署文档](./wechat_cloud_deployment.md)
 - [数据库设计文档](./database_mapping.md)
 - [API设计文档](./api_design.md)
-

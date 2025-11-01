@@ -13,14 +13,14 @@ import (
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
-// WeChatLoginBindLogic 微信登录绑定业务逻辑
-func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*auth.WeChatLoginBindResp, error) {
+// ThirdPartyLoginBindLogic 第三方登录绑定业务逻辑
+func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBindReq) (*auth.ThirdPartyLoginBindResp, error) {
 	// 1. 验证短信验证码
 	key := fmt.Sprintf("sms_code:%s", req.Phone)
 	storedCode, err := redis.Get(key)
 	if err != nil {
 		utils.Errorf("从Redis获取验证码失败: %v", err)
-		return &auth.WeChatLoginBindResp{
+		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      400,
 				Message:   "验证码已过期或无效",
@@ -33,7 +33,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 		utils.LogWithFields(map[string]interface{}{
 			"phone": req.Phone,
 		}).Warn("验证码错误")
-		return &auth.WeChatLoginBindResp{
+		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      400,
 				Message:   "验证码错误",
@@ -48,11 +48,11 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 		utils.Warnf("删除已使用的验证码失败: %v", err)
 	}
 
-	// 3. 检查是否已有微信绑定
-	existingBinding, err := mysql.GetWeChatBindingByOpenID(ctx, req.Openid)
+	// 3. 检查是否已有该平台的绑定
+	existingBinding, err := mysql.GetThirdPartyBindingByPlatformAndOpenID(ctx, req.Platform, req.Openid)
 	if err != nil {
-		utils.Errorf("查询微信绑定失败: %v", err)
-		return &auth.WeChatLoginBindResp{
+		utils.Errorf("查询第三方绑定失败: %v", err)
+		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      500,
 				Message:   "系统错误",
@@ -67,7 +67,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 
 	if err != nil {
 		utils.Errorf("查询用户失败: %v", err)
-		return &auth.WeChatLoginBindResp{
+		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      500,
 				Message:   "系统错误",
@@ -85,7 +85,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 		hashedPassword, err := utils.HashPassword(defaultPassword)
 		if err != nil {
 			utils.Errorf("密码加密失败: %v", err)
-			return &auth.WeChatLoginBindResp{
+			return &auth.ThirdPartyLoginBindResp{
 				Base: &common.BaseResp{
 					Code:      500,
 					Message:   "系统错误",
@@ -106,7 +106,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 
 		if err := mysql.CreateUser(ctx, user); err != nil {
 			utils.Errorf("创建用户失败: %v", err)
-			return &auth.WeChatLoginBindResp{
+			return &auth.ThirdPartyLoginBindResp{
 				Base: &common.BaseResp{
 					Code:      500,
 					Message:   "创建用户失败",
@@ -118,7 +118,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 		utils.Infof("创建新用户成功, UserID: %d", user.ID)
 	}
 
-	// 5. 如果已有微信绑定，更新绑定信息；否则创建新绑定
+	// 5. 如果已有该平台绑定，更新绑定信息；否则创建新绑定
 	if existingBinding != nil {
 		// 更新绑定信息
 		updateData := map[string]interface{}{
@@ -129,9 +129,9 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 			"last_login_at": time.Now().Format("2006-01-02 15:04:05"),
 		}
 		
-		if err := mysql.UpdateWeChatBinding(ctx, existingBinding.ID, updateData); err != nil {
-			utils.Errorf("更新微信绑定失败: %v", err)
-			return &auth.WeChatLoginBindResp{
+		if err := mysql.UpdateThirdPartyBinding(ctx, existingBinding.ID, updateData); err != nil {
+			utils.Errorf("更新第三方绑定失败: %v", err)
+			return &auth.ThirdPartyLoginBindResp{
 				Base: &common.BaseResp{
 					Code:      500,
 					Message:   "更新绑定失败",
@@ -140,9 +140,10 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 			}, nil
 		}
 	} else {
-		// 创建新的微信绑定
-		binding := &models.WeChatBinding{
+		// 创建新的第三方绑定
+		binding := &models.ThirdPartyBinding{
 			UserID:      user.ID,
+			Platform:    req.Platform,
 			OpenID:      req.Openid,
 			UnionID:     req.Unionid,
 			AppID:       req.Appid,
@@ -152,9 +153,9 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 			LastLoginAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 
-		if err := mysql.CreateWeChatBinding(ctx, binding); err != nil {
-			utils.Errorf("创建微信绑定失败: %v", err)
-			return &auth.WeChatLoginBindResp{
+		if err := mysql.CreateThirdPartyBinding(ctx, binding); err != nil {
+			utils.Errorf("创建第三方绑定失败: %v", err)
+			return &auth.ThirdPartyLoginBindResp{
 				Base: &common.BaseResp{
 					Code:      500,
 					Message:   "创建绑定失败",
@@ -168,7 +169,7 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 	token, err := utils.GenerateToken(user.ID, user.Role)
 	if err != nil {
 		utils.Errorf("生成token失败: %v", err)
-		return &auth.WeChatLoginBindResp{
+		return &auth.ThirdPartyLoginBindResp{
 			Base: &common.BaseResp{
 				Code:      500,
 				Message:   "系统错误",
@@ -180,11 +181,12 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 	utils.LogWithFields(map[string]interface{}{
 		"user_id":     user.ID,
 		"phone":       req.Phone,
+		"platform":    req.Platform,
 		"openid":      req.Openid,
 		"is_new_user": isNewUser,
-	}).Info("微信登录绑定成功")
+	}).Info("第三方登录绑定成功")
 
-	return &auth.WeChatLoginBindResp{
+	return &auth.ThirdPartyLoginBindResp{
 		Base: &common.BaseResp{
 			Code:      200,
 			Message:   "登录成功",
@@ -196,4 +198,3 @@ func WeChatLoginBindLogic(ctx context.Context, req *auth.WeChatLoginBindReq) (*a
 		ExpiresAt:  time.Now().Add(utils.TokenExpire).Format(time.RFC3339),
 	}, nil
 }
-

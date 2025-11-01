@@ -74,3 +74,8 @@ func _wechatloginbindMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _thirdpartyloginbindMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

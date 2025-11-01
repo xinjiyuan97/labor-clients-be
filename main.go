@@ -213,7 +213,7 @@ func runMigrate(cfg *config.Config) {
 		&models.Message{},
 		&models.CommunityPost{},
 		&models.UserFavoriteJob{},
-		&models.WeChatBinding{},
+		&models.ThirdPartyBinding{},
 	}
 
 	utils.LogWithFields(map[string]interface{}{

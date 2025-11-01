@@ -11,18 +11,18 @@ import (
 	auth "github.com/xinjiyuan97/labor-clients/biz/model/auth"
 )
 
-// WeChatLoginBind .
-// @router /api/v1/auth/wechat-bind [POST]
-func WeChatLoginBind(ctx context.Context, c *app.RequestContext) {
+// ThirdPartyLoginBind .
+// @router /api/v1/auth/third-party-bind [POST]
+func ThirdPartyLoginBind(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req auth.WeChatLoginBindReq
+	var req auth.ThirdPartyLoginBindReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp, err := authlogic.WeChatLoginBindLogic(ctx, &req)
+	resp, err := authlogic.ThirdPartyLoginBindLogic(ctx, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

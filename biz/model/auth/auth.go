@@ -2904,60 +2904,66 @@ func (p *LoginWithSMSCodeReq) String() string {
 
 }
 
-// 微信登录绑定请求
-type WeChatLoginBindReq struct {
-	Openid   string `thrift:"openid,1" form:"openid" json:"openid" vd:"len($)>0"`
-	Unionid  string `thrift:"unionid,2" form:"unionid" json:"unionid"`
-	Appid    string `thrift:"appid,3" form:"appid" json:"appid" vd:"len($)>0"`
-	Phone    string `thrift:"phone,4" form:"phone" json:"phone" vd:"len($)>0"`
-	Code     string `thrift:"code,5" form:"code" json:"code" vd:"len($)>0"`
-	Nickname string `thrift:"nickname,6" form:"nickname" json:"nickname"`
-	Avatar   string `thrift:"avatar,7" form:"avatar" json:"avatar"`
+// 第三方登录绑定请求
+type ThirdPartyLoginBindReq struct {
+	Platform string `thrift:"platform,1" form:"platform" json:"platform" vd:"len($)>0"`
+	Openid   string `thrift:"openid,2" form:"openid" json:"openid" vd:"len($)>0"`
+	Unionid  string `thrift:"unionid,3" form:"unionid" json:"unionid"`
+	Appid    string `thrift:"appid,4" form:"appid" json:"appid" vd:"len($)>0"`
+	Phone    string `thrift:"phone,5" form:"phone" json:"phone" vd:"len($)>0"`
+	Code     string `thrift:"code,6" form:"code" json:"code" vd:"len($)>0"`
+	Nickname string `thrift:"nickname,7" form:"nickname" json:"nickname"`
+	Avatar   string `thrift:"avatar,8" form:"avatar" json:"avatar"`
 }
 
-func NewWeChatLoginBindReq() *WeChatLoginBindReq {
-	return &WeChatLoginBindReq{}
+func NewThirdPartyLoginBindReq() *ThirdPartyLoginBindReq {
+	return &ThirdPartyLoginBindReq{}
 }
 
-func (p *WeChatLoginBindReq) GetOpenid() (v string) {
+func (p *ThirdPartyLoginBindReq) GetPlatform() (v string) {
+	return p.Platform
+}
+
+func (p *ThirdPartyLoginBindReq) GetOpenid() (v string) {
 	return p.Openid
 }
 
-func (p *WeChatLoginBindReq) GetUnionid() (v string) {
+func (p *ThirdPartyLoginBindReq) GetUnionid() (v string) {
 	return p.Unionid
 }
 
-func (p *WeChatLoginBindReq) GetAppid() (v string) {
+func (p *ThirdPartyLoginBindReq) GetAppid() (v string) {
 	return p.Appid
 }
 
-func (p *WeChatLoginBindReq) GetPhone() (v string) {
+func (p *ThirdPartyLoginBindReq) GetPhone() (v string) {
 	return p.Phone
 }
 
-func (p *WeChatLoginBindReq) GetCode() (v string) {
+func (p *ThirdPartyLoginBindReq) GetCode() (v string) {
 	return p.Code
 }
 
-func (p *WeChatLoginBindReq) GetNickname() (v string) {
+func (p *ThirdPartyLoginBindReq) GetNickname() (v string) {
 	return p.Nickname
 }
 
-func (p *WeChatLoginBindReq) GetAvatar() (v string) {
+func (p *ThirdPartyLoginBindReq) GetAvatar() (v string) {
 	return p.Avatar
 }
 
-var fieldIDToName_WeChatLoginBindReq = map[int16]string{
-	1: "openid",
-	2: "unionid",
-	3: "appid",
-	4: "phone",
-	5: "code",
-	6: "nickname",
-	7: "avatar",
+var fieldIDToName_ThirdPartyLoginBindReq = map[int16]string{
+	1: "platform",
+	2: "openid",
+	3: "unionid",
+	4: "appid",
+	5: "phone",
+	6: "code",
+	7: "nickname",
+	8: "avatar",
 }
 
-func (p *WeChatLoginBindReq) Read(iprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindReq) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -3032,6 +3038,14 @@ func (p *WeChatLoginBindReq) Read(iprot thrift.TProtocol) (err error) {
 			} else if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
 			}
+		case 8:
+			if fieldTypeId == thrift.STRING {
+				if err = p.ReadField8(iprot); err != nil {
+					goto ReadFieldError
+				}
+			} else if err = iprot.Skip(fieldTypeId); err != nil {
+				goto SkipFieldError
+			}
 		default:
 			if err = iprot.Skip(fieldTypeId); err != nil {
 				goto SkipFieldError
@@ -3051,7 +3065,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WeChatLoginBindReq[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ThirdPartyLoginBindReq[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3061,7 +3075,18 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) ReadField1(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField1(iprot thrift.TProtocol) error {
+
+	var _field string
+	if v, err := iprot.ReadString(); err != nil {
+		return err
+	} else {
+		_field = v
+	}
+	p.Platform = _field
+	return nil
+}
+func (p *ThirdPartyLoginBindReq) ReadField2(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3072,7 +3097,7 @@ func (p *WeChatLoginBindReq) ReadField1(iprot thrift.TProtocol) error {
 	p.Openid = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField2(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField3(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3083,7 +3108,7 @@ func (p *WeChatLoginBindReq) ReadField2(iprot thrift.TProtocol) error {
 	p.Unionid = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField3(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField4(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3094,7 +3119,7 @@ func (p *WeChatLoginBindReq) ReadField3(iprot thrift.TProtocol) error {
 	p.Appid = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField4(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3105,7 +3130,7 @@ func (p *WeChatLoginBindReq) ReadField4(iprot thrift.TProtocol) error {
 	p.Phone = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField5(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField6(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3116,7 +3141,7 @@ func (p *WeChatLoginBindReq) ReadField5(iprot thrift.TProtocol) error {
 	p.Code = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField6(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField7(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3127,7 +3152,7 @@ func (p *WeChatLoginBindReq) ReadField6(iprot thrift.TProtocol) error {
 	p.Nickname = _field
 	return nil
 }
-func (p *WeChatLoginBindReq) ReadField7(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindReq) ReadField8(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3139,9 +3164,9 @@ func (p *WeChatLoginBindReq) ReadField7(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *WeChatLoginBindReq) Write(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindReq) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("WeChatLoginBindReq"); err != nil {
+	if err = oprot.WriteStructBegin("ThirdPartyLoginBindReq"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3173,6 +3198,10 @@ func (p *WeChatLoginBindReq) Write(oprot thrift.TProtocol) (err error) {
 			fieldId = 7
 			goto WriteFieldError
 		}
+		if err = p.writeField8(oprot); err != nil {
+			fieldId = 8
+			goto WriteFieldError
+		}
 	}
 	if err = oprot.WriteFieldStop(); err != nil {
 		goto WriteFieldStopError
@@ -3191,11 +3220,11 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField1(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("openid", thrift.STRING, 1); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField1(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("platform", thrift.STRING, 1); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Openid); err != nil {
+	if err := oprot.WriteString(p.Platform); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3208,11 +3237,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField2(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("unionid", thrift.STRING, 2); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField2(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("openid", thrift.STRING, 2); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Unionid); err != nil {
+	if err := oprot.WriteString(p.Openid); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3225,11 +3254,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("appid", thrift.STRING, 3); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField3(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("unionid", thrift.STRING, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Appid); err != nil {
+	if err := oprot.WriteString(p.Unionid); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3242,11 +3271,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField4(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("phone", thrift.STRING, 4); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField4(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("appid", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Phone); err != nil {
+	if err := oprot.WriteString(p.Appid); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3259,11 +3288,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField5(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("code", thrift.STRING, 5); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField5(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("phone", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Code); err != nil {
+	if err := oprot.WriteString(p.Phone); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3276,11 +3305,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField6(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("nickname", thrift.STRING, 6); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField6(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("code", thrift.STRING, 6); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Nickname); err != nil {
+	if err := oprot.WriteString(p.Code); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3293,11 +3322,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 6 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) writeField7(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("avatar", thrift.STRING, 7); err != nil {
+func (p *ThirdPartyLoginBindReq) writeField7(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("nickname", thrift.STRING, 7); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteString(p.Avatar); err != nil {
+	if err := oprot.WriteString(p.Nickname); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -3310,16 +3339,33 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 7 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindReq) String() string {
+func (p *ThirdPartyLoginBindReq) writeField8(oprot thrift.TProtocol) (err error) {
+	if err = oprot.WriteFieldBegin("avatar", thrift.STRING, 8); err != nil {
+		goto WriteFieldBeginError
+	}
+	if err := oprot.WriteString(p.Avatar); err != nil {
+		return err
+	}
+	if err = oprot.WriteFieldEnd(); err != nil {
+		goto WriteFieldEndError
+	}
+	return nil
+WriteFieldBeginError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 begin error: ", p), err)
+WriteFieldEndError:
+	return thrift.PrependError(fmt.Sprintf("%T write field 8 end error: ", p), err)
+}
+
+func (p *ThirdPartyLoginBindReq) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("WeChatLoginBindReq(%+v)", *p)
+	return fmt.Sprintf("ThirdPartyLoginBindReq(%+v)", *p)
 
 }
 
-// 微信登录绑定响应
-type WeChatLoginBindResp struct {
+// 第三方登录绑定响应
+type ThirdPartyLoginBindResp struct {
 	Base      *common.BaseResp `thrift:"base,1" form:"base" json:"base"`
 	IsNewUser bool             `thrift:"is_new_user,2" form:"is_new_user" json:"is_new_user"`
 	UserID    int64            `thrift:"user_id,3" json:"user_id,string" form:"user_id" `
@@ -3327,36 +3373,36 @@ type WeChatLoginBindResp struct {
 	ExpiresAt string           `thrift:"expires_at,5" form:"expires_at" json:"expires_at"`
 }
 
-func NewWeChatLoginBindResp() *WeChatLoginBindResp {
-	return &WeChatLoginBindResp{}
+func NewThirdPartyLoginBindResp() *ThirdPartyLoginBindResp {
+	return &ThirdPartyLoginBindResp{}
 }
 
-var WeChatLoginBindResp_Base_DEFAULT *common.BaseResp
+var ThirdPartyLoginBindResp_Base_DEFAULT *common.BaseResp
 
-func (p *WeChatLoginBindResp) GetBase() (v *common.BaseResp) {
+func (p *ThirdPartyLoginBindResp) GetBase() (v *common.BaseResp) {
 	if !p.IsSetBase() {
-		return WeChatLoginBindResp_Base_DEFAULT
+		return ThirdPartyLoginBindResp_Base_DEFAULT
 	}
 	return p.Base
 }
 
-func (p *WeChatLoginBindResp) GetIsNewUser() (v bool) {
+func (p *ThirdPartyLoginBindResp) GetIsNewUser() (v bool) {
 	return p.IsNewUser
 }
 
-func (p *WeChatLoginBindResp) GetUserID() (v int64) {
+func (p *ThirdPartyLoginBindResp) GetUserID() (v int64) {
 	return p.UserID
 }
 
-func (p *WeChatLoginBindResp) GetToken() (v string) {
+func (p *ThirdPartyLoginBindResp) GetToken() (v string) {
 	return p.Token
 }
 
-func (p *WeChatLoginBindResp) GetExpiresAt() (v string) {
+func (p *ThirdPartyLoginBindResp) GetExpiresAt() (v string) {
 	return p.ExpiresAt
 }
 
-var fieldIDToName_WeChatLoginBindResp = map[int16]string{
+var fieldIDToName_ThirdPartyLoginBindResp = map[int16]string{
 	1: "base",
 	2: "is_new_user",
 	3: "user_id",
@@ -3364,11 +3410,11 @@ var fieldIDToName_WeChatLoginBindResp = map[int16]string{
 	5: "expires_at",
 }
 
-func (p *WeChatLoginBindResp) IsSetBase() bool {
+func (p *ThirdPartyLoginBindResp) IsSetBase() bool {
 	return p.Base != nil
 }
 
-func (p *WeChatLoginBindResp) Read(iprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -3446,7 +3492,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_WeChatLoginBindResp[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_ThirdPartyLoginBindResp[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -3456,7 +3502,7 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) ReadField1(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindResp) ReadField1(iprot thrift.TProtocol) error {
 	_field := common.NewBaseResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
@@ -3464,7 +3510,7 @@ func (p *WeChatLoginBindResp) ReadField1(iprot thrift.TProtocol) error {
 	p.Base = _field
 	return nil
 }
-func (p *WeChatLoginBindResp) ReadField2(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindResp) ReadField2(iprot thrift.TProtocol) error {
 
 	var _field bool
 	if v, err := iprot.ReadBool(); err != nil {
@@ -3475,7 +3521,7 @@ func (p *WeChatLoginBindResp) ReadField2(iprot thrift.TProtocol) error {
 	p.IsNewUser = _field
 	return nil
 }
-func (p *WeChatLoginBindResp) ReadField3(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindResp) ReadField3(iprot thrift.TProtocol) error {
 
 	var _field int64
 	if v, err := iprot.ReadI64(); err != nil {
@@ -3486,7 +3532,7 @@ func (p *WeChatLoginBindResp) ReadField3(iprot thrift.TProtocol) error {
 	p.UserID = _field
 	return nil
 }
-func (p *WeChatLoginBindResp) ReadField4(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindResp) ReadField4(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3497,7 +3543,7 @@ func (p *WeChatLoginBindResp) ReadField4(iprot thrift.TProtocol) error {
 	p.Token = _field
 	return nil
 }
-func (p *WeChatLoginBindResp) ReadField5(iprot thrift.TProtocol) error {
+func (p *ThirdPartyLoginBindResp) ReadField5(iprot thrift.TProtocol) error {
 
 	var _field string
 	if v, err := iprot.ReadString(); err != nil {
@@ -3509,9 +3555,9 @@ func (p *WeChatLoginBindResp) ReadField5(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *WeChatLoginBindResp) Write(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("WeChatLoginBindResp"); err != nil {
+	if err = oprot.WriteStructBegin("ThirdPartyLoginBindResp"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -3553,7 +3599,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("base", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3570,7 +3616,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) writeField2(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("is_new_user", thrift.BOOL, 2); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3587,7 +3633,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 2 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) writeField3(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("user_id", thrift.I64, 3); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3604,7 +3650,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 3 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) writeField4(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("token", thrift.STRING, 4); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3621,7 +3667,7 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 4 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) writeField5(oprot thrift.TProtocol) (err error) {
+func (p *ThirdPartyLoginBindResp) writeField5(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("expires_at", thrift.STRING, 5); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -3638,11 +3684,11 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 5 end error: ", p), err)
 }
 
-func (p *WeChatLoginBindResp) String() string {
+func (p *ThirdPartyLoginBindResp) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("WeChatLoginBindResp(%+v)", *p)
+	return fmt.Sprintf("ThirdPartyLoginBindResp(%+v)", *p)
 
 }
 
@@ -3663,7 +3709,7 @@ type AuthService interface {
 
 	LoginWithSMSCode(ctx context.Context, request *LoginWithSMSCodeReq) (r *LoginResp, err error)
 
-	WeChatLoginBind(ctx context.Context, request *WeChatLoginBindReq) (r *WeChatLoginBindResp, err error)
+	ThirdPartyLoginBind(ctx context.Context, request *ThirdPartyLoginBindReq) (r *ThirdPartyLoginBindResp, err error)
 }
 
 type AuthServiceClient struct {
@@ -3764,11 +3810,11 @@ func (p *AuthServiceClient) LoginWithSMSCode(ctx context.Context, request *Login
 	}
 	return _result.GetSuccess(), nil
 }
-func (p *AuthServiceClient) WeChatLoginBind(ctx context.Context, request *WeChatLoginBindReq) (r *WeChatLoginBindResp, err error) {
-	var _args AuthServiceWeChatLoginBindArgs
+func (p *AuthServiceClient) ThirdPartyLoginBind(ctx context.Context, request *ThirdPartyLoginBindReq) (r *ThirdPartyLoginBindResp, err error) {
+	var _args AuthServiceThirdPartyLoginBindArgs
 	_args.Request = request
-	var _result AuthServiceWeChatLoginBindResult
-	if err = p.Client_().Call(ctx, "WeChatLoginBind", &_args, &_result); err != nil {
+	var _result AuthServiceThirdPartyLoginBindResult
+	if err = p.Client_().Call(ctx, "ThirdPartyLoginBind", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
@@ -3802,7 +3848,7 @@ func NewAuthServiceProcessor(handler AuthService) *AuthServiceProcessor {
 	self.AddToProcessorMap("ChangePassword", &authServiceProcessorChangePassword{handler: handler})
 	self.AddToProcessorMap("SendSMSCode", &authServiceProcessorSendSMSCode{handler: handler})
 	self.AddToProcessorMap("LoginWithSMSCode", &authServiceProcessorLoginWithSMSCode{handler: handler})
-	self.AddToProcessorMap("WeChatLoginBind", &authServiceProcessorWeChatLoginBind{handler: handler})
+	self.AddToProcessorMap("ThirdPartyLoginBind", &authServiceProcessorThirdPartyLoginBind{handler: handler})
 	return self
 }
 func (p *AuthServiceProcessor) Process(ctx context.Context, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -4207,16 +4253,16 @@ func (p *authServiceProcessorLoginWithSMSCode) Process(ctx context.Context, seqI
 	return true, err
 }
 
-type authServiceProcessorWeChatLoginBind struct {
+type authServiceProcessorThirdPartyLoginBind struct {
 	handler AuthService
 }
 
-func (p *authServiceProcessorWeChatLoginBind) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := AuthServiceWeChatLoginBindArgs{}
+func (p *authServiceProcessorThirdPartyLoginBind) Process(ctx context.Context, seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := AuthServiceThirdPartyLoginBindArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("WeChatLoginBind", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("ThirdPartyLoginBind", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4225,11 +4271,11 @@ func (p *authServiceProcessorWeChatLoginBind) Process(ctx context.Context, seqId
 
 	iprot.ReadMessageEnd()
 	var err2 error
-	result := AuthServiceWeChatLoginBindResult{}
-	var retval *WeChatLoginBindResp
-	if retval, err2 = p.handler.WeChatLoginBind(ctx, args.Request); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing WeChatLoginBind: "+err2.Error())
-		oprot.WriteMessageBegin("WeChatLoginBind", thrift.EXCEPTION, seqId)
+	result := AuthServiceThirdPartyLoginBindResult{}
+	var retval *ThirdPartyLoginBindResp
+	if retval, err2 = p.handler.ThirdPartyLoginBind(ctx, args.Request); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing ThirdPartyLoginBind: "+err2.Error())
+		oprot.WriteMessageBegin("ThirdPartyLoginBind", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush(ctx)
@@ -4237,7 +4283,7 @@ func (p *authServiceProcessorWeChatLoginBind) Process(ctx context.Context, seqId
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("WeChatLoginBind", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("ThirdPartyLoginBind", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -6559,32 +6605,32 @@ func (p *AuthServiceLoginWithSMSCodeResult) String() string {
 
 }
 
-type AuthServiceWeChatLoginBindArgs struct {
-	Request *WeChatLoginBindReq `thrift:"request,1"`
+type AuthServiceThirdPartyLoginBindArgs struct {
+	Request *ThirdPartyLoginBindReq `thrift:"request,1"`
 }
 
-func NewAuthServiceWeChatLoginBindArgs() *AuthServiceWeChatLoginBindArgs {
-	return &AuthServiceWeChatLoginBindArgs{}
+func NewAuthServiceThirdPartyLoginBindArgs() *AuthServiceThirdPartyLoginBindArgs {
+	return &AuthServiceThirdPartyLoginBindArgs{}
 }
 
-var AuthServiceWeChatLoginBindArgs_Request_DEFAULT *WeChatLoginBindReq
+var AuthServiceThirdPartyLoginBindArgs_Request_DEFAULT *ThirdPartyLoginBindReq
 
-func (p *AuthServiceWeChatLoginBindArgs) GetRequest() (v *WeChatLoginBindReq) {
+func (p *AuthServiceThirdPartyLoginBindArgs) GetRequest() (v *ThirdPartyLoginBindReq) {
 	if !p.IsSetRequest() {
-		return AuthServiceWeChatLoginBindArgs_Request_DEFAULT
+		return AuthServiceThirdPartyLoginBindArgs_Request_DEFAULT
 	}
 	return p.Request
 }
 
-var fieldIDToName_AuthServiceWeChatLoginBindArgs = map[int16]string{
+var fieldIDToName_AuthServiceThirdPartyLoginBindArgs = map[int16]string{
 	1: "request",
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) IsSetRequest() bool {
+func (p *AuthServiceThirdPartyLoginBindArgs) IsSetRequest() bool {
 	return p.Request != nil
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) Read(iprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindArgs) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -6630,7 +6676,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AuthServiceWeChatLoginBindArgs[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AuthServiceThirdPartyLoginBindArgs[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6640,8 +6686,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) ReadField1(iprot thrift.TProtocol) error {
-	_field := NewWeChatLoginBindReq()
+func (p *AuthServiceThirdPartyLoginBindArgs) ReadField1(iprot thrift.TProtocol) error {
+	_field := NewThirdPartyLoginBindReq()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -6649,9 +6695,9 @@ func (p *AuthServiceWeChatLoginBindArgs) ReadField1(iprot thrift.TProtocol) erro
 	return nil
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) Write(oprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindArgs) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("WeChatLoginBind_args"); err != nil {
+	if err = oprot.WriteStructBegin("ThirdPartyLoginBind_args"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -6677,7 +6723,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindArgs) writeField1(oprot thrift.TProtocol) (err error) {
 	if err = oprot.WriteFieldBegin("request", thrift.STRUCT, 1); err != nil {
 		goto WriteFieldBeginError
 	}
@@ -6694,40 +6740,40 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 1 end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindArgs) String() string {
+func (p *AuthServiceThirdPartyLoginBindArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("AuthServiceWeChatLoginBindArgs(%+v)", *p)
+	return fmt.Sprintf("AuthServiceThirdPartyLoginBindArgs(%+v)", *p)
 
 }
 
-type AuthServiceWeChatLoginBindResult struct {
-	Success *WeChatLoginBindResp `thrift:"success,0,optional"`
+type AuthServiceThirdPartyLoginBindResult struct {
+	Success *ThirdPartyLoginBindResp `thrift:"success,0,optional"`
 }
 
-func NewAuthServiceWeChatLoginBindResult() *AuthServiceWeChatLoginBindResult {
-	return &AuthServiceWeChatLoginBindResult{}
+func NewAuthServiceThirdPartyLoginBindResult() *AuthServiceThirdPartyLoginBindResult {
+	return &AuthServiceThirdPartyLoginBindResult{}
 }
 
-var AuthServiceWeChatLoginBindResult_Success_DEFAULT *WeChatLoginBindResp
+var AuthServiceThirdPartyLoginBindResult_Success_DEFAULT *ThirdPartyLoginBindResp
 
-func (p *AuthServiceWeChatLoginBindResult) GetSuccess() (v *WeChatLoginBindResp) {
+func (p *AuthServiceThirdPartyLoginBindResult) GetSuccess() (v *ThirdPartyLoginBindResp) {
 	if !p.IsSetSuccess() {
-		return AuthServiceWeChatLoginBindResult_Success_DEFAULT
+		return AuthServiceThirdPartyLoginBindResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-var fieldIDToName_AuthServiceWeChatLoginBindResult = map[int16]string{
+var fieldIDToName_AuthServiceThirdPartyLoginBindResult = map[int16]string{
 	0: "success",
 }
 
-func (p *AuthServiceWeChatLoginBindResult) IsSetSuccess() bool {
+func (p *AuthServiceThirdPartyLoginBindResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *AuthServiceWeChatLoginBindResult) Read(iprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindResult) Read(iprot thrift.TProtocol) (err error) {
 
 	var fieldTypeId thrift.TType
 	var fieldId int16
@@ -6773,7 +6819,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AuthServiceWeChatLoginBindResult[fieldId]), err)
+	return thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_AuthServiceThirdPartyLoginBindResult[fieldId]), err)
 SkipFieldError:
 	return thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 
@@ -6783,8 +6829,8 @@ ReadStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindResult) ReadField0(iprot thrift.TProtocol) error {
-	_field := NewWeChatLoginBindResp()
+func (p *AuthServiceThirdPartyLoginBindResult) ReadField0(iprot thrift.TProtocol) error {
+	_field := NewThirdPartyLoginBindResp()
 	if err := _field.Read(iprot); err != nil {
 		return err
 	}
@@ -6792,9 +6838,9 @@ func (p *AuthServiceWeChatLoginBindResult) ReadField0(iprot thrift.TProtocol) er
 	return nil
 }
 
-func (p *AuthServiceWeChatLoginBindResult) Write(oprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindResult) Write(oprot thrift.TProtocol) (err error) {
 	var fieldId int16
-	if err = oprot.WriteStructBegin("WeChatLoginBind_result"); err != nil {
+	if err = oprot.WriteStructBegin("ThirdPartyLoginBind_result"); err != nil {
 		goto WriteStructBeginError
 	}
 	if p != nil {
@@ -6820,7 +6866,7 @@ WriteStructEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write struct end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *AuthServiceThirdPartyLoginBindResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err = oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			goto WriteFieldBeginError
@@ -6839,10 +6885,10 @@ WriteFieldEndError:
 	return thrift.PrependError(fmt.Sprintf("%T write field 0 end error: ", p), err)
 }
 
-func (p *AuthServiceWeChatLoginBindResult) String() string {
+func (p *AuthServiceThirdPartyLoginBindResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("AuthServiceWeChatLoginBindResult(%+v)", *p)
+	return fmt.Sprintf("AuthServiceThirdPartyLoginBindResult(%+v)", *p)
 
 }
