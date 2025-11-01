@@ -76,6 +76,44 @@ struct ChangePasswordResp {
     1: common.BaseResp base (api.body="base");
 }
 
+// 发送短信验证码请求
+struct SendSMSCodeReq {
+    1: string phone (api.body="phone", api.vd="len($)>0");
+}
+
+// 发送短信验证码响应
+struct SendSMSCodeResp {
+    1: common.BaseResp base (api.body="base");
+    2: string code (api.body="code");
+    3: i32 expires_in (api.body="expires_in");
+}
+
+// 短信验证码登录请求
+struct LoginWithSMSCodeReq {
+    1: string phone (api.body="phone", api.vd="len($)>0");
+    2: string code (api.body="code", api.vd="len($)>0");
+}
+
+// 微信登录绑定请求
+struct WeChatLoginBindReq {
+    1: string openid (api.body="openid", api.vd="len($)>0");
+    2: string unionid (api.body="unionid");
+    3: string appid (api.body="appid", api.vd="len($)>0");
+    4: string phone (api.body="phone", api.vd="len($)>0");
+    5: string code (api.body="code", api.vd="len($)>0");
+    6: string nickname (api.body="nickname");
+    7: string avatar (api.body="avatar");
+}
+
+// 微信登录绑定响应
+struct WeChatLoginBindResp {
+    1: common.BaseResp base (api.body="base");
+    2: bool is_new_user (api.body="is_new_user");
+    3: i64 user_id (api.body="user_id" go.tag="json:\"user_id,string\"");
+    4: string token (api.body="token");
+    5: string expires_at (api.body="expires_at");
+}
+
 service AuthService {
     RegisterResp Register(1: RegisterReq request) (api.post="/api/v1/auth/register");
     LoginResp Login(1: LoginReq request) (api.post="/api/v1/auth/login");
@@ -83,4 +121,7 @@ service AuthService {
     RefreshTokenResp RefreshToken(1: RefreshTokenReq request) (api.post="/api/v1/auth/refresh");
     GetUserProfileResp GetUserProfile(1: GetUserProfileReq request) (api.get="/api/v1/auth/profile");
     ChangePasswordResp ChangePassword(1: ChangePasswordReq request) (api.post="/api/v1/auth/change-password");
+    SendSMSCodeResp SendSMSCode(1: SendSMSCodeReq request) (api.post="/api/v1/auth/send-sms-code");
+    LoginResp LoginWithSMSCode(1: LoginWithSMSCodeReq request) (api.post="/api/v1/auth/login-with-sms");
+    WeChatLoginBindResp WeChatLoginBind(1: WeChatLoginBindReq request) (api.post="/api/v1/auth/wechat-bind");
 }

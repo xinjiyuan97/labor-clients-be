@@ -59,3 +59,18 @@ func _changepasswordMw() []app.HandlerFunc {
 		middleware.RequireAuth(),
 	}
 }
+
+func _loginwithsmscodeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _sendsmscodeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _wechatloginbindMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
