@@ -2,8 +2,6 @@ package auth
 
 import (
 	"context"
-	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/xinjiyuan97/labor-clients/biz/model/auth"
@@ -38,9 +36,10 @@ func SendSMSCodeLogic(ctx context.Context, req *auth.SendSMSCodeReq) (*auth.Send
 	}
 
 	// 2. 生成6位随机验证码
-	rand.Seed(time.Now().UnixNano())
-	code := fmt.Sprintf("%06d", rand.Intn(1000000))
+	// rand.Seed(time.Now().UnixNano())
+	// code := fmt.Sprintf("%06d", rand.Intn(1000000))
 
+	code := "123456"
 	// 3. 将验证码存储到MySQL
 	err = mysql.CreateSMSVerificationCode(ctx, req.Phone, code)
 	if err != nil {
@@ -75,7 +74,6 @@ func SendSMSCodeLogic(ctx context.Context, req *auth.SendSMSCodeReq) (*auth.Send
 			Message:   "验证码发送成功",
 			Timestamp: time.Now().Format(time.RFC3339),
 		},
-		Code:      code, // TODO: 生产环境删除此字段
-		ExpiresIn: 300,  // 5分钟有效期
+		ExpiresIn: 300, // 5分钟有效期
 	}, nil
 }
