@@ -212,8 +212,8 @@ func runServer(cfg *config.Config) {
 		"server_host":   cfg.Server.Host,
 		"server_port":   cfg.Server.Port,
 		"database_host": cfg.Database.Host,
-		"redis_host":    cfg.Redis.Host,
-		"log_level":     cfg.Log.Level,
+		// "redis_host":    cfg.Redis.Host,
+		"log_level": cfg.Log.Level,
 	}).Info("服务器启动配置")
 
 	utils.Info("服务器启动成功，开始监听请求...")
