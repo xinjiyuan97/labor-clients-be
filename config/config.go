@@ -238,37 +238,37 @@ func (c *Config) Validate() error {
 // DSN格式: username:password@tcp(host:port)/database?charset=utf8mb4&parseTime=True&loc=Local
 func ParseDSN(dsn string) (*DatabaseConfig, error) {
 	cfg := &DatabaseConfig{}
-	
+
 	// 正则表达式匹配 DSN 格式
 	// username:password@tcp(host:port)/database?charset=utf8mb4&parseTime=True&loc=Local
 	// 或者 username:password@tcp(host:port)/database（无查询参数）
 	re := regexp.MustCompile(`^([^:]+):([^@]+)@tcp\(([^:]+):(\d+)\)/([^\?]+)(?:\?(.*))?$`)
 	matches := re.FindStringSubmatch(dsn)
-	
+
 	if len(matches) < 6 {
 		return nil, fmt.Errorf("无效的DSN格式")
 	}
-	
+
 	cfg.Username = matches[1]
 	cfg.Password = matches[2]
 	cfg.Host = matches[3]
-	
+
 	// 解析端口
 	port, err := strconv.Atoi(matches[4])
 	if err != nil {
 		return nil, fmt.Errorf("无效的端口号: %v", err)
 	}
 	cfg.Port = port
-	
+
 	cfg.Database = matches[5]
-	
+
 	// 解析查询参数（可选）
 	if len(matches) >= 7 && matches[6] != "" {
 		params, err := url.ParseQuery(matches[6])
 		if err != nil {
 			return nil, fmt.Errorf("解析查询参数失败: %v", err)
 		}
-		
+
 		if charset := params.Get("charset"); charset != "" {
 			cfg.Charset = charset
 		} else {
@@ -277,7 +277,7 @@ func ParseDSN(dsn string) (*DatabaseConfig, error) {
 	} else {
 		cfg.Charset = "utf8mb4" // 默认字符集
 	}
-	
+
 	// 设置默认值
 	cfg.Driver = "mysql"
 	if cfg.MaxOpenConns == 0 {
@@ -292,7 +292,7 @@ func ParseDSN(dsn string) (*DatabaseConfig, error) {
 	if cfg.LogLevel == "" {
 		cfg.LogLevel = "info"
 	}
-	
+
 	return cfg, nil
 }
 
@@ -303,12 +303,12 @@ func LoadConfigFromDSN(dsn string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("解析DSN失败: %v", err)
 	}
-	
+
 	// 创建配置对象
 	config := &Config{
 		Database: dbConfig,
 	}
-	
+
 	// 设置其他默认配置
 	config.Server = ServerConfig{
 		Host:         "0.0.0.0",
@@ -318,7 +318,7 @@ func LoadConfigFromDSN(dsn string) (*Config, error) {
 		IdleTimeout:  120,
 		Mode:         "release",
 	}
-	
+
 	config.Redis = &RedisConfig{
 		Host:         "127.0.0.1",
 		Port:         6379,
@@ -330,7 +330,7 @@ func LoadConfigFromDSN(dsn string) (*Config, error) {
 		ReadTimeout:  3,
 		WriteTimeout: 3,
 	}
-	
+
 	config.Log = LogConfig{
 		Level:      "info",
 		Format:     "json",
@@ -341,16 +341,16 @@ func LoadConfigFromDSN(dsn string) (*Config, error) {
 		MaxAge:     7,
 		Compress:   true,
 	}
-	
+
 	config.Auth = AuthConfig{
 		JWTExpire:     24,
 		RefreshExpire: 7,
 		Algorithm:     "HS256",
 	}
-	
+
 	config.Snowflake = SnowflakeConfig{
 		NodeID: 1,
 	}
-	
+
 	return config, nil
 }
