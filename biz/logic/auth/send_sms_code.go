@@ -26,7 +26,7 @@ func SendSMSCodeLogic(ctx context.Context, req *auth.SendSMSCodeReq) (*auth.Send
 			},
 		}, nil
 	}
-	
+
 	if hasRecentCode {
 		return &auth.SendSMSCodeResp{
 			Base: &common.BaseResp{
@@ -75,8 +75,7 @@ func SendSMSCodeLogic(ctx context.Context, req *auth.SendSMSCodeReq) (*auth.Send
 			Message:   "验证码发送成功",
 			Timestamp: time.Now().Format(time.RFC3339),
 		},
-		Code:       code, // TODO: 生产环境删除此字段
-		ExpiresIn: 300,   // 5分钟有效期
+		Code:      code, // TODO: 生产环境删除此字段
+		ExpiresIn: 300,  // 5分钟有效期
 	}, nil
 }
-
