@@ -15,7 +15,7 @@ func CreateSMSVerificationCode(ctx context.Context, phone, code string) error {
 	tx := GetDB(ctx)
 	
 	// 设置过期时间为5分钟后
-	expiresAt := time.Now().Add(5 * time.Minute).Format("2006-01-02 15:04:05")
+	expiresAt := time.Now().Add(5 * time.Minute)
 	
 	smsCode := &models.SMSVerificationCode{
 		Phone:     phone,
@@ -53,7 +53,7 @@ func GetSMSVerificationCode(ctx context.Context, phone, code string) (*models.SM
 func MarkSMSVerificationCodeUsed(ctx context.Context, phone, code string) error {
 	tx := GetDB(ctx)
 	
-	usedAt := time.Now().Format("2006-01-02 15:04:05")
+	usedAt := time.Now()
 	
 	if err := tx.Model(&models.SMSVerificationCode{}).
 		Where("phone = ? AND code = ?", phone, code).
@@ -71,7 +71,7 @@ func MarkSMSVerificationCodeUsed(ctx context.Context, phone, code string) error 
 // CleanExpiredSMSVerificationCodes 清理过期的验证码
 func CleanExpiredSMSVerificationCodes(ctx context.Context) error {
 	tx := GetDB(ctx)
-	now := time.Now().Format("2006-01-02 15:04:05")
+	now := time.Now()
 	
 	if err := tx.Model(&models.SMSVerificationCode{}).
 		Where("expires_at < ? AND status = ?", now, "unused").
@@ -88,7 +88,7 @@ func CheckRecentCodeExists(ctx context.Context, phone string, minutes int) (bool
 	tx := GetDB(ctx)
 	
 	// 检查指定分钟内是否有未使用的验证码
-	since := time.Now().Add(-time.Duration(minutes) * time.Minute).Format("2006-01-02 15:04:05")
+	since := time.Now().Add(-time.Duration(minutes) * time.Minute)
 	
 	var count int64
 	if err := tx.Model(&models.SMSVerificationCode{}).

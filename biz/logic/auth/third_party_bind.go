@@ -119,12 +119,13 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 	// 5. 如果已有该平台绑定，更新绑定信息；否则创建新绑定
 	if existingBinding != nil {
 		// 更新绑定信息
+		now := time.Now()
 		updateData := map[string]interface{}{
-			"user_id":      user.ID,
-			"unionid":      req.Unionid,
-			"nickname":     req.Nickname,
-			"avatar":       req.Avatar,
-			"last_login_at": time.Now().Format("2006-01-02 15:04:05"),
+			"user_id":       user.ID,
+			"unionid":       req.Unionid,
+			"nickname":      req.Nickname,
+			"avatar":        req.Avatar,
+			"last_login_at": now,
 		}
 		
 		if err := mysql.UpdateThirdPartyBinding(ctx, existingBinding.ID, updateData); err != nil {
@@ -139,7 +140,7 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 		}
 	} else {
 		// 创建新的第三方绑定
-		lastLoginAt := time.Now().Format("2006-01-02 15:04:05")
+		now := time.Now()
 		binding := &models.ThirdPartyBinding{
 			UserID:      user.ID,
 			Platform:    req.Platform,
@@ -149,7 +150,7 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 			Nickname:    req.Nickname,
 			Avatar:      req.Avatar,
 			Status:      "active",
-			LastLoginAt: &lastLoginAt,
+			LastLoginAt: &now,
 		}
 
 		if err := mysql.CreateThirdPartyBinding(ctx, binding); err != nil {
