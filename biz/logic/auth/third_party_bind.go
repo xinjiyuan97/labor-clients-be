@@ -139,6 +139,7 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 		}
 	} else {
 		// 创建新的第三方绑定
+		lastLoginAt := time.Now().Format("2006-01-02 15:04:05")
 		binding := &models.ThirdPartyBinding{
 			UserID:      user.ID,
 			Platform:    req.Platform,
@@ -148,7 +149,7 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 			Nickname:    req.Nickname,
 			Avatar:      req.Avatar,
 			Status:      "active",
-			LastLoginAt: time.Now().Format("2006-01-02 15:04:05"),
+			LastLoginAt: &lastLoginAt,
 		}
 
 		if err := mysql.CreateThirdPartyBinding(ctx, binding); err != nil {
