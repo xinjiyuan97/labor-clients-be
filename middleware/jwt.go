@@ -252,7 +252,7 @@ func WeChatOrJWTAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		// 1. 首先尝试从微信header获取OpenID
 		openid := string(c.GetHeader("X-WX-OPENID"))
-		
+
 		if openid != "" {
 			// 查询微信绑定
 			binding, err := mysql.GetThirdPartyBindingByPlatformAndOpenID(ctx, "wechat", openid)
@@ -269,19 +269,19 @@ func WeChatOrJWTAuth() app.HandlerFunc {
 					c.Set("user_id", user.ID)
 					c.Set("user_role", user.Role)
 					c.Set("auth_method", "wechat")
-					
+
 					utils.LogWithFields(map[string]interface{}{
-						"user_id":      user.ID,
-						"auth_method":  "wechat",
-						"openid":       openid,
+						"user_id":     user.ID,
+						"auth_method": "wechat",
+						"openid":      openid,
 					}).Info("微信鉴权成功")
-					
+
 					c.Next(ctx)
 					return
 				}
 			}
 		}
-		
+
 		// 2. 没有微信OpenID或查询失败，尝试使用JWT
 		authHeader := string(c.GetHeader("Authorization"))
 		if authHeader == "" {
@@ -323,7 +323,7 @@ func WeChatOrJWTAuth() app.HandlerFunc {
 		c.Set("user_role", claims.Role)
 		c.Set("jwt_claims", claims)
 		c.Set("auth_method", "jwt")
-		
+
 		utils.LogWithFields(map[string]interface{}{
 			"user_id":     claims.UserID,
 			"auth_method": "jwt",
