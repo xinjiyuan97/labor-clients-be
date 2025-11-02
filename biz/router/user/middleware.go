@@ -24,7 +24,7 @@ func _v1Mw() []app.HandlerFunc {
 
 func _userMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{middleware.JWTAuth()}
+	return []app.HandlerFunc{middleware.WeChatOrJWTAuth()}
 }
 
 func _favoritesMw() []app.HandlerFunc {
