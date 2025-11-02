@@ -8,6 +8,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
 	"github.com/xinjiyuan97/labor-clients/constants"
+	"github.com/xinjiyuan97/labor-clients/dal/mysql"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
@@ -244,4 +245,90 @@ func GetStoreIDFromContext(c *app.RequestContext) (int64, bool) {
 	}
 
 	return 0, false
+}
+
+// WeChatOrJWTAuth 混合鉴权中间件：优先使用微信OpenID，否则使用JWT
+func WeChatOrJWTAuth() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		// 1. 首先尝试从微信header获取OpenID
+		openid := string(c.GetHeader("X-WX-OPENID"))
+		
+		if openid != "" {
+			// 查询微信绑定
+			binding, err := mysql.GetThirdPartyBindingByPlatformAndOpenID(ctx, "wechat", openid)
+			if err != nil {
+				utils.Errorf("查询微信绑定失败: %v", err)
+				// 查询失败，继续尝试JWT
+			} else if binding != nil {
+				// 查询到用户信息
+				user, err := mysql.GetUserByID(nil, binding.UserID)
+				if err != nil {
+					utils.Errorf("查询用户失败: %v", err)
+				} else if user != nil {
+					// 将用户信息存储到context中
+					c.Set("user_id", user.ID)
+					c.Set("user_role", user.Role)
+					c.Set("auth_method", "wechat")
+					
+					utils.LogWithFields(map[string]interface{}{
+						"user_id":      user.ID,
+						"auth_method":  "wechat",
+						"openid":       openid,
+					}).Info("微信鉴权成功")
+					
+					c.Next(ctx)
+					return
+				}
+			}
+		}
+		
+		// 2. 没有微信OpenID或查询失败，尝试使用JWT
+		authHeader := string(c.GetHeader("Authorization"))
+		if authHeader == "" {
+			c.JSON(401, &common.BaseResp{
+				Code:      401,
+				Message:   "缺少Authorization header",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		// 提取token
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+		if token == authHeader {
+			c.JSON(401, &common.BaseResp{
+				Code:      401,
+				Message:   "无效的token格式",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		// 验证token
+		claims, err := utils.ValidateToken(token)
+		if err != nil {
+			c.JSON(401, &common.BaseResp{
+				Code:      401,
+				Message:   "无效的token",
+				Timestamp: GetCurrentTime(),
+			})
+			c.Abort()
+			return
+		}
+
+		// 将用户信息存储到context中
+		c.Set("user_id", claims.UserID)
+		c.Set("user_role", claims.Role)
+		c.Set("jwt_claims", claims)
+		c.Set("auth_method", "jwt")
+		
+		utils.LogWithFields(map[string]interface{}{
+			"user_id":     claims.UserID,
+			"auth_method": "jwt",
+		}).Info("JWT鉴权成功")
+
+		c.Next(ctx)
+	}
 }
