@@ -32,6 +32,7 @@ func Register(r *server.Hertz) {
 				_auth.POST("/register", append(_registerMw(), auth.Register)...)
 				_auth.POST("/send-sms-code", append(_sendsmscodeMw(), auth.SendSMSCode)...)
 				_auth.POST("/third-party-bind", append(_thirdpartyloginbindMw(), auth.ThirdPartyLoginBind)...)
+				_auth.POST("/wechat-login-with-sms", append(_wechatloginwithsmscodeMw(), auth.WeChatLoginWithSMSCode)...)
 			}
 		}
 	}

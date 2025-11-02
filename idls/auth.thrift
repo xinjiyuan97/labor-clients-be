@@ -94,6 +94,12 @@ struct LoginWithSMSCodeReq {
     2: string code (api.body="code", api.vd="len($)>0");
 }
 
+// 微信手机号验证码登录请求
+struct WeChatLoginWithSMSCodeReq {
+    1: string phone (api.body="phone", api.vd="len($)>0");
+    2: string code (api.body="code", api.vd="len($)>0");
+}
+
 // 第三方登录绑定请求
 struct ThirdPartyLoginBindReq {
     1: string platform (api.body="platform", api.vd="len($)>0");
@@ -124,5 +130,6 @@ service AuthService {
     ChangePasswordResp ChangePassword(1: ChangePasswordReq request) (api.post="/api/v1/auth/change-password");
     SendSMSCodeResp SendSMSCode(1: SendSMSCodeReq request) (api.post="/api/v1/auth/send-sms-code");
     LoginResp LoginWithSMSCode(1: LoginWithSMSCodeReq request) (api.post="/api/v1/auth/login-with-sms");
+    LoginResp WeChatLoginWithSMSCode(1: WeChatLoginWithSMSCodeReq request) (api.post="/api/v1/auth/wechat-login-with-sms");
     ThirdPartyLoginBindResp ThirdPartyLoginBind(1: ThirdPartyLoginBindReq request) (api.post="/api/v1/auth/third-party-bind");
 }

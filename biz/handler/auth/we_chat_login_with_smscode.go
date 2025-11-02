@@ -11,18 +11,18 @@ import (
 	auth "github.com/xinjiyuan97/labor-clients/biz/model/auth"
 )
 
-// Logout .
-// @router /api/v1/auth/logout [POST]
-func Logout(ctx context.Context, c *app.RequestContext) {
+// WeChatLoginWithSMSCode .
+// @router /api/v1/auth/wechat-login-with-sms [POST]
+func WeChatLoginWithSMSCode(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req auth.LogoutReq
+	var req auth.WeChatLoginWithSMSCodeReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.String(consts.StatusBadRequest, err.Error())
 		return
 	}
 
-	resp, err := authlogic.LogoutLogic(ctx, c, &req)
+	resp, err := authlogic.WeChatLoginWithSMSCodeLogic(ctx, c, &req)
 	if err != nil {
 		c.String(consts.StatusInternalServerError, err.Error())
 		return

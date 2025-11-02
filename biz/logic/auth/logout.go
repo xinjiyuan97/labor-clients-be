@@ -1,16 +1,19 @@
 package auth
 
 import (
+	"context"
 	"strings"
 	"time"
 
+	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/xinjiyuan97/labor-clients/biz/model/auth"
 	"github.com/xinjiyuan97/labor-clients/biz/model/common"
+	"github.com/xinjiyuan97/labor-clients/dal/mysql"
 	"github.com/xinjiyuan97/labor-clients/utils"
 )
 
 // LogoutLogic 用户登出业务逻辑
-func LogoutLogic(req *auth.LogoutReq) (*auth.LogoutResp, error) {
+func LogoutLogic(ctx context.Context, c *app.RequestContext, req *auth.LogoutReq) (*auth.LogoutResp, error) {
 	// 从Authorization header中提取token
 	token := strings.TrimPrefix(req.Token, "Bearer ")
 
@@ -24,6 +27,26 @@ func LogoutLogic(req *auth.LogoutReq) (*auth.LogoutResp, error) {
 				Timestamp: time.Now().Format(time.RFC3339),
 			},
 		}, nil
+	}
+
+	// 检查是否包含微信请求头，如果有则解绑微信
+	openid := string(c.GetHeader("X-WX-OPENID"))
+	if openid != "" {
+		// 查询微信绑定
+		binding, err := mysql.GetThirdPartyBindingByPlatformAndOpenID(ctx, "wechat", openid)
+		if err != nil {
+			utils.Warnf("查询微信绑定失败: %v", err)
+		} else if binding != nil && binding.UserID == claims.UserID {
+			// 解绑微信（设置status为disabled）
+			updateData := map[string]interface{}{
+				"status": "disabled",
+			}
+			if err := mysql.UpdateThirdPartyBinding(ctx, binding.ID, updateData); err != nil {
+				utils.Warnf("解绑微信失败: %v", err)
+			} else {
+				utils.Infof("微信解绑成功, UserID: %d, OpenID: %s", claims.UserID, openid)
+			}
+		}
 	}
 
 	// 这里可以添加token黑名单逻辑，将token加入Redis黑名单

@@ -79,3 +79,8 @@ func _thirdpartyloginbindMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _wechatloginwithsmscodeMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
