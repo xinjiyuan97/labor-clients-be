@@ -116,12 +116,28 @@ func ThirdPartyLoginBindLogic(ctx context.Context, req *auth.ThirdPartyLoginBind
 		utils.Infof("创建新用户成功, UserID: %d", user.ID)
 	}
 
-	// 5. 如果已有该平台绑定，更新绑定信息；否则创建新绑定
+	// 5. 如果已有该平台绑定，检查是否需要更新；否则创建新绑定
 	if existingBinding != nil {
-		// 更新绑定信息
+		// 如果已绑定，检查是否是同一个用户
+		if existingBinding.UserID != user.ID {
+			utils.LogWithFields(map[string]interface{}{
+				"existing_user_id": existingBinding.UserID,
+				"new_user_id":      user.ID,
+				"platform":         req.Platform,
+				"openid":           req.Openid,
+			}).Warn("第三方账号已绑定到其他用户，拒绝重新绑定")
+			return &auth.ThirdPartyLoginBindResp{
+				Base: &common.BaseResp{
+					Code:      400,
+					Message:   "该第三方账号已绑定到其他用户",
+					Timestamp: time.Now().Format(time.RFC3339),
+				},
+			}, nil
+		}
+		
+		// 如果是同一个用户，更新登录时间和用户信息
 		now := time.Now()
 		updateData := map[string]interface{}{
-			"user_id":       user.ID,
 			"unionid":       req.Unionid,
 			"nickname":      req.Nickname,
 			"avatar":        req.Avatar,

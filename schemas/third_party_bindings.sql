@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS third_party_bindings (
     INDEX idx_user_id (user_id),
     INDEX idx_platform (platform),
     UNIQUE KEY idx_platform_openid (platform, openid),
+    UNIQUE KEY idx_platform_appid_openid (platform, appid, openid),
     INDEX idx_unionid (unionid),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) COMMENT '第三方账号绑定表';
