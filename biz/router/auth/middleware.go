@@ -39,7 +39,7 @@ func _logoutMw() []app.HandlerFunc {
 
 func _getuserprofileMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{middleware.JWTAuth()}
+	return []app.HandlerFunc{middleware.WeChatOrJWTAuth()}
 }
 
 func _refreshtokenMw() []app.HandlerFunc {
@@ -55,7 +55,7 @@ func _registerMw() []app.HandlerFunc {
 func _changepasswordMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{
-		middleware.JWTAuth(),
+		middleware.WeChatOrJWTAuth(),
 		middleware.RequireAuth(),
 	}
 }
